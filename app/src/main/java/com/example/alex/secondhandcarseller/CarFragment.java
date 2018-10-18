@@ -1,0 +1,50 @@
+package com.example.alex.secondhandcarseller;
+
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class CarFragment extends Fragment {
+
+
+    public CarFragment() {
+        // Required empty public constructor
+    }
+
+    private Button buttonLogout;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View v = inflater.inflate(R.layout.fragment_car, container, false);
+        buttonLogout = (Button) v.findViewById(R.id.buttonLogout);
+
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor user = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE).edit();
+                user.putString("username", null);
+                user.apply();
+
+                getActivity().finish();
+
+            }
+        });
+
+
+
+        return v;
+    }
+
+}
