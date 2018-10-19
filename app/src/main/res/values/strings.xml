@@ -9,7 +9,12 @@
     <string name="forgot_password">Forget Password?</string>
     <string name="login">Login</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Appointment">Appointment</string>
+    <string name="Adjust">Adjust</string>
+    <string name="Name">Name :</string>
+    <string name="Report">Report a problem</string>
+    <string name="EditProfile">Edit My Profile</string>
+    <string name="ManageSub">Manage Subscription</string>
+    <string name="logout">Log Out</string>
 </resources>

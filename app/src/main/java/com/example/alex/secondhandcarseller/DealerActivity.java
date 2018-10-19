@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,7 +16,7 @@ public class DealerActivity extends AppCompatActivity {
 
     private CarFragment carFragment;
     private AgentFragment agentFragment;
-    private ProfileFragment profileFragment;
+    private DealerProfileFragment dealerProfileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +28,7 @@ public class DealerActivity extends AppCompatActivity {
 
         carFragment = new CarFragment();
         agentFragment = new AgentFragment();
-        profileFragment = new ProfileFragment();
+        dealerProfileFragment = new DealerProfileFragment();
         setFragment(carFragment);
 
 
@@ -44,7 +43,7 @@ public class DealerActivity extends AppCompatActivity {
                         setFragment(agentFragment);
                         return true;
                     case R.id.nav_Profile:
-                        setFragment(profileFragment);
+                        setFragment(dealerProfileFragment);
                         return true;
 
                     default:
