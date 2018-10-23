@@ -1,6 +1,8 @@
 package com.example.alex.secondhandcarseller;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -10,50 +12,61 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by Alex on 10/19/2018.
  */
 
-public class CarAdapter extends ArrayAdapter<String> {
+public class CarAdapter extends ArrayAdapter<Car> {
+    Context context;
+    int resource;
+    List<Car> carList;
 
-    private final Context context;
-    private final String[] carNames;
-    private final Integer[] carImages;
 
-    public CarAdapter(@NonNull Context context, Integer[] IMAGES, String[] NAMES) {
-        super(context, R.layout.adapter_car_layout);
+    public CarAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Car> carList) {
+        super(context, resource, carList);
+        this.context = context;
+        this.resource = resource;
+        this.carList = carList;
 
-        this.carImages=IMAGES;
-        this.carNames=NAMES;
-        this.context=context;
     }
 
     @Override
     public int getCount() {
-        return carNames.length;
-    }
-
-    public String[] getCarNames() {
-        return carNames;
-    }
-
-    public Integer[] getCarImages() {
-        return carImages;
+        return super.getCount();
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v=inflater.inflate(R.layout.adapter_car_layout,null,true);
-        TextView carResult=(TextView)v.findViewById(R.id.textViewCar);
-        ImageView imCarResult=(ImageView)v.findViewById(R.id.imageViewCar);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View v = inflater.inflate(resource, null);
 
-        imCarResult.setImageResource(carImages[position]);
-        carResult.setText(carNames[position]);
+
+        TextView carResult = (TextView) v.findViewById(R.id.textViewCar);
+        ImageView imCarResult = (ImageView) v.findViewById(R.id.imageViewCar);
+
+        Car car = carList.get(position);
+        final String carName = car.getCarNames();
+        carResult.setText(carName);
+        imCarResult.setImageDrawable(context.getResources().getDrawable(car.getCarImages()));
+
+
+        imCarResult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent login = new Intent(context, EditCarActivity.class);
+                login.putExtra("Item", carName);
+
+                context.startActivity(login);
+            }
+        });
+
 
         return v;
     }
+
 
 }
 
