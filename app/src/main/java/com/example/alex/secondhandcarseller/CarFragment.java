@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ public class CarFragment extends Fragment {
     }
 
     private ListView listViewCar;
+    private FloatingActionButton fabAddCar;
     private List<Car> carList = new ArrayList<>();
 
     @Override
@@ -36,29 +38,26 @@ public class CarFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_car, container, false);
+
         carList.add(new Car("Proton Saga", R.drawable.test1));
         carList.add(new Car("Proton Vira", R.drawable.test3));
         carList.add(new Car("Honda Civic", R.drawable.test4));
         carList.add(new Car("Honda City", R.drawable.test5));
         carList.add(new Car("Myvi", R.drawable.test6));
 
-
+        fabAddCar = (FloatingActionButton) v.findViewById(R.id.fabAddCar);
         listViewCar = (ListView) v.findViewById(R.id.listViewCar);
 
         CarAdapter carAdapter = new CarAdapter(getActivity(), R.layout.adapter_car_layout, carList);
         listViewCar.setAdapter(carAdapter);
 
-
-      /* listViewCar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        fabAddCar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> a, View view, int position, long id) {
-
-                String carName= (ClipData.Item)a.getAdapter().getItem(position).;
-                Intent login = new Intent(getActivity(), EditCarActivity.class);
-                login.putExtra("Item", );
-                startActivity(login);
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddCarActivity.class);
+                startActivity(intent);
             }
-        });*/
+        });
 
 
         return v;

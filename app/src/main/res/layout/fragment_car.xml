@@ -5,6 +5,20 @@
     android:layout_height="match_parent"
     tools:context="com.example.alex.secondhandcarseller.CarFragment">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddCar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:clickable="true"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/listViewCar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:rippleColor="@color/Black"
+        app:srcCompat="@drawable/ic_action_add" />
+
     <Button
         android:id="@+id/buttonLogout"
         android:layout_width="wrap_content"
@@ -28,7 +42,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <!-- TODO: Update blank fragment layout -->
 
