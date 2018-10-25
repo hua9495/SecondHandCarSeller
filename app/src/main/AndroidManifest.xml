@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
@@ -24,7 +24,8 @@
         </activity>
         <activity android:name=".AgentActivity" />
         <activity android:name=".EditCarActivity" />
-        <activity android:name=".AddCarActivity"></activity>
+        <activity android:name=".AddCarActivity" />
+        <activity android:name=".AddPhotoActivity"></activity>
     </application>
 
 </manifest>

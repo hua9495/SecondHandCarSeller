@@ -47,14 +47,23 @@ public class MainActivity extends AppCompatActivity {
         textViewResetPw = (TextView) findViewById(R.id.textViewResetPw);
         loading = (ProgressBar) findViewById(R.id.loading);
 
+        //skip this activity if already logged in
+        SharedPreferences myPref = getSharedPreferences("My_Pref", MODE_PRIVATE);
+        String checkUser = myPref.getString("ID", null);
 
-        SharedPreferences chkuser = getSharedPreferences("My_Pref", MODE_PRIVATE);
-        String chkus = chkuser.getString("LoginEmail", null);
 
-        if (chkus != null) {
-            Intent login = new Intent(MainActivity.this, DealerActivity.class);
-            startActivity(login);
-            finish();
+        if (checkUser != null) {
+            String checkD = checkUser.substring(0, 1);
+            if (checkD.matches("D")) {
+                Intent login = new Intent(MainActivity.this, DealerActivity.class);
+                startActivity(login);
+                finish();
+            } else {
+                Intent login = new Intent(MainActivity.this, AgentActivity.class);
+                startActivity(login);
+                finish();
+            }
+
         }
 
 
@@ -64,12 +73,12 @@ public class MainActivity extends AppCompatActivity {
                 pw = editTextPw.getText().toString().trim();
                 email = editTextEmail.getText().toString().trim();
 
-
-                if (!pw.isEmpty() || !email.isEmpty()) {
-                    Login(email, pw);
-                } else {
-                    editTextEmail.setError("Please enter Email!");
+                if (pw.isEmpty()) {
                     editTextPw.setError("Please enter Password!");
+                } else if (email.isEmpty()) {
+                    editTextEmail.setError("Please enter Email!");
+                } else {
+                    Login(email, pw);
                 }
 
 
@@ -96,26 +105,72 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject object = jsonArray.getJSONObject(i);
 
                             //follow index
-                            String email = object.getString("email").trim();
+                            String demail = object.getString("email").trim();
+                            String dname = object.getString("name").trim();
+                            String did = object.getString("id").trim();
+                            String dlocation = object.getString("location").trim();
+                            String dcontact = object.getString("contact").trim();
+                            String dpic = object.getString("personIC").trim();
+
                             loading.setVisibility(View.GONE);
                             buttonLogin.setVisibility(View.VISIBLE);
 
-                            Toast.makeText(MainActivity.this, "Login success", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Dealer", Toast.LENGTH_LONG).show();
 
-                            //SharedPreferences.Editor user = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
-                            // user.putString("LoginEmail", email);
-                            //  user.apply();
+                            SharedPreferences.Editor user = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                            user.putString("Email", demail);
+                            user.putString("ID", did);
+                            user.putString("Name", dname);
+                            user.putString("Location", dlocation);
+                            user.putString("Contact", dcontact);
+                            user.putString("PersonIC", dpic);
+                            user.apply();
 
-                            // Intent login = new Intent(MainActivity.this, DealerActivity.class);
-                            //startActivity(login);
-                            //finish();
+                            Intent login = new Intent(MainActivity.this, DealerActivity.class);
+                            startActivity(login);
+                            finish();
 
                         }
-                    }
+                    } else if (success.equals("2")) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject object = jsonArray.getJSONObject(i);
 
+                            //follow index
+                            String aemail = object.getString("email").trim();
+                            String aid = object.getString("id").trim();
+                            String did = object.getString("dealerID").trim();
+                            String aic = object.getString("ic").trim();
+                            String aname = object.getString("name").trim();
+                            String acontact = object.getString("contact").trim();
+                            String workstart = object.getString("workstart").trim();
+                            loading.setVisibility(View.GONE);
+                            buttonLogin.setVisibility(View.VISIBLE);
+
+                            Toast.makeText(MainActivity.this, "Agent", Toast.LENGTH_LONG).show();
+
+                            SharedPreferences.Editor user = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                            user.putString("Email", aemail);
+                            user.putString("ID", aid);
+                            user.putString("BelongDealer", did);
+                            user.putString("ICno", aic);
+                            user.putString("Name", aname);
+                            user.putString("Contact", acontact);
+                            user.putString("WorkStart", workstart);
+                            user.apply();
+
+                            Intent login = new Intent(MainActivity.this, AgentActivity.class);
+                            startActivity(login);
+                            finish();
+
+                        }
+                    } else {
+                        loading.setVisibility(View.GONE);
+                        buttonLogin.setVisibility(View.VISIBLE);
+                        Toast.makeText(MainActivity.this, "Incorrect Password", Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Invalid Email \nPlease make sure u enter the correct Email", Toast.LENGTH_LONG).show();
                     loading.setVisibility(View.GONE);
                     buttonLogin.setVisibility(View.VISIBLE);
                 }
