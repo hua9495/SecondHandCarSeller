@@ -106,27 +106,36 @@ public class AddCarActivity extends AppCompatActivity {
                 if (name.isEmpty() || price.isEmpty() || year.isEmpty() || mileage.isEmpty() || desc.isEmpty()) {
                     if (name.isEmpty()) {
                         editTextCarName.setError("Please enter Car Name");
+                        editTextCarName.requestFocus();
                     }
                     if (price.isEmpty()) {
                         editTextCarPrice.setError("Please enter Car Price");
+                        editTextCarPrice.requestFocus();
                     }
                     if (year.isEmpty()) {
                         editTextCarYear.setError("Please enter Car Publish Year");
+                        editTextCarYear.requestFocus();
                     }
                     if (mileage.isEmpty()) {
                         editTextMileage.setError("Please enter Mileage of car");
+                        editTextMileage.requestFocus();
                     }
                     if (desc.isEmpty()) {
                         editTextDesc.setError("Please enter Car Description");
+                        editTextDesc.requestFocus();
                     }
 
                 } else {
-                    if (Integer.parseInt(year) < 1940 || Integer.parseInt(year) > 2019) {
-                        editTextCarYear.setError("Invalid Year!");
-                    } else if (Double.parseDouble(price) <= 0 || Double.parseDouble(price) > 10000000) {
+                    if (Double.parseDouble(price) <= 0 || Double.parseDouble(price) > 10000000) {
                         editTextCarPrice.setError("Invalid Price Range!");
-                    } else if (Integer.parseInt(mileage) < 0 || Integer.parseInt(mileage) > 100000000) {
+                        editTextCarPrice.requestFocus();
+                    }
+                    else if (Integer.parseInt(year) < 1940 || Integer.parseInt(year) > 2019) {
+                        editTextCarYear.setError("Invalid Year!");
+                        editTextCarYear.requestFocus();
+                    }  else if (Integer.parseInt(mileage) < 0 || Integer.parseInt(mileage) > 100000000) {
                         editTextMileage.setError("Invalid Mileage!");
+                        editTextMileage.requestFocus();
                     } else {
 
                         Intent addinfo = new Intent(AddCarActivity.this, AddPhotoActivity.class);
