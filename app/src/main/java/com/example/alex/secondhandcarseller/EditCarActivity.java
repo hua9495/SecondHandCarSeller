@@ -13,7 +13,7 @@ public class EditCarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_car);
 
         buttonTest = (Button) findViewById(R.id.buttonTest);
-        String INT = getIntent().getStringExtra("Item");
+        String INT = getIntent().getStringExtra("CarID");
 
 
         buttonTest.setText(INT);

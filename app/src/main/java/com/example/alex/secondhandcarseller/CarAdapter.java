@@ -30,12 +30,14 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
 
     private ArrayList<String> mCarName = new ArrayList<>();
     private ArrayList<String> mCarImage = new ArrayList<>();
+    private ArrayList<String> mCarId = new ArrayList<>();
     private Context mContext;
 
-    public CarAdapter(Context context, ArrayList<String> CarName, ArrayList<String> CarImage) {
+    public CarAdapter(Context context, ArrayList<String> CarName, ArrayList<String> CarImage, ArrayList<String> CarId) {
         mCarName = CarName;
         mCarImage = CarImage;
         mContext = context;
+        mCarId = CarId;
     }
 
     @Override
@@ -60,8 +62,16 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
             public void onClick(View v) {
                 Log.d(TAG, "onClick:Clicked on: " + mCarName.get(position));
                 Toast.makeText(mContext, mCarName.get(position), Toast.LENGTH_LONG).show();
+
+                Intent intent=new Intent(mContext,EditCarActivity.class);
+                intent.putExtra("CarID",mCarId.get(position));
+                mContext.startActivity(intent);
             }
         });
+
+
+
+
     }
 
     @Override

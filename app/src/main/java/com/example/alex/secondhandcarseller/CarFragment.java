@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.media.MediaBrowserCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,9 +18,27 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -34,7 +53,12 @@ public class CarFragment extends Fragment {
 
     private ArrayList<String> mCarName = new ArrayList<>();
     private ArrayList<String> mCarImage = new ArrayList<>();
-    RecyclerView recyclerViewCar;
+    private ArrayList<String> mCarId = new ArrayList<>();
+    private ProgressBar progressBarLoadCar;
+    private RecyclerView recyclerViewCar;
+    private String Url = "https://dewy-minuses.000webhostapp.com/sellerCar.php";
+    private String subid, dealerid;
+    private FloatingActionButton fabAddCar;
 
 
     @Override
@@ -43,29 +67,102 @@ public class CarFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_car, container, false);
         recyclerViewCar = (RecyclerView) v.findViewById(R.id.recyclerViewCar);
+        progressBarLoadCar = (ProgressBar) v.findViewById(R.id.progressBarLoadCar);
+        fabAddCar = (FloatingActionButton) v.findViewById(R.id.fabAddCar);
+
+        SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
+        String checkid = myPref.getString("ID", null);
+        subid = checkid.substring(0, 1);
+        if (subid.equals("A")) {
+            dealerid = myPref.getString("BelongDealer", null);
+        } else {
+            dealerid = myPref.getString("ID", null);
+        }
+
         mCarName.clear();
         mCarImage.clear();
-        initImageBitmaps(v);
+        mCarId.clear();
+
+        LoadPic(v);
+
+        fabAddCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddCarActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         return v;
     }
 
-    private void initImageBitmaps(View v) {
-
-        mCarImage.add("http://dewy-minuses.000webhostapp.com/images/C0001.png");
-        mCarName.add("Test1");
-        mCarImage.add("http://dewy-minuses.000webhostapp.com/images/C0002.png");
-        mCarName.add("Test2");
-
-        initRecyclerView(v);
-    }
 
     private void initRecyclerView(View v) {
 
-        CarAdapter adapter = new CarAdapter(getActivity(), mCarName, mCarImage);
+        CarAdapter adapter = new CarAdapter(getActivity(), mCarName, mCarImage, mCarId);
         recyclerViewCar.setAdapter(adapter);
         recyclerViewCar.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+    }
+
+
+    private void LoadPic(final View v) {
+        progressBarLoadCar.setVisibility(View.VISIBLE);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String success = jsonObject.getString("success");
+                    JSONArray jsonArray = jsonObject.getJSONArray("car");
+                    if (success.equals("1")) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject object = jsonArray.getJSONObject(i);
+
+                            //follow index
+                            String carID = object.getString("id").trim();
+                            String name = object.getString("name").trim();
+                            String image_data = object.getString("imageUrl").trim();
+
+                            mCarName.add(name);
+                            mCarImage.add(image_data);
+                            mCarId.add(carID);
+                        }
+                        initRecyclerView(v);
+
+                        progressBarLoadCar.setVisibility(View.GONE);
+                    } else {
+                        progressBarLoadCar.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), "No car in your list", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+                    progressBarLoadCar.setVisibility(View.GONE);
+                }
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(getActivity(), "Error " + error.toString(), Toast.LENGTH_LONG).show();
+                        progressBarLoadCar.setVisibility(View.GONE);
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("dealerid", dealerid);
+                return params;
+            }
+        };
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+
 
     }
 
