@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,38 +32,41 @@ public class CarFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private ListView listViewCar;
-    private FloatingActionButton fabAddCar;
-    private List<Car> carList = new ArrayList<>();
+    private ArrayList<String> mCarName = new ArrayList<>();
+    private ArrayList<String> mCarImage = new ArrayList<>();
+    RecyclerView recyclerViewCar;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_car, container, false);
-
-        carList.add(new Car("Proton Saga", R.drawable.test1));
-        carList.add(new Car("Proton Vira", R.drawable.test3));
-        carList.add(new Car("Honda Civic", R.drawable.test4));
-        carList.add(new Car("Honda City", R.drawable.test5));
-        carList.add(new Car("Myvi", R.drawable.test6));
-
-        fabAddCar = (FloatingActionButton) v.findViewById(R.id.fabAddCar);
-        listViewCar = (ListView) v.findViewById(R.id.listViewCar);
-
-        CarAdapter carAdapter = new CarAdapter(getActivity(), R.layout.adapter_car_layout, carList);
-        listViewCar.setAdapter(carAdapter);
-
-        fabAddCar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddCarActivity.class);
-                startActivity(intent);
-            }
-        });
+        recyclerViewCar = (RecyclerView) v.findViewById(R.id.recyclerViewCar);
+        mCarName.clear();
+        mCarImage.clear();
+        initImageBitmaps(v);
 
 
         return v;
+    }
+
+    private void initImageBitmaps(View v) {
+
+        mCarImage.add("http://dewy-minuses.000webhostapp.com/images/C0001.png");
+        mCarName.add("Test1");
+        mCarImage.add("http://dewy-minuses.000webhostapp.com/images/C0002.png");
+        mCarName.add("Test2");
+
+        initRecyclerView(v);
+    }
+
+    private void initRecyclerView(View v) {
+
+        CarAdapter adapter = new CarAdapter(getActivity(), mCarName, mCarImage);
+        recyclerViewCar.setAdapter(adapter);
+        recyclerViewCar.setLayoutManager(new LinearLayoutManager(getActivity()));
+
     }
 
 }

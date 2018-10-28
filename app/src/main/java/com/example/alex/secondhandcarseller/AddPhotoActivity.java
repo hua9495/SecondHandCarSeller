@@ -2,6 +2,7 @@ package com.example.alex.secondhandcarseller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -33,34 +34,52 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class AddPhotoActivity extends AppCompatActivity {
 
-    Button buttonSelectImg, buttonUpload;
-    ImageView imageViewAddCar;
-    EditText editTextCarName, editTextCarPrice, editTextCarYear, editTextMileage;
-    Bitmap FixBitmap;
-    String ImageTag = "image_tag";
-    String ImageName = "image_data";
-    String ServerUploadPath = "http://dewy-minuses.000webhostapp.com/upload.php";
-    ProgressDialog progressDialog;
-    ByteArrayOutputStream byteArrayOutputStream;
-    byte[] byteArray;
-    String ConvertImage, GetImageNameFromEditText;
-    HttpURLConnection httpURLConnection;
-    URL url;
-    OutputStream outputStream;
-    BufferedWriter bufferedWriter;
-    int RC;
-    BufferedReader bufferedReader;
-    StringBuilder stringBuilder;
+    private Button buttonSelectImg, buttonUpload;
+    private ImageView imageViewAddCar;
+    private String dealerid, brand, name, color, price, year, type, desc, mileage, ConvertImage, subid;
+    private Bitmap FixBitmap;
+    private String ServerUploadPath = "http://dewy-minuses.000webhostapp.com/upload.php";
+    private ProgressDialog progressDialog;
+    private ByteArrayOutputStream byteArrayOutputStream;
+    private byte[] byteArray;
+    private HttpURLConnection httpURLConnection;
+    private URL url;
+    private OutputStream outputStream;
+    private BufferedWriter bufferedWriter;
+    private int RC;
+    private BufferedReader bufferedReader;
+    private StringBuilder stringBuilder;
 
     boolean check = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_photo);
+        setTitle("Choose Image for Car");
+
+
+        SharedPreferences myPref = this.getSharedPreferences("My_Pref", MODE_PRIVATE);
+        String checkid = myPref.getString("ID", null);
+        subid = checkid.substring(0, 1);
+        if (subid.equals("A")) {
+            dealerid = myPref.getString("BelongDealer", null);
+        } else {
+            dealerid = myPref.getString("ID", null);
+        }
+
+        brand = getIntent().getStringExtra("brand");
+        name = getIntent().getStringExtra("name");
+        color = getIntent().getStringExtra("color");
+        price = getIntent().getStringExtra("price");
+        year = getIntent().getStringExtra("year");
+        type = getIntent().getStringExtra("type");
+        mileage = getIntent().getStringExtra("mileage");
+        desc = getIntent().getStringExtra("desc");
+
         buttonSelectImg = (Button) findViewById(R.id.buttonSelectImg);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
         imageViewAddCar = (ImageView) findViewById(R.id.imageViewAddCar);
-        editTextCarName = (EditText) findViewById(R.id.editTextCarName);
         byteArrayOutputStream = new ByteArrayOutputStream();
 
         buttonSelectImg.setOnClickListener(new View.OnClickListener() {
@@ -70,15 +89,16 @@ public class AddPhotoActivity extends AppCompatActivity {
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Image From Gallery"), 1);
-
+                buttonUpload.setEnabled(true);
             }
         });
 
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GetImageNameFromEditText = editTextCarName.getText().toString();
                 UploadImageToServer();
+
+
             }
         });
     }
@@ -107,7 +127,7 @@ public class AddPhotoActivity extends AppCompatActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                progressDialog = ProgressDialog.show(AddPhotoActivity.this, "Image is Uploading", "Please Wait", false, false);
+                progressDialog = ProgressDialog.show(AddPhotoActivity.this, "Car Information is Uploading", "Please Wait", false, false);
             }
 
             @Override
@@ -115,14 +135,34 @@ public class AddPhotoActivity extends AppCompatActivity {
                 super.onPostExecute(string1);
                 progressDialog.dismiss();
                 Toast.makeText(AddPhotoActivity.this, string1, Toast.LENGTH_LONG).show();
+
+                if (!string1.equals("ERROR")) {
+                    if (subid.equals("A")) {
+                        Intent backtomain = new Intent(AddPhotoActivity.this, AgentActivity.class);
+                        startActivity(backtomain);
+                    } else {
+                        Intent backtomain = new Intent(AddPhotoActivity.this, DealerActivity.class);
+                        startActivity(backtomain);
+                    }
+
+                }
             }
 
             @Override
             protected String doInBackground(Void... params) {
                 AddPhotoActivity.ImageProcessClass imageProcessClass = new AddPhotoActivity.ImageProcessClass();
                 HashMap<String, String> HashMapParams = new HashMap<String, String>();
-                HashMapParams.put(ImageTag, GetImageNameFromEditText);
-                HashMapParams.put(ImageName, ConvertImage);
+
+                HashMapParams.put("brand", brand);
+                HashMapParams.put("name", name);
+                HashMapParams.put("dealer", dealerid);
+                HashMapParams.put("price", price);
+                HashMapParams.put("color", color);
+                HashMapParams.put("desc", desc);
+                HashMapParams.put("year", year);
+                HashMapParams.put("type", type);
+                HashMapParams.put("mileage", mileage);
+                HashMapParams.put("image_data", ConvertImage);
                 String FinalData = imageProcessClass.ImageHttpRequest(ServerUploadPath, HashMapParams);
                 return FinalData;
             }
@@ -189,4 +229,5 @@ public class AddPhotoActivity extends AppCompatActivity {
         }
 
     }
+
 }
