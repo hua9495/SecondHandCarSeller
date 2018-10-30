@@ -88,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
     private void Login(final String DealerEmail, final String Dealerpw) {
         loading.setVisibility(View.VISIBLE);
         buttonLogin.setVisibility(View.GONE);

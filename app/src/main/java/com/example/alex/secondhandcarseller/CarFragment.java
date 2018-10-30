@@ -93,10 +93,8 @@ public class CarFragment extends Fragment {
             }
         });
 
-
         return v;
     }
-
 
     private void initRecyclerView(View v) {
 
@@ -105,7 +103,6 @@ public class CarFragment extends Fragment {
         recyclerViewCar.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
-
 
     private void LoadPic(final View v) {
         progressBarLoadCar.setVisibility(View.VISIBLE);

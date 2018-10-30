@@ -63,15 +63,11 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 Log.d(TAG, "onClick:Clicked on: " + mCarName.get(position));
                 Toast.makeText(mContext, mCarName.get(position), Toast.LENGTH_LONG).show();
 
-                Intent intent=new Intent(mContext,EditCarActivity.class);
-                intent.putExtra("CarID",mCarId.get(position));
+                Intent intent = new Intent(mContext, EditCarActivity.class);
+                intent.putExtra("CarID", mCarId.get(position));
                 mContext.startActivity(intent);
             }
         });
-
-
-
-
     }
 
     @Override
@@ -89,8 +85,6 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
             textViewCar = itemView.findViewById(R.id.textViewCar);
             imageViewCar = itemView.findViewById(R.id.imageViewCar);
             LayoutCar = itemView.findViewById(R.id.LayoutCar);
-
-
         }
     }
 

@@ -2,6 +2,7 @@ package com.example.alex.secondhandcarseller;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,11 +33,13 @@ public class DealerProfileFragment extends Fragment {
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor user = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE).edit();
-                user.putString("username", null);
-                user.apply();
 
-                getActivity().finish();
+
+                SharedPreferences.Editor user = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE).edit();
+                user.putString("ID", null);
+                user.apply();
+                Intent intent=new Intent(getActivity(),MainActivity.class);
+                startActivity(intent);
 
             }
         });
