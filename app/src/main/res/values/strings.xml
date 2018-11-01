@@ -46,6 +46,9 @@
     <string name="addAgent">Add Agent</string>
     <string name="sold">Mark As Sold?</string>
     <string name="back">Back</string>
+    <string name="car_name">Car name:</string>
+    <string name="date">Appointment date:</string>
+    <string name="time">Appointment time:</string>
     <string-array name="car_type">
         <item>4X4</item>
         <item>Sedan</item>
@@ -54,4 +57,5 @@
         <item>SUV</item>
         <item>Van</item>
     </string-array>
+    <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAgentAppointment.php</string>
 </resources>
