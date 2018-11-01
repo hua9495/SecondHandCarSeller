@@ -1,8 +1,10 @@
 package com.example.alex.secondhandcarseller;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,6 +50,7 @@ public class AgentFragment extends Fragment {
 
     private ProgressBar loadAgent;
     private RecyclerView recycleViewAgent;
+    private FloatingActionButton fabAddAgent;
     private String Url = "https://dewy-minuses.000webhostapp.com/AgentOfD.php";
     private String subid, dealerid;
 
@@ -62,6 +65,7 @@ public class AgentFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_agent, container, false);
         recycleViewAgent = (RecyclerView) v.findViewById(R.id.recycleViewAgent);
         loadAgent = (ProgressBar) v.findViewById(R.id.loadAgent);
+        fabAddAgent = (FloatingActionButton) v.findViewById(R.id.fabAddAgent);
 
         SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
         String checkid = myPref.getString("ID", null);
@@ -72,6 +76,21 @@ public class AgentFragment extends Fragment {
             dealerid = myPref.getString("ID", null);
         }
 
+
+
+        fabAddAgent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),AddAgentActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        return v;
+    }
+
+    @Override
+    public void onResume() {
         AgentNames.clear();
         AgentContact.clear();
         AgentEmail.clear();
@@ -79,12 +98,9 @@ public class AgentFragment extends Fragment {
         AgentStatus.clear();
         AgentID.clear();
         AgentIC.clear();
+        loadAgent(getView());
+        super.onResume();
 
-
-        loadAgent(v);
-
-
-        return v;
     }
 
     private void initRecyclerView(View v) {

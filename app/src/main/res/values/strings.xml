@@ -43,6 +43,9 @@
 
     <string name="brand_prompt">Select Brand</string>
     <string name="type_prompt">Choose a car type</string>
+    <string name="addAgent">Add Agent</string>
+    <string name="sold">Mark As Sold?</string>
+    <string name="back">Back</string>
     <string-array name="car_type">
         <item>4X4</item>
         <item>Sedan</item>

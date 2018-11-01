@@ -31,13 +31,27 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     private ArrayList<String> mCarName = new ArrayList<>();
     private ArrayList<String> mCarImage = new ArrayList<>();
     private ArrayList<String> mCarId = new ArrayList<>();
+    private ArrayList<String> mCarBrand = new ArrayList<>();
+    private ArrayList<String> mCarPrice = new ArrayList<>();
+    private ArrayList<String> mCarColor = new ArrayList<>();
+    private ArrayList<String> mCarDesc = new ArrayList<>();
+    private ArrayList<String> mCarYear = new ArrayList<>();
+    private ArrayList<String> mCarMile = new ArrayList<>();
     private Context mContext;
 
-    public CarAdapter(Context context, ArrayList<String> CarName, ArrayList<String> CarImage, ArrayList<String> CarId) {
-        mCarName = CarName;
-        mCarImage = CarImage;
-        mContext = context;
-        mCarId = CarId;
+
+
+    public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarYear, ArrayList<String> mCarMile, Context mContext) {
+        this.mCarName = mCarName;
+        this.mCarImage = mCarImage;
+        this.mCarId = mCarId;
+        this.mCarBrand = mCarBrand;
+        this.mCarPrice = mCarPrice;
+        this.mCarColor = mCarColor;
+        this.mCarDesc = mCarDesc;
+        this.mCarYear = mCarYear;
+        this.mCarMile = mCarMile;
+        this.mContext = mContext;
     }
 
     @Override
@@ -57,6 +71,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 .into(holder.imageViewCar);
 
         holder.textViewCar.setText(mCarName.get(position));
+
         holder.LayoutCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,6 +80,14 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
 
                 Intent intent = new Intent(mContext, EditCarActivity.class);
                 intent.putExtra("CarID", mCarId.get(position));
+                intent.putExtra("CarName", mCarName.get(position));
+                intent.putExtra("CarImg", mCarImage.get(position));
+                intent.putExtra("CarBrand", mCarBrand.get(position));
+                intent.putExtra("CarPrice", mCarPrice.get(position));
+                intent.putExtra("CarColor", mCarColor.get(position));
+                intent.putExtra("CarDesc", mCarDesc.get(position));
+                intent.putExtra("CarYear", mCarYear.get(position));
+                intent.putExtra("CarMile", mCarMile.get(position));
                 mContext.startActivity(intent);
             }
         });

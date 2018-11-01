@@ -54,6 +54,12 @@ public class CarFragment extends Fragment {
     private ArrayList<String> mCarName = new ArrayList<>();
     private ArrayList<String> mCarImage = new ArrayList<>();
     private ArrayList<String> mCarId = new ArrayList<>();
+    private ArrayList<String> mCarBrand = new ArrayList<>();
+    private ArrayList<String> mCarPrice = new ArrayList<>();
+    private ArrayList<String> mCarColor = new ArrayList<>();
+    private ArrayList<String> mCarDesc = new ArrayList<>();
+    private ArrayList<String> mCarYear = new ArrayList<>();
+    private ArrayList<String> mCarMile = new ArrayList<>();
     private ProgressBar progressBarLoadCar;
     private RecyclerView recyclerViewCar;
     private String Url = "https://dewy-minuses.000webhostapp.com/sellerCar.php";
@@ -79,11 +85,6 @@ public class CarFragment extends Fragment {
             dealerid = myPref.getString("ID", null);
         }
 
-        mCarName.clear();
-        mCarImage.clear();
-        mCarId.clear();
-
-        LoadPic(v);
 
         fabAddCar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,9 +97,29 @@ public class CarFragment extends Fragment {
         return v;
     }
 
+
+    @Override
+    public void onResume() {
+
+        recyclerViewCar.setEnabled(false);
+        mCarName.clear();
+        mCarImage.clear();
+        mCarId.clear();
+        mCarBrand.clear();
+        mCarPrice.clear();
+        mCarColor.clear();
+        mCarDesc.clear();
+        mCarYear.clear();
+        mCarMile.clear();
+
+        LoadPic(getView());
+
+        super.onResume();
+    }
+
     private void initRecyclerView(View v) {
 
-        CarAdapter adapter = new CarAdapter(getActivity(), mCarName, mCarImage, mCarId);
+        CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarYear, mCarMile, getActivity());
         recyclerViewCar.setAdapter(adapter);
         recyclerViewCar.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -106,6 +127,7 @@ public class CarFragment extends Fragment {
 
     private void LoadPic(final View v) {
         progressBarLoadCar.setVisibility(View.VISIBLE);
+        recyclerViewCar.setEnabled(false);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {
             @Override
@@ -119,17 +141,30 @@ public class CarFragment extends Fragment {
                             JSONObject object = jsonArray.getJSONObject(i);
 
                             //follow index
-                            String carID = object.getString("id").trim();
-                            String name = object.getString("name").trim();
-                            String image_data = object.getString("imageUrl").trim();
+                            String carID = object.getString("id");
+                            String name = object.getString("name");
+                            String image_data = object.getString("imageUrl");
+                            String brand = object.getString("brand");
+                            String price = object.getString("price");
+                            String color = object.getString("color");
+                            String desc = object.getString("desc");
+                            String year = object.getString("year");
+                            String mileage = object.getString("mileage");
 
                             mCarName.add(name);
                             mCarImage.add(image_data);
                             mCarId.add(carID);
+                            mCarBrand.add(brand);
+                            mCarPrice.add(price);
+                            mCarColor.add(color);
+                            mCarDesc.add(desc);
+                            mCarYear.add(year);
+                            mCarMile.add(mileage);
                         }
                         initRecyclerView(v);
 
                         progressBarLoadCar.setVisibility(View.GONE);
+                        recyclerViewCar.setEnabled(true);
                     } else {
                         progressBarLoadCar.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), "No car in your list", Toast.LENGTH_LONG).show();
@@ -138,6 +173,7 @@ public class CarFragment extends Fragment {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
                     progressBarLoadCar.setVisibility(View.GONE);
+                    recyclerViewCar.setEnabled(true);
                 }
             }
         },
@@ -147,6 +183,7 @@ public class CarFragment extends Fragment {
 
                         Toast.makeText(getActivity(), "Error " + error.toString(), Toast.LENGTH_LONG).show();
                         progressBarLoadCar.setVisibility(View.GONE);
+                        recyclerViewCar.setEnabled(true);
                     }
                 }) {
             @Override
