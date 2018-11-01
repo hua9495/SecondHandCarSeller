@@ -1,58 +1,109 @@
 package com.example.alex.secondhandcarseller;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 
 /**
  * Created by Alex on 10/19/2018.
  */
 
-public class AgentAdapter extends ArrayAdapter<String> {
+public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> {
+    private static final String TAG = "CarAdapter";
 
-    private final Context context;
-    private final String[] AgentNames, AgentContact, AgentEmail, AgentWorkDate, AgentStatus;
+    private ArrayList<String> AgentID = new ArrayList<>();
+    private ArrayList<String> AgentNames = new ArrayList<>();
+    private ArrayList<String> AgentIC = new ArrayList<>();
+    private ArrayList<String> AgentContact = new ArrayList<>();
+    private ArrayList<String> AgentEmail = new ArrayList<>();
+    private ArrayList<String> AgentWorkDate = new ArrayList<>();
+    private ArrayList<String> AgentStatus = new ArrayList<>();
+    private Context mContext;
 
-    public AgentAdapter(@NonNull Context context, String[] agentNames, String[] agentContact, String[] agentEmail, String[] agentWorkDate, String[] agentStatus) {
-        super(context, R.layout.adapter_agent_layout);
 
-        this.AgentNames = agentNames;
-        this.AgentContact = agentContact;
-        this.AgentEmail = agentEmail;
-        this.AgentWorkDate = agentWorkDate;
-        this.AgentStatus = agentStatus;
-        this.context = context;
+    public AgentAdapter(Context context,  ArrayList<String> agentID,ArrayList<String> agentNames, ArrayList<String> agentIC , ArrayList<String> agentContact, ArrayList<String> agentEmail, ArrayList<String> agentWorkDate, ArrayList<String> agentStatus) {
+        AgentNames = agentNames;
+        AgentID = agentID;
+        AgentIC = agentIC;
+        AgentContact = agentContact;
+        AgentEmail = agentEmail;
+        AgentWorkDate = agentWorkDate;
+        AgentStatus = agentStatus;
+        mContext = context;
     }
 
-    @Override
-    public int getCount() {
-        return AgentNames.length;
-    }
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.adapter_agent_layout, null, true);
-        TextView textViewAgentName = (TextView) v.findViewById(R.id.textViewAgentName);
-        TextView textViewAgentEmail = (TextView) v.findViewById(R.id.textViewAgentEmail);
-        TextView textViewAgentNo = (TextView) v.findViewById(R.id.textViewAgentNo);
-        TextView textViewStatus = (TextView) v.findViewById(R.id.textViewStatus);
-        TextView textViewWorkDate = (TextView) v.findViewById(R.id.textViewWorkDate);
-
-        textViewAgentName.setText(AgentNames[position]);
-        textViewAgentEmail.setText(AgentEmail[position]);
-        textViewAgentNo.setText(AgentContact[position]);
-        textViewStatus.setText(AgentStatus[position]);
-        textViewWorkDate.setText(AgentWorkDate[position]);
-
-        return v;
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_agent_layout, parent, false);
+        ViewHolder holder =new ViewHolder(view);
+        return holder;
     }
 
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+        Log.d(TAG, "onBindViewHolder: called.");
+
+
+        holder.textViewAgentName.setText(AgentNames.get(position));
+        holder.textViewAgentEmail.setText(AgentEmail.get(position));
+        holder.textViewAgentNo.setText(AgentContact.get(position));
+        holder.textViewStatus.setText(AgentStatus.get(position));
+        holder.textViewWorkDate.setText(AgentWorkDate.get(position));
+
+        holder.AgentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(mContext, AgentDetailActivity.class);
+                intent.putExtra("Aname", AgentNames.get(position));
+                intent.putExtra("Aid", AgentID.get(position));
+                intent.putExtra("Aic", AgentIC.get(position));
+                intent.putExtra("Acontact", AgentContact.get(position));
+                intent.putExtra("Aemail", AgentEmail.get(position));
+                intent.putExtra("Awork", AgentWorkDate.get(position));
+                intent.putExtra("Astatus", AgentStatus.get(position));
+
+                mContext.startActivity(intent);
+
+            }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return AgentNames.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewAgentName, textViewAgentEmail, textViewAgentNo, textViewStatus, textViewWorkDate;
+        ConstraintLayout AgentLayout;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            textViewAgentName = (TextView) itemView.findViewById(R.id.textViewAgentName);
+            textViewAgentEmail = (TextView) itemView.findViewById(R.id.textViewAgentEmail);
+            textViewAgentNo = (TextView) itemView.findViewById(R.id.textViewAgentNo);
+            textViewStatus = (TextView) itemView.findViewById(R.id.textViewStatus);
+            textViewWorkDate = (TextView) itemView.findViewById(R.id.textViewWorkDate);
+            AgentLayout = itemView.findViewById(R.id.AgentLayout);
+        }
+    }
 }

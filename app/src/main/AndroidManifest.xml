@@ -25,8 +25,10 @@
         <activity android:name=".AgentActivity" />
         <activity android:name=".EditCarActivity" />
         <activity android:name=".AddCarActivity" />
-        <activity android:name=".AddPhotoActivity"
-            android:parentActivityName=".AddCarActivity"></activity>
+        <activity
+            android:name=".AddPhotoActivity"
+            android:parentActivityName=".AddCarActivity" />
+        <activity android:name=".AgentDetailActivity"></activity>
     </application>
 
 </manifest>
