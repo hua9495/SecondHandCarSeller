@@ -42,8 +42,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class AppointFragment extends Fragment {
     private ListView lvBooking;
     private ProgressBar downloadingBooking;
-    private TextView tvCaption,tvCaption1;
-    private ArrayList<String> arrBookingStatus = new ArrayList<>();
+    private TextView tvCaption, tvCaption1;
+   private ArrayList<String> arrBookingStatus = new ArrayList<>();
     private ArrayList<String> arrCarNAMES = new ArrayList<>();
     private ArrayList<String> arrBookingDates = new ArrayList<>();
     private ArrayList<String> arrBookingTimes = new ArrayList<>();
@@ -72,14 +72,18 @@ public class AppointFragment extends Fragment {
         agentID = myPref.getString("ID", null);
         lvBooking = (ListView) v.findViewById(R.id.listViewBooking);
         downloadingBooking = (ProgressBar) v.findViewById(R.id.downloadBooking);
-        tvCaption=(TextView)v.findViewById(R.id.tvNoBooking1);
-        tvCaption1=(TextView)v.findViewById(R.id.tvNoBooking2);
+        tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
+        tvCaption1 = (TextView) v.findViewById(R.id.tvNoBooking2);
+        downloadingBooking.setVisibility(View.GONE);
         tvCaption1.setVisibility(View.GONE);
         tvCaption.setVisibility(View.GONE);
-        downloadingBooking.setVisibility(View.GONE);
-        getAppointment(getActivity(), getString(R.string.get_appointment_url));
+
+
+        getAppointment(v, getString(R.string.get_appointment_url));
+
         return v;
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -93,7 +97,7 @@ public class AppointFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void getAppointment(final Context context, String url) {
+    private void getAppointment(final View v, String url) {
 
         clearView();
         downloadingBooking.setVisibility(View.VISIBLE);
@@ -133,11 +137,11 @@ public class AppointFragment extends Fragment {
                                     arrCustID.add(custID);
 
                                 }
-                                AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity().getApplicationContext(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto,arrCustID);
-                                lvBooking.setAdapter(myBookingAdapter);
+                                downloadingBooking.setVisibility(View.GONE);
+                                initListVIew(v);
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
 
-                                downloadingBooking.setVisibility(View.GONE);
+
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
                                 tvCaption1.setVisibility(View.VISIBLE);
@@ -171,7 +175,6 @@ public class AppointFragment extends Fragment {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 //LHS is from php, RHS is getText there
-//todo:change to agentID in php
                 params.put("agentID", agentID);
 
                 return params;
@@ -189,5 +192,9 @@ public class AppointFragment extends Fragment {
         arrBookingTimes.clear();
         arrBookingDates.clear();
         arrCarNAMES.clear();
+    }
+    private void initListVIew(View v){
+        AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrCustID);
+        lvBooking.setAdapter(myBookingAdapter);
     }
 }

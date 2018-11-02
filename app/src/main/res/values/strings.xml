@@ -19,7 +19,7 @@
     <string name="ManageSub">Manage Subscription</string>
     <string name="logout">Log Out</string>
     <string name="carName">Car Name</string>
-    <string name="price">Price</string>
+    <string name="price">Price:</string>
     <string name="year">Publish Year</string>
     <string name="mileage">Mileage</string>
     <string name="addcar">Add Car</string>
@@ -46,9 +46,9 @@
     <string name="addAgent">Add Agent</string>
     <string name="sold">Mark As Sold?</string>
     <string name="back">Back</string>
-    <string name="car_name">Car name:</string>
-    <string name="date">Appointment date:</string>
-    <string name="time">Appointment time:</string>
+    <string name="car_name">Car Name:</string>
+    <string name="date">Date:</string>
+    <string name="time">Time:</string>
     <string-array name="car_type">
         <item>4X4</item>
         <item>Sedan</item>
@@ -58,4 +58,11 @@
         <item>Van</item>
     </string-array>
     <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAgentAppointment.php</string>
+    <string name="customer">Customer:</string>
+    <string name="contact_no" >Contact Number:</string>
+    <string name="cust_email">Customer Email:</string>
+    <string name="app_date">Appointment Date:</string>
+    <string name="app_time">Appointment Time:</string>
+    <string name="accept_request">Accept</string>
+    <string name="title_booking_detail">Booking Detail</string>
 </resources>

@@ -2,21 +2,14 @@ package com.example.alex.secondhandcarseller;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -99,7 +92,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
             textViewAgentName = (TextView) itemView.findViewById(R.id.textViewAgentName);
-            textViewAgentEmail = (TextView) itemView.findViewById(R.id.textViewAgentEmail);
+            textViewAgentEmail = (TextView) itemView.findViewById(R.id.textViewCustEmail);
             textViewAgentNo = (TextView) itemView.findViewById(R.id.textViewAgentNo);
             textViewStatus = (TextView) itemView.findViewById(R.id.textViewStatus);
             textViewWorkDate = (TextView) itemView.findViewById(R.id.textViewWorkDate);

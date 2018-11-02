@@ -28,7 +28,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
     private ArrayList<String> price = new ArrayList<>();
     private ArrayList<String> carPhoto = new ArrayList<>();
     private ArrayList<String> custID = new ArrayList<>();
-    private String strPrice,strCarPhoto, strCustID;
+    private String strPrice,strCarPhoto, strCustID,strBookingStatus;
 
     public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times,ArrayList<String> price,ArrayList<String> carPhoto,ArrayList<String> custID) {
         super(context, R.layout.content_appointment);
@@ -66,10 +66,10 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         strPrice=price.get(position);
         strCarPhoto=carPhoto.get(position);
         strCustID=custID.get(position);
+        strBookingStatus=bookingStatus.get(position);
 
 
-
-        if (bookingStatus.get(position).equals("Pending")) {
+        if (strBookingStatus.equals("Pending")) {
             imBookingStatus.setImageResource(R.drawable.ic_action_edit_status);
         } else if(bookingStatus.get(position).equals("Met")) {
             imBookingStatus.setImageResource(R.drawable.ic_action_green_status);
@@ -88,6 +88,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
                 bookingDetailIntent.putExtra("price", strPrice);
                 bookingDetailIntent.putExtra("carPhoto",strCarPhoto);
                 bookingDetailIntent.putExtra("custID", strCustID);
+                bookingDetailIntent.putExtra("bookingStatus",strBookingStatus);
 
                 context.startActivity(bookingDetailIntent);
             }

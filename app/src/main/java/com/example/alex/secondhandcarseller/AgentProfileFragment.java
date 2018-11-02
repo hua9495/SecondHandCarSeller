@@ -35,8 +35,8 @@ public class AgentProfileFragment extends Fragment {
 
         tvAgentName=v.findViewById(R.id.tvAgentName);
         tvAgentIC=v.findViewById(R.id.tvAgentIC);
-        tvAgentContact=v.findViewById(R.id.tvAgentContact);
-        tvAgentEmail=v.findViewById(R.id.tvAgentEmail);
+        tvAgentContact=v.findViewById(R.id.tvCustContact);
+        tvAgentEmail=v.findViewById(R.id.tvCustEmail);
         tvBelongTo=v.findViewById(R.id.tvBelongTo);
         tvWorkStart=v.findViewById(R.id.tvWorkStart);
         buttonReport=v.findViewById(R.id.buttonReport);
