@@ -31,7 +31,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -43,14 +45,17 @@ public class AppointFragment extends Fragment {
     private ListView lvBooking;
     private ProgressBar downloadingBooking;
     private TextView tvCaption, tvCaption1;
-   private ArrayList<String> arrBookingStatus = new ArrayList<>();
+    private ArrayList<String> arrBookingStatus = new ArrayList<>();
     private ArrayList<String> arrCarNAMES = new ArrayList<>();
     private ArrayList<String> arrBookingDates = new ArrayList<>();
     private ArrayList<String> arrBookingTimes = new ArrayList<>();
     private ArrayList<String> arrPrice = new ArrayList<>();
     private ArrayList<String> arrCarPhoto = new ArrayList<>();
     private ArrayList<String> arrCustID = new ArrayList<>();
+    private ArrayList<String> arrDateTime = new ArrayList<>();
+    private ArrayList<Appointment> appointmentArrayList=new ArrayList<>();
     private String agentID;
+    SharedPreferences sharePref;
 
     public AppointFragment() {
         // Required empty public constructor
@@ -70,6 +75,7 @@ public class AppointFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_appoint, container, false);
         SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
         agentID = myPref.getString("ID", null);
+
         lvBooking = (ListView) v.findViewById(R.id.listViewBooking);
         downloadingBooking = (ProgressBar) v.findViewById(R.id.downloadBooking);
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
@@ -94,6 +100,8 @@ public class AppointFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        getAppointment(getView(), getString(R.string.get_appointment_url));
         return super.onOptionsItemSelected(item);
     }
 
@@ -114,12 +122,13 @@ public class AppointFragment extends Fragment {
                             //if HAVE RECORD
                             if (success.equals("1")) {
                                 //retrive the record
+                                String appID="";
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject userResponse = jsonArray.getJSONObject(i);
 
                                     String carName = userResponse.getString("carName");
                                     String price = userResponse.getString("price");
-                                    String appID = userResponse.getString("appID");
+                                    appID = userResponse.getString("appID");
                                     String carID = userResponse.getString("carID");
                                     String custID = userResponse.getString("custID");
                                     String appDate = userResponse.getString("appDate");
@@ -127,18 +136,37 @@ public class AppointFragment extends Fragment {
                                     String appStatus = userResponse.getString("appStatus");
                                     String carPhoto = userResponse.getString("car_photo");
 
+                                    //store the date time together,for checking purpose(used in booking detail)
+                                    String bookingDateTime=appDate+" "+appTime;
+                                    arrDateTime.add(bookingDateTime);
+
                                     arrCarNAMES.add(carName);
                                     arrBookingDates.add(appDate);
                                     arrBookingTimes.add(appTime);
+
                                     arrBookingStatus.add(appStatus);
                                     //for showing booking detail purpose
                                     arrPrice.add(price);
                                     arrCarPhoto.add(carPhoto);
                                     arrCustID.add(custID);
 
+                                    //Appointment newApp=new Appointment(appID,bookingDateTime,appStatus);
+                                    //appointmentArrayList.add(newApp);
+
                                 }
+                               // Set<String> set = new HashSet<String>();
+                              //  set.addAll(arrDateTime);
+                              //  Set<String> setS = new HashSet<String>();
+                              //  setS.addAll(arrBookingStatus);
+                                //using share preference to store the list
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                                editor.putString("appID",appID);
+                                //editor.putStringSet("dateTime",set);
+                              //  editor.putStringSet("status",setS);
+                               // editor.commit();
                                 downloadingBooking.setVisibility(View.GONE);
                                 initListVIew(v);
+
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
 
 
@@ -193,7 +221,8 @@ public class AppointFragment extends Fragment {
         arrBookingDates.clear();
         arrCarNAMES.clear();
     }
-    private void initListVIew(View v){
+
+    private void initListVIew(View v) {
         AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrCustID);
         lvBooking.setAdapter(myBookingAdapter);
     }
