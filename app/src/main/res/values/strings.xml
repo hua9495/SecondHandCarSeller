@@ -58,7 +58,7 @@
         <item>Van</item>
     </string-array>
     <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAgentAppointment.php</string>
-    <string name="get_appointment_detail_url">https://dewy-minuses.000webhostapp.com/GetAgentAppointmentDetail.php</string>
+    <string name="get_appointment_detail_url">https://dewy-minuses.000webhostapp.com/getAgentBookingDetail.php</string>
     <string name="customer">Customer:</string>
     <string name="contact_no" >Contact Number:</string>
     <string name="cust_email">Customer Email:</string>
@@ -68,4 +68,6 @@
     <string name="title_booking_detail">Booking Detail</string>
     <string name="dealer_location">Dealer Location:</string>
     <string name="update_Status_url">https://dewy-minuses.000webhostapp.com/updateAppointmentStatus.php</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
 </resources>

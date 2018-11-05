@@ -18,17 +18,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,7 +58,7 @@ public class AppointFragment extends Fragment {
     private ArrayList<String> arrCustID = new ArrayList<>();
     private ArrayList<String> arrDateTime = new ArrayList<>();
     private ArrayList<Appointment> appointmentArrayList=new ArrayList<>();
-    private String agentID;
+    private String agentID,dealerID;
     SharedPreferences sharePref;
 
     public AppointFragment() {
@@ -74,7 +78,9 @@ public class AppointFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_appoint, container, false);
         SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
+        //past agentID and dealer ID as params to get booking list
         agentID = myPref.getString("ID", null);
+        dealerID=myPref.getString("BelongDealer",null);
 
         lvBooking = (ListView) v.findViewById(R.id.listViewBooking);
         downloadingBooking = (ProgressBar) v.findViewById(R.id.downloadBooking);
@@ -116,11 +122,12 @@ public class AppointFragment extends Fragment {
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            String success = jsonObject.getString("success");
+                            String successA = jsonObject.getString("successA");
+                            String successB=jsonObject.getString("successB");
                             //String message = jsonObject.getString("message");
                             JSONArray jsonArray = jsonObject.getJSONArray("BOOKING");
                             //if HAVE RECORD
-                            if (success.equals("1")) {
+                            if (successA.equals("1")||successB.equals("1")) {
                                 //retrive the record
                                 String appID="";
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -150,20 +157,17 @@ public class AppointFragment extends Fragment {
                                     arrCarPhoto.add(carPhoto);
                                     arrCustID.add(custID);
 
-                                    //Appointment newApp=new Appointment(appID,bookingDateTime,appStatus);
-                                    //appointmentArrayList.add(newApp);
+                                    Appointment newApp=new Appointment(appID,bookingDateTime,appStatus);
+                                    appointmentArrayList.add(newApp);
 
                                 }
-                               // Set<String> set = new HashSet<String>();
-                              //  set.addAll(arrDateTime);
-                              //  Set<String> setS = new HashSet<String>();
-                              //  setS.addAll(arrBookingStatus);
-                                //using share preference to store the list
+
                                 SharedPreferences.Editor editor = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
                                 editor.putString("appID",appID);
-                                //editor.putStringSet("dateTime",set);
-                              //  editor.putStringSet("status",setS);
-                               // editor.commit();
+                                Gson gson=new Gson();
+                                String jsonApp=gson.toJson(appointmentArrayList);
+                                editor.putString("jsonApp",jsonApp);
+                                editor.commit();
                                 downloadingBooking.setVisibility(View.GONE);
                                 initListVIew(v);
 
@@ -195,7 +199,6 @@ public class AppointFragment extends Fragment {
                         Toast.makeText(getActivity(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                         downloadingBooking.setVisibility(View.GONE);
                         error.printStackTrace();
-                        //btnSearch.setEnabled(true);
 
                     }
                 }) {
@@ -204,11 +207,22 @@ public class AppointFragment extends Fragment {
                 Map<String, String> params = new HashMap<>();
                 //LHS is from php, RHS is getText there
                 params.put("agentID", agentID);
+                params.put("dealerID", dealerID);
 
                 return params;
             }
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
         };
-
+//10000 is the time in milliseconds adn is equal to 10 sec
+      /*  stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(stringRequest);
 

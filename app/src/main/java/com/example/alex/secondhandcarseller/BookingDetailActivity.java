@@ -1,8 +1,10 @@
 package com.example.alex.secondhandcarseller;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,11 +23,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +50,9 @@ public class BookingDetailActivity extends AppCompatActivity {
     SharedPreferences sharePref;
     private ArrayList<String> dateTime = new ArrayList<>();
     private ArrayList<String> status = new ArrayList<>();
+    ArrayList<Appointment> appList = new ArrayList<>();
     RequestQueue queue;
+    private Date date;
 
 
     @Override
@@ -55,6 +64,11 @@ public class BookingDetailActivity extends AppCompatActivity {
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         agentID = sharePref.getString("ID", null);
         appID = sharePref.getString("appID", null);
+        Gson gson = new Gson();
+        String json = sharePref.getString("jsonApp", null);
+        Type type = new TypeToken<ArrayList<Appointment>>() {
+        }.getType();
+        appList = gson.fromJson(json, type);
 
 
         tvCarName = (TextView) findViewById(R.id.textViewCarName);
@@ -70,6 +84,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         btnAcceptRequest = (Button) findViewById(R.id.buttonAccept);
         downloadingAppDetail = (ProgressBar) findViewById(R.id.downloadingAppDetail);
 
+
         downloadingAppDetail.setVisibility(View.GONE);
         Intent intent = getIntent();
         carName = intent.getStringExtra("CarName");
@@ -80,8 +95,6 @@ public class BookingDetailActivity extends AppCompatActivity {
         custID = intent.getStringExtra("custID");
         bookingStatus = intent.getStringExtra("bookingStatus");
 
-
-        //Todo: get the custID and agentID,make a function call with params(custID,agentId)
         //to let the agent accept the pending request
         if (bookingStatus.equals("Pending")) {
             btnAcceptRequest.setVisibility(View.VISIBLE);
@@ -89,7 +102,7 @@ public class BookingDetailActivity extends AppCompatActivity {
             btnAcceptRequest.setVisibility(View.GONE);
         }
 
-        getAgentAppointmentDetail(this, getString(R.string.get_appointment_detail_url), custID, agentID);
+        getAgentAppointmentDetail(this, getString(R.string.get_appointment_detail_url), custID);
 
         btnBackMyBooking.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +113,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     }
 
     //Todo:have to try
-    private void getAgentAppointmentDetail(Context context, String url, final String custID, final String agentID) {
+    private void getAgentAppointmentDetail(Context context, String url, final String custID) {
         downloadingAppDetail.setVisibility(View.VISIBLE);
         btnBackMyBooking.setEnabled(false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -113,50 +126,42 @@ public class BookingDetailActivity extends AppCompatActivity {
                             JSONArray jsonArray = jsonObject.getJSONArray("DETAIL");
                             //if HAVE RECORD
                             if (success.equals("1")) {
-                                String custContact = "";
                                 String custName = "";
                                 String custEmail = "";
-                                String dealerLocation = "";
+                                String custContact = "";
+
                                 //retrive the record
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject userResponse = jsonArray.getJSONObject(i);
 
-
-                                    custContact = userResponse.getString("agentContactNo");
-                                    custName = userResponse.getString("agentName");
-                                    custEmail = userResponse.getString("agentEmail");
-                                    dealerLocation = userResponse.getString("dealerLocation");
-
+                                    custName = userResponse.getString("custName");
+                                    custEmail = userResponse.getString("custEmail");
+                                    custContact = userResponse.getString("custContactNo");
 
                                 }
 
-                                tvCarName.setText(carName.toString());
-                                tvAppDate.setText(appDate.toString());
-                                tvAppTime.setText(appTime.toString());
-                                tvPrice.setText("RM " + price.toString() + ".00");
+                                tvCarName.setText(carName);
+                                tvAppDate.setText(appDate);
+                                tvAppTime.setText(appTime);
+                                tvPrice.setText("RM " + price + ".00");
                                 Glide.with(getApplicationContext()).asBitmap().load(carPhoto).into(ivCarPhoto);
-                                tvDealerLoc.setText(dealerLocation.toString());
-                                tvCustName.setText(custName.toString());
-                                tvCusttEmail.setText(custEmail.toString());
-                                tvCustContactNo.setText(custContact.toString());
-                                downloadingAppDetail.setVisibility(View.GONE);
-                                btnBackMyBooking.setEnabled(true);
-
+                                tvCustName.setText(custName);
+                                tvCusttEmail.setText(custEmail);
+                                tvCustContactNo.setText(custContact);
 
                             } else {
                                 Toast.makeText(BookingDetailActivity.this, "No record", Toast.LENGTH_LONG).show();
-                                downloadingAppDetail.setVisibility(View.GONE);
-                                btnBackMyBooking.setEnabled(true);
                             }
+
 
                         } catch (JSONException e) {
                             Toast.makeText(getApplicationContext(), "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
                             e.printStackTrace();
-                            downloadingAppDetail.setVisibility(View.GONE);
-                            btnBackMyBooking.setEnabled(true);
 
                         }
 
+                        downloadingAppDetail.setVisibility(View.GONE);
+                        btnBackMyBooking.setEnabled(true);
                     }
                 },
                 new Response.ErrorListener() {
@@ -174,12 +179,23 @@ public class BookingDetailActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 //LHS is from php, RHS is getText there
                 params.put("custID", custID);
-                params.put("agentID", agentID);
+
 
                 return params;
             }
-        };
 
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+//10000 is the time in milliseconds adn is equal to 10 sec
+        /*stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                20000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
@@ -187,15 +203,44 @@ public class BookingDetailActivity extends AppCompatActivity {
     //if the agent accept the appointment request
     public void onAcceptRequest(View v) {
         //Todo: check got crash datetime or not(datetime,status)
-        String appointmentDateTime = appDate + " " + appTime;
+        Boolean crashTime = checkCrashTime(appList);
+        if (crashTime) {
+            AlertDialog.Builder buider = new AlertDialog.Builder(BookingDetailActivity.this);
+            buider.setTitle(R.string.retry);
+            buider.setMessage("Can not accept the appointment.\nReason: Date time is crashed ").setNegativeButton(R.string.cancel, null).create().show();
 
+        } else {
+            //else reply to customer, update the appointment status to "booked"(DONE)
+            makeServiceCall(this, getString(R.string.update_Status_url), appID);
+        }
 
-        //else reply to customer, update the appointment status to "booked"(DONE)
-        makeServiceCall(this,getString(R.string.update_Status_url),appID);
 
     }
-    //Todo: have to try
-    private  void makeServiceCall(final Context context,String url, final String id){
+
+    private Boolean checkCrashTime(ArrayList<Appointment> appList) {
+        String dateTime, status;
+        Boolean crashTime = false;
+        Date aDate;
+        SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy h:mm tt");
+        ParsePosition aPos = new ParsePosition(0);
+        aDate = shFormatter.parse(appDate + "" + appTime, aPos);
+        for (int i = 0; i < appList.size(); i++) {
+            dateTime = appList.get(i).getAppDateNTime().toString();
+            status = appList.get(i).getAppStatus().toString();
+            //convert dateTime to date format
+            ParsePosition pos = new ParsePosition(0);
+            date = shFormatter.parse(dateTime, pos);
+            //check status equals "Booked" AND dateTime is equal to the app datetime;
+            if (status.equals("Booked") && date.equals(aDate)) {
+                crashTime = true;
+            }
+
+        }
+        return crashTime;
+    }
+
+
+    private void makeServiceCall(final Context context, String url, final String id) {
         downloadingAppDetail.setVisibility(View.VISIBLE);
         btnBackMyBooking.setEnabled(false);
         btnAcceptRequest.setEnabled(false);
@@ -216,17 +261,16 @@ public class BookingDetailActivity extends AppCompatActivity {
 
                                 if (success.equals("1")) {//UPDATED success
                                     Toast.makeText(BookingDetailActivity.this, message, Toast.LENGTH_LONG).show();
-                                }else {
+                                } else {
                                     Toast.makeText(BookingDetailActivity.this, message, Toast.LENGTH_LONG).show();
 
                                 }
-                                proceed();
-                            }
-                            catch (JSONException e) {
+                            } catch (JSONException e) {
                                 Toast.makeText(BookingDetailActivity.this, e.toString(), Toast.LENGTH_LONG).show();
-                                proceed();
+
 
                             }
+                            proceed();
                         }
                     },
                     new Response.ErrorListener() {
@@ -241,6 +285,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
                     params.put("appID", id);
+                    params.put("agetID",agentID);
                     return params;
                 }
 
@@ -258,7 +303,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         }
     }
 
-    private void proceed(){
+    private void proceed() {
         downloadingAppDetail.setVisibility(View.GONE);
         btnBackMyBooking.setEnabled(true);
         btnAcceptRequest.setEnabled(true);

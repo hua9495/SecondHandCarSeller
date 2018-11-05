@@ -192,6 +192,13 @@ public class CarFragment extends Fragment {
                 params.put("dealerid", dealerid);
                 return params;
             }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                return params;
+            }
         };
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
