@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -72,7 +73,7 @@ public class AddCarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_car);
 
         setTitle("Add Car");
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editTextCarName = (EditText) findViewById(R.id.editTextCarName);
         editTextDesc = (EditText) findViewById(R.id.editTextDesc);
         editTextCarPrice = (EditText) findViewById(R.id.editTextCarPrice);
@@ -218,5 +219,11 @@ public class AddCarActivity extends AppCompatActivity {
         };
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 }

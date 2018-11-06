@@ -70,4 +70,8 @@
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>
     <string name="title_edit_car">Car Maintenance</string>
+    <string name="title_booking">My Booking</string>
+    <string name="title_my_profile">My Profile</string>
+    <string name="title_car_management">Car Management</string>
+    <string name="title_booking_management">Booking Management</string>
 </resources>

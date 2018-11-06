@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditCarActivity extends AppCompatActivity {
-    private Button buttonSold, buttonBackC;
+    private Button buttonSold;
     private TextView TvCarName, TvColor, TvPrice, TvYear, TvMile, TvDesc;
     private String id, name, img, brand, price, color, desc, year, mile;
     private ImageView imageViewShCar;
@@ -41,7 +42,6 @@ public class EditCarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_car);
         setTitle(R.string.title_edit_car);
         buttonSold = (Button) findViewById(R.id.buttonSold);
-        buttonBackC = (Button) findViewById(R.id.buttonBackC);
         TvCarName = (TextView) findViewById(R.id.TvCarName);
         TvColor = (TextView) findViewById(R.id.TvColor);
         TvPrice = (TextView) findViewById(R.id.TvPrice);
@@ -49,7 +49,7 @@ public class EditCarActivity extends AppCompatActivity {
         TvMile = (TextView) findViewById(R.id.TvMile);
         TvDesc = (TextView) findViewById(R.id.TvDesc);
         imageViewShCar = (ImageView) findViewById(R.id.imageViewShCar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         id = intent.getStringExtra("CarID");
         name = intent.getStringExtra("CarName");
@@ -87,13 +87,7 @@ public class EditCarActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
-        buttonBackC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        
         buttonSold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -160,9 +154,9 @@ public class EditCarActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
-    public void onBackPressed() {
-        finish();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 }

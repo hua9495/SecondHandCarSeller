@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -42,7 +43,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 public class BookingDetailActivity extends AppCompatActivity {
-    private Button btnBackMyBooking, btnAcceptRequest;
+    private Button  btnAcceptRequest;
     private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvCustName, tvCustContactNo, tvCusttEmail;
     private String carName, appDate, appTime, price, carPhoto, agentID, appID, custID, bookingStatus;
     private ImageView ivCarPhoto;
@@ -60,7 +61,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
         setTitle(R.string.title_booking_detail);
-
+getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         agentID = sharePref.getString("ID", null);
         appID = sharePref.getString("appID", null);
@@ -79,7 +80,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         tvCustContactNo = (TextView) findViewById(R.id.textViewCustContactNo);
         tvCusttEmail = (TextView) findViewById(R.id.textViewCustEmail);
         ivCarPhoto = (ImageView) findViewById(R.id.imageViewCarPhoto);
-        btnBackMyBooking = (Button) findViewById(R.id.buttonBackMyBooking);
+
         btnAcceptRequest = (Button) findViewById(R.id.buttonAccept);
         downloadingAppDetail = (ProgressBar) findViewById(R.id.downloadingAppDetail);
 
@@ -103,18 +104,12 @@ public class BookingDetailActivity extends AppCompatActivity {
 
         getAgentAppointmentDetail(this, getString(R.string.get_appointment_detail_url), custID);
 
-        btnBackMyBooking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+
     }
 
     //Todo:have to try
     private void getAgentAppointmentDetail(Context context, String url, final String custID) {
         downloadingAppDetail.setVisibility(View.VISIBLE);
-        btnBackMyBooking.setEnabled(false);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -160,7 +155,6 @@ public class BookingDetailActivity extends AppCompatActivity {
                         }
 
                         downloadingAppDetail.setVisibility(View.GONE);
-                        btnBackMyBooking.setEnabled(true);
                     }
                 },
                 new Response.ErrorListener() {
@@ -169,7 +163,6 @@ public class BookingDetailActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                         error.printStackTrace();
                         downloadingAppDetail.setVisibility(View.GONE);
-                        btnBackMyBooking.setEnabled(true);
 
                     }
                 }) {
@@ -242,7 +235,6 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     private void makeServiceCall(final Context context, String url, final String id) {
         downloadingAppDetail.setVisibility(View.VISIBLE);
-        btnBackMyBooking.setEnabled(false);
         btnAcceptRequest.setEnabled(false);
         queue = Volley.newRequestQueue(context);
         //Send data
@@ -305,8 +297,12 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     private void proceed() {
         downloadingAppDetail.setVisibility(View.GONE);
-        btnBackMyBooking.setEnabled(true);
         btnAcceptRequest.setEnabled(true);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
 }
