@@ -43,7 +43,7 @@ import java.util.StringTokenizer;
 
 public class BookingDetailActivity extends AppCompatActivity {
     private Button btnBackMyBooking, btnAcceptRequest;
-    private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvCustName, tvCustContactNo, tvCusttEmail, tvDealerLoc;
+    private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvCustName, tvCustContactNo, tvCusttEmail;
     private String carName, appDate, appTime, price, carPhoto, agentID, appID, custID, bookingStatus;
     private ImageView ivCarPhoto;
     private ProgressBar downloadingAppDetail;
@@ -53,7 +53,7 @@ public class BookingDetailActivity extends AppCompatActivity {
     ArrayList<Appointment> appList = new ArrayList<>();
     RequestQueue queue;
     private Date date;
-
+    SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy h:mm a");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,6 @@ public class BookingDetailActivity extends AppCompatActivity {
         tvAppDate = (TextView) findViewById(R.id.textViewAppDate);
         tvAppTime = (TextView) findViewById(R.id.textViewAppTime);
         tvPrice = (TextView) findViewById(R.id.textViewPrice);
-        tvDealerLoc = (TextView) findViewById(R.id.textViewDealerLocation);
         tvCustName = (TextView) findViewById(R.id.textViewCustomer);
         tvCustContactNo = (TextView) findViewById(R.id.textViewCustContactNo);
         tvCusttEmail = (TextView) findViewById(R.id.textViewCustEmail);
@@ -221,12 +220,13 @@ public class BookingDetailActivity extends AppCompatActivity {
         String dateTime, status;
         Boolean crashTime = false;
         Date aDate;
-        SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy h:mm tt");
+
+
         ParsePosition aPos = new ParsePosition(0);
-        aDate = shFormatter.parse(appDate + "" + appTime, aPos);
+        aDate = shFormatter.parse(appDate + " " + appTime,aPos);
         for (int i = 0; i < appList.size(); i++) {
-            dateTime = appList.get(i).getAppDateNTime().toString();
-            status = appList.get(i).getAppStatus().toString();
+            dateTime = appList.get(i).getAppDateNTime();
+            status = appList.get(i).getAppStatus();
             //convert dateTime to date format
             ParsePosition pos = new ParsePosition(0);
             date = shFormatter.parse(dateTime, pos);
@@ -285,7 +285,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
                     params.put("appID", id);
-                    params.put("agetID",agentID);
+                    params.put("agentID",agentID);
                     return params;
                 }
 

@@ -5,10 +5,13 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.MediaBrowserCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -169,9 +172,17 @@ public class CarFragment extends Fragment {
                         progressBarLoadCar.setVisibility(View.GONE);
                         Toast.makeText(getActivity(), "No car in your list", Toast.LENGTH_LONG).show();
                     }
+
                 } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+                    //if no internet
+                    if (!isConnected(v.getContext())) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                        builder.setTitle("Connection Error");
+                        builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+                    } else
+                        Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+
                     progressBarLoadCar.setVisibility(View.GONE);
                     recyclerViewCar.setEnabled(true);
                 }
@@ -180,10 +191,18 @@ public class CarFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        //if no internet
+                        if (!isConnected(v.getContext())) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                            builder.setTitle("Connection Error");
+                            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
-                        Toast.makeText(getActivity(), "Error " + error.toString(), Toast.LENGTH_LONG).show();
+                        } else
+                            Toast.makeText(getActivity(), "Error " + error.toString(), Toast.LENGTH_LONG).show();
+
                         progressBarLoadCar.setVisibility(View.GONE);
                         recyclerViewCar.setEnabled(true);
+
                     }
                 }) {
             @Override
@@ -204,6 +223,16 @@ public class CarFragment extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
 
+
+    }
+
+    //check internet
+    public static boolean isConnected(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
     }
 

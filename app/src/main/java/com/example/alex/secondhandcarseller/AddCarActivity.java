@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -60,7 +61,7 @@ public class AddCarActivity extends AppCompatActivity {
     private ProgressBar progressBarLoadBrand;
     private Button buttonNext;
     private static String Url = "http://dewy-minuses.000webhostapp.com/brand.php";
-    private ArrayList<String> brand = new ArrayList<String>();
+    private ArrayList<String> brand = new ArrayList<>();
 
     ArrayAdapter<CharSequence> colorAdap, typeAdap;
 
@@ -129,11 +130,10 @@ public class AddCarActivity extends AppCompatActivity {
                     if (Double.parseDouble(price) <= 0 || Double.parseDouble(price) > 10000000) {
                         editTextCarPrice.setError("Invalid Price Range!");
                         editTextCarPrice.requestFocus();
-                    }
-                    else if (Integer.parseInt(year) < 1940 || Integer.parseInt(year) > 2019) {
+                    } else if (Integer.parseInt(year) < 1940 || Integer.parseInt(year) > 2019) {
                         editTextCarYear.setError("Invalid Year!");
                         editTextCarYear.requestFocus();
-                    }  else if (Integer.parseInt(mileage) < 0 || Integer.parseInt(mileage) > 100000000) {
+                    } else if (Integer.parseInt(mileage) < 0 || Integer.parseInt(mileage) > 100000000) {
                         editTextMileage.setError("Invalid Mileage!");
                         editTextMileage.requestFocus();
                     } else {
@@ -176,7 +176,7 @@ public class AddCarActivity extends AppCompatActivity {
                         }
                         progressBarLoadBrand.setVisibility(View.GONE);
                         buttonNext.setEnabled(true);
-                        ArrayAdapter<String> brandAdap = new ArrayAdapter<String>(AddCarActivity.this, android.R.layout.simple_spinner_dropdown_item, brand);
+                        ArrayAdapter<String> brandAdap = new ArrayAdapter<>(AddCarActivity.this, android.R.layout.simple_spinner_dropdown_item, brand);
                         spinnerCarBrand.setAdapter(brandAdap);
 
                     } else {
@@ -186,9 +186,15 @@ public class AddCarActivity extends AppCompatActivity {
                         finish();
                     }
                 } catch (JSONException e) {
+                    if (!CarFragment.isConnected(AddCarActivity.this)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AddCarActivity.this);
+                        builder.setTitle("Connection Error");
+                        builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+                    } else
+                        Toast.makeText(AddCarActivity.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
                     progressBarLoadBrand.setVisibility(View.GONE);
                     buttonNext.setEnabled(true);
-                    Toast.makeText(AddCarActivity.this, "Error" + e.toString(), Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
@@ -196,9 +202,15 @@ public class AddCarActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        if (!CarFragment.isConnected(AddCarActivity.this)) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(AddCarActivity.this);
+                            builder.setTitle("Connection Error");
+                            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+                        } else
+                            Toast.makeText(AddCarActivity.this, "Error " + error.toString(), Toast.LENGTH_LONG).show();
                         progressBarLoadBrand.setVisibility(View.GONE);
                         buttonNext.setEnabled(true);
-                        Toast.makeText(AddCarActivity.this, "Error " + error.toString(), Toast.LENGTH_LONG).show();
                         finish();
                     }
                 }) {

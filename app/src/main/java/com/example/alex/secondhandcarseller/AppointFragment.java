@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,7 +50,8 @@ import static android.content.Context.MODE_PRIVATE;
 public class AppointFragment extends Fragment {
     private ListView lvBooking;
     private ProgressBar downloadingBooking;
-    private TextView tvCaption, tvCaption1;
+    private TextView tvCaption, tvTips;
+    private ConstraintLayout bookingLayout;
     private ArrayList<String> arrBookingStatus = new ArrayList<>();
     private ArrayList<String> arrCarNAMES = new ArrayList<>();
     private ArrayList<String> arrBookingDates = new ArrayList<>();
@@ -57,9 +60,9 @@ public class AppointFragment extends Fragment {
     private ArrayList<String> arrCarPhoto = new ArrayList<>();
     private ArrayList<String> arrCustID = new ArrayList<>();
     private ArrayList<String> arrDateTime = new ArrayList<>();
-    private ArrayList<Appointment> appointmentArrayList=new ArrayList<>();
-    private String agentID,dealerID;
-    SharedPreferences sharePref;
+    private ArrayList<Appointment> appointmentArrayList = new ArrayList<>();
+    private String agentID, dealerID;
+
 
     public AppointFragment() {
         // Required empty public constructor
@@ -80,14 +83,12 @@ public class AppointFragment extends Fragment {
         SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
         //past agentID and dealer ID as params to get booking list
         agentID = myPref.getString("ID", null);
-        dealerID=myPref.getString("BelongDealer",null);
-
+        dealerID = myPref.getString("BelongDealer", null);
+        tvTips = (TextView) v.findViewById(R.id.textViewTips);
         lvBooking = (ListView) v.findViewById(R.id.listViewBooking);
         downloadingBooking = (ProgressBar) v.findViewById(R.id.downloadBooking);
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
-        tvCaption1 = (TextView) v.findViewById(R.id.tvNoBooking2);
         downloadingBooking.setVisibility(View.GONE);
-        tvCaption1.setVisibility(View.GONE);
         tvCaption.setVisibility(View.GONE);
 
 
@@ -107,14 +108,16 @@ public class AppointFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+
         getAppointment(getView(), getString(R.string.get_appointment_url));
+
         return super.onOptionsItemSelected(item);
     }
 
     private void getAppointment(final View v, String url) {
 
         clearView();
-        downloadingBooking.setVisibility(View.VISIBLE);
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -123,13 +126,13 @@ public class AppointFragment extends Fragment {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String successA = jsonObject.getString("successA");
-                            String successB=jsonObject.getString("successB");
+                            String successB = jsonObject.getString("successB");
                             //String message = jsonObject.getString("message");
                             JSONArray jsonArray = jsonObject.getJSONArray("BOOKING");
                             //if HAVE RECORD
-                            if (successA.equals("1")||successB.equals("1")) {
+                            if (successA.equals("1") || successB.equals("1")) {
                                 //retrive the record
-                                String appID="";
+                                String appID = "";
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject userResponse = jsonArray.getJSONObject(i);
 
@@ -144,7 +147,7 @@ public class AppointFragment extends Fragment {
                                     String carPhoto = userResponse.getString("car_photo");
 
                                     //store the date time together,for checking purpose(used in booking detail)
-                                    String bookingDateTime=appDate+" "+appTime;
+                                    String bookingDateTime = appDate + " " + appTime;
                                     arrDateTime.add(bookingDateTime);
 
                                     arrCarNAMES.add(carName);
@@ -157,36 +160,44 @@ public class AppointFragment extends Fragment {
                                     arrCarPhoto.add(carPhoto);
                                     arrCustID.add(custID);
 
-                                    Appointment newApp=new Appointment(appID,bookingDateTime,appStatus);
+                                    Appointment newApp = new Appointment(appID, bookingDateTime, appStatus);
                                     appointmentArrayList.add(newApp);
 
                                 }
 
                                 SharedPreferences.Editor editor = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
-                                editor.putString("appID",appID);
-                                Gson gson=new Gson();
-                                String jsonApp=gson.toJson(appointmentArrayList);
-                                editor.putString("jsonApp",jsonApp);
-                                editor.commit();
-                                downloadingBooking.setVisibility(View.GONE);
+                                editor.putString("appID", appID);
+                                Gson gson = new Gson();
+                                String jsonApp = gson.toJson(appointmentArrayList);
+                                editor.putString("jsonApp", jsonApp);
+                                editor.apply();
+
                                 initListVIew(v);
-
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
-
+                                tvTips.setText( "Green - Met, Red - Booked, Pen - Pending");
 
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
-                                tvCaption1.setVisibility(View.VISIBLE);
 
-                                downloadingBooking.setVisibility(View.GONE);
                             }
+                            lvBooking.setVisibility(View.VISIBLE);
+                            downloadingBooking.setVisibility(View.GONE);
+                            tvCaption.setVisibility(View.GONE);
+                            tvTips.setVisibility(View.VISIBLE);
 
                         } catch (JSONException e) {
-                            Toast.makeText(getActivity(), "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
+                            //if no internet
+                            if (!CarFragment.isConnected(v.getContext())) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                                builder.setTitle("Connection Error");
+                                builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
+
+                            } else
+                                Toast.makeText(getActivity(), "Error:  " + e.toString(), Toast.LENGTH_LONG).show();
+                            lvBooking.setVisibility(View.VISIBLE);
                             downloadingBooking.setVisibility(View.GONE);
+                            tvCaption.setVisibility(View.VISIBLE);
                             e.printStackTrace();
-
-
                         }
 
                     }
@@ -194,10 +205,19 @@ public class AppointFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        //if no internet
+                        if (!CarFragment.isConnected(v.getContext())) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                            builder.setTitle("Connection Error");
+                            builder.setMessage("No network.\nPlease try connect your network").setNegativeButton("Retry", null).create().show();
 
+                        } else {
+                            Toast.makeText(getActivity(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+                        }
 
-                        Toast.makeText(getActivity(), "Error: " + error.toString(), Toast.LENGTH_LONG).show();
+                        lvBooking.setVisibility(View.VISIBLE);
                         downloadingBooking.setVisibility(View.GONE);
+                        tvCaption.setVisibility(View.VISIBLE);
                         error.printStackTrace();
 
                     }
@@ -211,6 +231,7 @@ public class AppointFragment extends Fragment {
 
                 return params;
             }
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -234,6 +255,10 @@ public class AppointFragment extends Fragment {
         arrBookingTimes.clear();
         arrBookingDates.clear();
         arrCarNAMES.clear();
+        lvBooking.setVisibility(View.GONE);
+        downloadingBooking.setVisibility(View.VISIBLE);
+        tvCaption.setVisibility(View.VISIBLE);
+        tvTips.setVisibility(View.GONE);
     }
 
     private void initListVIew(View v) {

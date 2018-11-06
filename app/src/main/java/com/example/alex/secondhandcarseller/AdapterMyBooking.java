@@ -14,9 +14,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Bbao on 02/11/2018.
- */
 
 public class AdapterMyBooking extends ArrayAdapter<String> {
 
@@ -28,17 +25,17 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
     private ArrayList<String> price = new ArrayList<>();
     private ArrayList<String> carPhoto = new ArrayList<>();
     private ArrayList<String> custID = new ArrayList<>();
-    private String strPrice,strCarPhoto, strCustID,strBookingStatus;
+    private String strPrice, strCarPhoto, strCustID, strBookingStatus;
 
-    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times,ArrayList<String> price,ArrayList<String> carPhoto,ArrayList<String> custID) {
+    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times, ArrayList<String> price, ArrayList<String> carPhoto, ArrayList<String> custID) {
         super(context, R.layout.content_appointment);
         this.bookingStatus = bookingStatus;
         this.carNames = carNames;
         this.dates = dates;
         this.times = times;
-        this.price=price;
-        this.carPhoto=carPhoto;
-        this.custID=custID;
+        this.price = price;
+        this.carPhoto = carPhoto;
+        this.custID = custID;
         this.context = context;
     }
 
@@ -49,7 +46,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.content_appointment, null, true);
         final TextView carName = (TextView) v.findViewById(R.id.textViewBookingCarName);
@@ -63,17 +60,18 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         carName.setText(carNames.get(position));
         bookingDate.setText(dates.get(position));
         bookingTime.setText(times.get(position));
-        strPrice=price.get(position);
-        strCarPhoto=carPhoto.get(position);
-        strCustID=custID.get(position);
-        strBookingStatus=bookingStatus.get(position);
 
+        strBookingStatus = bookingStatus.get(position);
+
+        //green-Met
+        //Red-Booked
+        //edit-Pending
 
         if (strBookingStatus.equals("Pending")) {
             imBookingStatus.setImageResource(R.drawable.ic_action_edit_status);
-        } else if(bookingStatus.get(position).equals("Met")) {
+        } else if (strBookingStatus.equals("Met")) {
             imBookingStatus.setImageResource(R.drawable.ic_action_green_status);
-        }else{
+        } else {
             imBookingStatus.setImageResource(R.drawable.ic_action_red_status);
         }
 
@@ -81,14 +79,19 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
             @Override
             public void onClick(View view) {
 
+                strBookingStatus = bookingStatus.get(position);
+                strPrice = price.get(position);
+                strCarPhoto = carPhoto.get(position);
+                strCustID = custID.get(position);
+
                 Intent bookingDetailIntent = new Intent(context, BookingDetailActivity.class);
                 bookingDetailIntent.putExtra("CarName", carName.getText().toString());
                 bookingDetailIntent.putExtra("appDate", bookingDate.getText().toString());
                 bookingDetailIntent.putExtra("appTime", bookingTime.getText().toString());
                 bookingDetailIntent.putExtra("price", strPrice);
-                bookingDetailIntent.putExtra("carPhoto",strCarPhoto);
+                bookingDetailIntent.putExtra("carPhoto", strCarPhoto);
                 bookingDetailIntent.putExtra("custID", strCustID);
-                bookingDetailIntent.putExtra("bookingStatus",strBookingStatus);
+                bookingDetailIntent.putExtra("bookingStatus", strBookingStatus);
 
                 context.startActivity(bookingDetailIntent);
             }
