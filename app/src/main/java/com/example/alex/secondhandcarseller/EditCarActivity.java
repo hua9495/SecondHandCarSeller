@@ -39,7 +39,7 @@ public class EditCarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_car);
-
+        setTitle(R.string.title_edit_car);
         buttonSold = (Button) findViewById(R.id.buttonSold);
         buttonBackC = (Button) findViewById(R.id.buttonBackC);
         TvCarName = (TextView) findViewById(R.id.TvCarName);

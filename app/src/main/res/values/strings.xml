@@ -69,4 +69,5 @@
     <string name="update_Status_url">https://dewy-minuses.000webhostapp.com/updateAppointmentStatus.php</string>
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>
+    <string name="title_edit_car">Car Maintenance</string>
 </resources>
