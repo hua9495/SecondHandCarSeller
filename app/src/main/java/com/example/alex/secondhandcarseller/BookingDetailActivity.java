@@ -35,6 +35,7 @@ import java.lang.reflect.Type;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,7 +55,9 @@ public class BookingDetailActivity extends AppCompatActivity {
     ArrayList<Appointment> appList = new ArrayList<>();
     RequestQueue queue;
     private Date date;
-    SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy h:mm a");
+    private String currentDate="";
+    private String currentTime="";
+    SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,7 +206,13 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         } else {
             //else reply to customer, update the appointment status to "booked"(DONE)
-            makeServiceCall(this, getString(R.string.update_Status_url), appID);
+            Date cDate= new Date();
+            Date cTime=new Date();
+            SimpleDateFormat sdfDate=new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdfTime=new SimpleDateFormat("hh:mm a");
+            currentDate=sdfDate.format(cDate);
+            currentTime=sdfTime.format(cTime);
+            makeServiceCall(this, getString(R.string.update_Status_url), appID,currentDate,currentTime);
         }
 
 
@@ -233,7 +242,7 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
-    private void makeServiceCall(final Context context, String url, final String id) {
+    private void makeServiceCall(final Context context, String url, final String id,final String cDate,final String cTime) {
         downloadingAppDetail.setVisibility(View.VISIBLE);
         btnAcceptRequest.setEnabled(false);
         queue = Volley.newRequestQueue(context);
@@ -252,6 +261,7 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                                 String message = jsonObject.getString("message");
 
                                 if (success.equals("1")) {//UPDATED success
+
                                     Toast.makeText(BookingDetailActivity.this, message, Toast.LENGTH_LONG).show();
                                 } else {
                                     Toast.makeText(BookingDetailActivity.this, message, Toast.LENGTH_LONG).show();
@@ -278,6 +288,8 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                     Map<String, String> params = new HashMap<>();
                     params.put("appID", id);
                     params.put("agentID",agentID);
+                    params.put("acceptDate",cDate);
+                    params.put("acceptTime",cTime);
                     return params;
                 }
 
