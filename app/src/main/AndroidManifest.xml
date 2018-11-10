@@ -30,7 +30,8 @@
             android:parentActivityName=".AddCarActivity" />
         <activity android:name=".AgentDetailActivity" />
         <activity android:name=".AddAgentActivity" />
-        <activity android:name=".BookingDetailActivity"></activity>
+        <activity android:name=".BookingDetailActivity" />
+        <activity android:name=".AdminActivity"></activity>
     </application>
 
 </manifest>

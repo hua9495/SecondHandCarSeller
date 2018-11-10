@@ -18,10 +18,10 @@
     <string name="EditProfile">Edit My Profile</string>
     <string name="ManageSub">Manage Subscription</string>
     <string name="logout">Log Out</string>
-    <string name="carName">Car Name</string>
+    <string name="carName">Car Name:</string>
     <string name="price">Price: </string>
-    <string name="year">Publish Year</string>
-    <string name="mileage">Mileage</string>
+    <string name="year">Publish Year:</string>
+    <string name="mileage">Mileage:</string>
     <string name="addcar">Add Car</string>
     <string name="next">Next</string>
 
@@ -60,7 +60,7 @@
     <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAgentAppointment.php</string>
     <string name="get_appointment_detail_url">https://dewy-minuses.000webhostapp.com/getAgentBookingDetail.php</string>
     <string name="customer">Customer:   </string>
-    <string name="contact_no" >Contact Number:  </string>
+    <string name="contact_no">Contact Number:  </string>
     <string name="cust_email">Customer Email:   </string>
     <string name="app_date">Appointment Date:   </string>
     <string name="app_time">Appointment Time:   </string>

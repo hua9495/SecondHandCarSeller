@@ -79,6 +79,12 @@ public class CarFragment extends Fragment {
         progressBarLoadCar = (ProgressBar) v.findViewById(R.id.progressBarLoadCar);
         fabAddCar = (FloatingActionButton) v.findViewById(R.id.fabAddCar);
 
+
+        ClearArray();
+
+        LoadPic(getView());
+
+
         SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
         String checkid = myPref.getString("ID", null);
         subid = checkid.substring(0, 1);
@@ -100,10 +106,7 @@ public class CarFragment extends Fragment {
         return v;
     }
 
-
-    @Override
-    public void onResume() {
-
+    private void ClearArray() {
         recyclerViewCar.setEnabled(false);
         mCarName.clear();
         mCarImage.clear();
@@ -114,11 +117,9 @@ public class CarFragment extends Fragment {
         mCarDesc.clear();
         mCarYear.clear();
         mCarMile.clear();
-
-        LoadPic(getView());
-
-        super.onResume();
     }
+
+    
 
     private void initRecyclerView(View v) {
 

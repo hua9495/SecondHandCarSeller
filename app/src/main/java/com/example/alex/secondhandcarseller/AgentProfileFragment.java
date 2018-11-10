@@ -52,6 +52,7 @@ public class AgentProfileFragment extends Fragment {
                 user.apply();
                 Intent intent=new Intent(getActivity(),MainActivity.class);
                 startActivity(intent);
+                getActivity().finish();
 
             }
         });

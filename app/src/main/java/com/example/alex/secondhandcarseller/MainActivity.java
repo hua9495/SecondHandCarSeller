@@ -2,6 +2,7 @@ package com.example.alex.secondhandcarseller;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(login);
                 finish();
             }
-
         }
 
 
@@ -78,13 +78,16 @@ public class MainActivity extends AppCompatActivity {
                 } else if (email.isEmpty()) {
                     editTextEmail.setError("Please enter Email!");
                 } else {
-                    Login(email, pw);
+                    if (email.equals("Adminlogin") && pw.equals("admin")) {
+                        Intent login = new Intent(MainActivity.this, AdminActivity.class);
+                        startActivity(login);
+                        login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        finish();
+                    } else
+                        Login(email, pw);
                 }
-
-
             }
         });
-
 
     }
 
@@ -131,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                             user.apply();
 
                             Intent login = new Intent(MainActivity.this, DealerActivity.class);
+                            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(login);
                             finish();
 
@@ -163,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
                             user.apply();
 
                             Intent login = new Intent(MainActivity.this, AgentActivity.class);
+                            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(login);
                             finish();
 

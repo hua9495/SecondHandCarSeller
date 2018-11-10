@@ -104,6 +104,8 @@ public class AddCarActivity extends AppCompatActivity {
                 String year = editTextCarYear.getText().toString();
                 String mileage = editTextMileage.getText().toString();
                 String desc = editTextDesc.getText().toString();
+                String brand = spinnerCarBrand.getSelectedItem().toString();
+
 
                 if (name.isEmpty() || price.isEmpty() || year.isEmpty() || mileage.isEmpty() || desc.isEmpty()) {
                     if (name.isEmpty()) {
@@ -140,7 +142,7 @@ public class AddCarActivity extends AppCompatActivity {
                     } else {
 
                         Intent addinfo = new Intent(AddCarActivity.this, AddPhotoActivity.class);
-                        addinfo.putExtra("brand", spinnerCarBrand.getSelectedItem().toString());
+                        addinfo.putExtra("brand", brand);
                         addinfo.putExtra("name", name);
                         addinfo.putExtra("color", spinnerColor.getSelectedItem().toString());
                         addinfo.putExtra("price", price);
@@ -169,10 +171,7 @@ public class AddCarActivity extends AppCompatActivity {
                             JSONObject object = jsonArray.getJSONObject(i);
 
                             //follow index
-                            String bid = object.getString("id").trim();
-                            String bname = object.getString("name").trim();
-                            String bdesc = object.getString("desc").trim();
-                            String byear = object.getString("year").trim();
+                            String bname = object.getString("name");
                             brand.add(bname);
                         }
                         progressBarLoadBrand.setVisibility(View.GONE);
