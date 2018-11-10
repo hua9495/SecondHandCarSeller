@@ -1,6 +1,8 @@
 package com.example.alex.secondhandcarseller;
 
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,7 +20,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class AgentProfileFragment extends Fragment {
 
-
+    private Button buttonLogout;
     public AgentProfileFragment() {
         // Required empty public constructor
     }
@@ -32,7 +34,7 @@ public class AgentProfileFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View v = inflater.inflate(R.layout.fragment_agent_profile, container, false);
-
+        buttonLogout = (Button) v.findViewById(R.id.buttonLogout);
         tvAgentName=v.findViewById(R.id.tvAgentName);
         tvAgentIC=v.findViewById(R.id.tvAgentIC);
         tvAgentContact=v.findViewById(R.id.tvCustContact);
@@ -40,6 +42,19 @@ public class AgentProfileFragment extends Fragment {
         tvBelongTo=v.findViewById(R.id.tvBelongTo);
         tvWorkStart=v.findViewById(R.id.tvWorkStart);
         buttonReport=v.findViewById(R.id.buttonReport);
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                SharedPreferences.Editor user = getActivity().getSharedPreferences("My_Pref", Context.MODE_PRIVATE).edit();
+                user.putString("ID", null);
+                user.apply();
+                Intent intent=new Intent(getActivity(),MainActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
         SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
         String email = myPref.getString("Email", null);
