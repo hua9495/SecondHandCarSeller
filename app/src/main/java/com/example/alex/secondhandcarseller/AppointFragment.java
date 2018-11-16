@@ -60,7 +60,9 @@ public class AppointFragment extends Fragment {
     private ArrayList<String> arrCarPhoto = new ArrayList<>();
     private ArrayList<String> arrCustID = new ArrayList<>();
     private ArrayList<String> arrDateTime = new ArrayList<>();
+    private ArrayList<String> arrAppID=new ArrayList<>();
     private ArrayList<Appointment> appointmentArrayList = new ArrayList<>();
+
     private String agentID, dealerID;
 
 
@@ -115,10 +117,7 @@ public class AppointFragment extends Fragment {
     }
 
     private void getAppointment(final View v, String url) {
-
         clearView();
-
-
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -132,13 +131,13 @@ public class AppointFragment extends Fragment {
                             //if HAVE RECORD
                             if (successA.equals("1") || successB.equals("1")) {
                                 //retrive the record
-                                String appID = "";
+
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject userResponse = jsonArray.getJSONObject(i);
 
                                     String carName = userResponse.getString("carName");
                                     String price = userResponse.getString("price");
-                                    appID = userResponse.getString("appID");
+                                    String appID = userResponse.getString("appID");
                                     String carID = userResponse.getString("carID");
                                     String custID = userResponse.getString("custID");
                                     String appDate = userResponse.getString("appDate");
@@ -160,21 +159,22 @@ public class AppointFragment extends Fragment {
                                     arrCarPhoto.add(carPhoto);
                                     arrCustID.add(custID);
 
-                                    Appointment newApp = new Appointment(appID, bookingDateTime, appStatus);
-                                    appointmentArrayList.add(newApp);
+                                    arrAppID.add(appID);
+
+                                  //  Appointment newApp = new Appointment(appID, bookingDateTime, appStatus);
+                                 //   appointmentArrayList.add(newApp);
 
                                 }
 
-                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
-                                editor.putString("appID", appID);
-                                Gson gson = new Gson();
-                                String jsonApp = gson.toJson(appointmentArrayList);
-                                editor.putString("jsonApp", jsonApp);
-                                editor.apply();
+                             //   SharedPreferences.Editor editor = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                             //   Gson gson = new Gson();
+                             //   String jsonApp = gson.toJson(appointmentArrayList);
+                            //    editor.putString("jsonApp", jsonApp);
+                             //   editor.apply();
 
                                 initListVIew(v);
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
-                                tvTips.setText( "Green - Met, Red - Booked, Pen - Pending");
+                                tvTips.setText( R.string.color_indicator);
 
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
@@ -256,13 +256,17 @@ public class AppointFragment extends Fragment {
         arrBookingDates.clear();
         arrCarNAMES.clear();
         lvBooking.setVisibility(View.GONE);
+        arrAppID.clear();
+        arrCustID.clear();
+        arrPrice.clear();
+        arrCarPhoto.clear();
         downloadingBooking.setVisibility(View.VISIBLE);
         tvCaption.setVisibility(View.VISIBLE);
         tvTips.setVisibility(View.GONE);
     }
 
     private void initListVIew(View v) {
-        AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrCustID);
+        AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrCustID,arrAppID);
         lvBooking.setAdapter(myBookingAdapter);
     }
 }

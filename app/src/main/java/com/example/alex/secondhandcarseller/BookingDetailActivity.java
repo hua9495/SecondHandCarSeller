@@ -71,14 +71,14 @@ public class BookingDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         agentID = sharePref.getString("ID", null);
-        appID = sharePref.getString("appID", null);
 
-        Gson gson = new Gson();
-        String json = sharePref.getString("jsonApp", null);
+
+        //     Gson gson = new Gson();
+        //     String json = sharePref.getString("jsonApp", null);
         //appList is to check got crashTime or not
-        Type type = new TypeToken<ArrayList<Appointment>>() {
-        }.getType();
-        appList = gson.fromJson(json, type);
+        //   Type type = new TypeToken<ArrayList<Appointment>>() {
+        //    }.getType();
+        //   appList = gson.fromJson(json, type);
 
 
         tvCarName = (TextView) findViewById(R.id.textViewCarName);
@@ -100,6 +100,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         appDate = intent.getStringExtra("appDate");
         appTime = intent.getStringExtra("appTime");
         price = intent.getStringExtra("price");
+        appID = intent.getStringExtra("appID");
 
         dPrice = Double.parseDouble(price);
         price = formatter.format(dPrice);
@@ -207,12 +208,12 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     //if the agent accept the appointment request
     public void onAcceptRequest(View v) {
-        //Todo: check got crash datetime or not(datetime,status)
-        Boolean crashTime = checkCrashTime(appList);
-        if (crashTime) {
+        //Todo: check got clash datetime or not(datetime,status)
+        Boolean clashTime = checkClashTime(appList);
+        if (clashTime) {
             AlertDialog.Builder buider = new AlertDialog.Builder(BookingDetailActivity.this);
             buider.setTitle(R.string.retry);
-            buider.setMessage("Can not accept the appointment.\nReason: Date time is crashed ").setNegativeButton(R.string.cancel, null).create().show();
+            buider.setMessage("Can not accept the appointment.\nReason: Date time is clashed ").setNegativeButton(R.string.cancel, null).create().show();
 
         } else {
             //else reply to customer, update the appointment status to "booked"(DONE)
@@ -228,11 +229,10 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     }
 
-    private Boolean checkCrashTime(ArrayList<Appointment> appList) {
+    private Boolean checkClashTime(ArrayList<Appointment> appList) {
         String dateTime, status;
         Boolean crashTime = false;
         Date aDate;
-
 
         ParsePosition aPos = new ParsePosition(0);
         aDate = shFormatter.parse(appDate + " " + appTime, aPos);
@@ -273,6 +273,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                                 if (success.equals("1")) {//UPDATED success
 
                                     Toast.makeText(BookingDetailActivity.this, message, Toast.LENGTH_LONG).show();
+                                    finish();
                                 } else {
                                     Toast.makeText(BookingDetailActivity.this, message, Toast.LENGTH_LONG).show();
 

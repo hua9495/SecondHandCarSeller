@@ -25,9 +25,10 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
     private ArrayList<String> price = new ArrayList<>();
     private ArrayList<String> carPhoto = new ArrayList<>();
     private ArrayList<String> custID = new ArrayList<>();
-    private String strPrice, strCarPhoto, strCustID, strBookingStatus;
+    private ArrayList<String> appID = new ArrayList<>();
+    private String strPrice, strCarPhoto, strCustID, strBookingStatus,strAppID;
 
-    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times, ArrayList<String> price, ArrayList<String> carPhoto, ArrayList<String> custID) {
+    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times, ArrayList<String> price, ArrayList<String> carPhoto, ArrayList<String> custID, ArrayList<String> appID) {
         super(context, R.layout.content_appointment);
         this.bookingStatus = bookingStatus;
         this.carNames = carNames;
@@ -36,6 +37,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         this.price = price;
         this.carPhoto = carPhoto;
         this.custID = custID;
+        this.appID=appID;
         this.context = context;
     }
 
@@ -66,13 +68,17 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         //green-Met
         //Red-Booked
         //edit-Pending
+        //cross-cancel
 
         if (strBookingStatus.equals("Pending")) {
             imBookingStatus.setImageResource(R.drawable.ic_action_edit_status);
         } else if (strBookingStatus.equals("Met")) {
             imBookingStatus.setImageResource(R.drawable.ic_action_green_status);
-        } else {
+        } else if(strBookingStatus.equals("Booked")){
             imBookingStatus.setImageResource(R.drawable.ic_action_red_status);
+        }
+        else{
+            imBookingStatus.setImageResource(R.drawable.ic_action_cancel_status);
         }
 
         bookingLayout.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +89,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
                 strPrice = price.get(position);
                 strCarPhoto = carPhoto.get(position);
                 strCustID = custID.get(position);
+                strAppID=appID.get(position);
 
                 Intent bookingDetailIntent = new Intent(context, BookingDetailActivity.class);
                 bookingDetailIntent.putExtra("CarName", carName.getText().toString());
@@ -92,6 +99,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
                 bookingDetailIntent.putExtra("carPhoto", strCarPhoto);
                 bookingDetailIntent.putExtra("custID", strCustID);
                 bookingDetailIntent.putExtra("bookingStatus", strBookingStatus);
+                bookingDetailIntent.putExtra("appID",strAppID);
 
                 context.startActivity(bookingDetailIntent);
             }
