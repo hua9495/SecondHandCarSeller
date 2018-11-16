@@ -22,11 +22,13 @@ public class AdminAdapter  extends RecyclerView.Adapter<AdminAdapter.ViewHolder>
 
     private ArrayList<String> DealerType = new ArrayList<>();
     private ArrayList<String> DealerNo = new ArrayList<>();
+    private ArrayList<String> DealerStatus = new ArrayList<>();
     private Context mContext;
 
-    public AdminAdapter(ArrayList<String> dealerType, ArrayList<String> dealerNo, Context mContext) {
+    public AdminAdapter(ArrayList<String> dealerType, ArrayList<String> dealerNo,ArrayList<String> dealerStatus, Context mContext) {
         DealerType = dealerType;
         DealerNo = dealerNo;
+        DealerStatus=dealerStatus;
         this.mContext = mContext;
     }
 

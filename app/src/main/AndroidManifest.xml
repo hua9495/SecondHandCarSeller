@@ -31,7 +31,8 @@
         <activity android:name=".AgentDetailActivity" />
         <activity android:name=".AddAgentActivity" />
         <activity android:name=".BookingDetailActivity" />
-        <activity android:name=".AdminActivity"></activity>
+        <activity android:name=".AdminActivity" />
+        <activity android:name=".DealerListActivity"></activity>
     </application>
 
 </manifest>

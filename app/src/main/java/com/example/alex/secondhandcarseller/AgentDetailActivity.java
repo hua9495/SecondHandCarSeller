@@ -54,7 +54,7 @@ public class AgentDetailActivity extends AppCompatActivity {
         buttonBack = (Button) findViewById(R.id.buttonBack);
         buttonUpdateAgent = (Button) findViewById(R.id.buttonUpdateAgent);
         checkBoxRetired = (CheckBox) findViewById(R.id.checkBoxRetired);
-        progressBarUpdateA=(ProgressBar)findViewById(R.id.progressBarUpdateA);
+        progressBarUpdateA = (ProgressBar) findViewById(R.id.progressBarUpdateA);
 
         Intent intent = getIntent();
         name = intent.getStringExtra("Aname");
