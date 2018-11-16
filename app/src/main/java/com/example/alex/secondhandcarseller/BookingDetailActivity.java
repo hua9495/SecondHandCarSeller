@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 public class BookingDetailActivity extends AppCompatActivity {
-    private Button  btnAcceptRequest;
+    private Button btnAcceptRequest;
     private TextView tvCarName, tvAppDate, tvAppTime, tvPrice, tvCustName, tvCustContactNo, tvCusttEmail;
     private String carName, appDate, appTime, price, carPhoto, agentID, appID, custID, bookingStatus;
     private ImageView ivCarPhoto;
@@ -55,21 +56,26 @@ public class BookingDetailActivity extends AppCompatActivity {
     ArrayList<Appointment> appList = new ArrayList<>();
     RequestQueue queue;
     private Date date;
-    private String currentDate="";
-    private String currentTime="";
+    private String currentDate = "";
+    private String currentTime = "";
     SimpleDateFormat shFormatter = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+    NumberFormat formatter = NumberFormat.getCurrencyInstance();
+    private Double dPrice;
+    private String custName, custEmail, custContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_detail);
         setTitle(R.string.title_booking_detail);
-getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         agentID = sharePref.getString("ID", null);
         appID = sharePref.getString("appID", null);
+
         Gson gson = new Gson();
         String json = sharePref.getString("jsonApp", null);
+        //appList is to check got crashTime or not
         Type type = new TypeToken<ArrayList<Appointment>>() {
         }.getType();
         appList = gson.fromJson(json, type);
@@ -94,6 +100,10 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         appDate = intent.getStringExtra("appDate");
         appTime = intent.getStringExtra("appTime");
         price = intent.getStringExtra("price");
+
+        dPrice = Double.parseDouble(price);
+        price = formatter.format(dPrice);
+
         carPhoto = intent.getStringExtra("carPhoto");
         custID = intent.getStringExtra("custID");
         bookingStatus = intent.getStringExtra("bookingStatus");
@@ -110,7 +120,6 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
-    //Todo:have to try
     private void getAgentAppointmentDetail(Context context, String url, final String custID) {
         downloadingAppDetail.setVisibility(View.VISIBLE);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -123,9 +132,6 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                             JSONArray jsonArray = jsonObject.getJSONArray("DETAIL");
                             //if HAVE RECORD
                             if (success.equals("1")) {
-                                String custName = "";
-                                String custEmail = "";
-                                String custContact = "";
 
                                 //retrive the record
                                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -136,15 +142,8 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                                     custContact = userResponse.getString("custContactNo");
 
                                 }
+                                loadData();
 
-                                tvCarName.setText(carName);
-                                tvAppDate.setText(appDate);
-                                tvAppTime.setText(appTime);
-                                tvPrice.setText("RM " + price + ".00");
-                                Glide.with(getApplicationContext()).asBitmap().load(carPhoto).into(ivCarPhoto);
-                                tvCustName.setText(custName);
-                                tvCusttEmail.setText(custEmail);
-                                tvCustContactNo.setText(custContact);
 
                             } else {
                                 Toast.makeText(BookingDetailActivity.this, "No record", Toast.LENGTH_LONG).show();
@@ -195,6 +194,17 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         queue.add(stringRequest);
     }
 
+    private void loadData() {
+        tvCarName.setText(carName);
+        tvAppDate.setText(appDate);
+        tvAppTime.setText(appTime);
+        tvPrice.setText(price);
+        Glide.with(getApplicationContext()).asBitmap().load(carPhoto).into(ivCarPhoto);
+        tvCustName.setText(custName);
+        tvCusttEmail.setText(custEmail);
+        tvCustContactNo.setText(custContact);
+    }
+
     //if the agent accept the appointment request
     public void onAcceptRequest(View v) {
         //Todo: check got crash datetime or not(datetime,status)
@@ -206,13 +216,13 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         } else {
             //else reply to customer, update the appointment status to "booked"(DONE)
-            Date cDate= new Date();
-            Date cTime=new Date();
-            SimpleDateFormat sdfDate=new SimpleDateFormat("dd/MM/yyyy");
-            SimpleDateFormat sdfTime=new SimpleDateFormat("hh:mm a");
-            currentDate=sdfDate.format(cDate);
-            currentTime=sdfTime.format(cTime);
-            makeServiceCall(this, getString(R.string.update_Status_url), appID,currentDate,currentTime);
+            Date cDate = new Date();
+            Date cTime = new Date();
+            SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat sdfTime = new SimpleDateFormat("hh:mm a");
+            currentDate = sdfDate.format(cDate);
+            currentTime = sdfTime.format(cTime);
+            makeServiceCall(this, getString(R.string.update_Status_url), appID, currentDate, currentTime);
         }
 
 
@@ -225,7 +235,7 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         ParsePosition aPos = new ParsePosition(0);
-        aDate = shFormatter.parse(appDate + " " + appTime,aPos);
+        aDate = shFormatter.parse(appDate + " " + appTime, aPos);
         for (int i = 0; i < appList.size(); i++) {
             dateTime = appList.get(i).getAppDateNTime();
             status = appList.get(i).getAppStatus();
@@ -242,7 +252,7 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
-    private void makeServiceCall(final Context context, String url, final String id,final String cDate,final String cTime) {
+    private void makeServiceCall(final Context context, String url, final String id, final String cDate, final String cTime) {
         downloadingAppDetail.setVisibility(View.VISIBLE);
         btnAcceptRequest.setEnabled(false);
         queue = Volley.newRequestQueue(context);
@@ -287,9 +297,9 @@ getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 protected Map<String, String> getParams() {
                     Map<String, String> params = new HashMap<>();
                     params.put("appID", id);
-                    params.put("agentID",agentID);
-                    params.put("acceptDate",cDate);
-                    params.put("acceptTime",cTime);
+                    params.put("agentID", agentID);
+                    params.put("acceptDate", cDate);
+                    params.put("acceptTime", cTime);
                     return params;
                 }
 
