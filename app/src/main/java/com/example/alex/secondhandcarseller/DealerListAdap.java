@@ -1,6 +1,7 @@
 package com.example.alex.secondhandcarseller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +56,20 @@ public class DealerListAdap  extends RecyclerView.Adapter<DealerListAdap.ViewHol
         holder.tvDealername.setText(DealerName.get(position));
         holder.tvPic.setText(Pic.get(position));
         holder.tvDealerlocation.setText(DealerLoctaion.get(position));
+        holder.dealerListLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(mContext,AdminDealerDetail.class);
+                intent.putExtra("DealerID", Dealerid.get(position));
+                intent.putExtra("DealerName", DealerName.get(position));
+                intent.putExtra("DealerStatus", DealerStatus.get(position));
+                intent.putExtra("DealerEmail", DealerEmail.get(position));
+                intent.putExtra("DealerLoctaion", DealerLoctaion.get(position));
+                intent.putExtra("DealerContact", DealerContact.get(position));
+                intent.putExtra("Pic", Pic.get(position));
+                mContext.startActivity(intent);
+            }
+        });
 
 
     }

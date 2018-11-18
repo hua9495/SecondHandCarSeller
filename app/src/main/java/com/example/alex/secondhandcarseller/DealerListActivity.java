@@ -52,6 +52,7 @@ public class DealerListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Status = intent.getStringExtra("DealerStatus");
+        setTitle(Status+" Dealers List");
 
         getDealer();
 
