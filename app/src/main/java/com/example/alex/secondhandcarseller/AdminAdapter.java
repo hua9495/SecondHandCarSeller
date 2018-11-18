@@ -53,14 +53,10 @@ public class AdminAdapter  extends RecyclerView.Adapter<AdminAdapter.ViewHolder>
             @Override
             public void onClick(View v) {
 
-                if(DealerNo.get(position).equals(0)){
-
-                }else if(DealerNo.get(position).equals(1)){
-
-                }
-                else {
-
-                }
+                String[] splitStr = DealerStatus.get(position).split("\\s+");
+                Intent intent = new Intent(mContext, DealerListActivity.class);
+                intent.putExtra("DealerStatus", splitStr[0]);
+                mContext.startActivity(intent);
 
             }
         });
