@@ -49,7 +49,9 @@ public class EditCarActivity extends AppCompatActivity {
         TvMile = (TextView) findViewById(R.id.TvMile);
         TvDesc = (TextView) findViewById(R.id.TvDesc);
         imageViewShCar = (ImageView) findViewById(R.id.imageViewShCar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
         id = intent.getStringExtra("CarID");
         name = intent.getStringExtra("CarName");
