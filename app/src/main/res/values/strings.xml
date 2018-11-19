@@ -50,12 +50,14 @@
     <string name="date">Date: </string>
     <string name="time">Time: </string>
     <string-array name="car_type">
-        <item>4X4</item>
         <item>Sedan</item>
-        <item>Small Sedan</item>
-        <item>Saloon</item>
+        <item>MPV</item>
+        <item>Hatchback</item>
         <item>SUV</item>
+        <item>4X4</item>
+        <item>Sport</item>
         <item>Van</item>
+        <item>Coupe</item>
     </string-array>
     <string name="get_appointment_url">https://dewy-minuses.000webhostapp.com/GetAllAgentAppointment.php</string>
     <string name="get_appointment_detail_url">https://dewy-minuses.000webhostapp.com/getAgentBookingDetail.php</string>
