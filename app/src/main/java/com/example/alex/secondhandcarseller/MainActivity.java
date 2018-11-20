@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editTextEmail, editTextPw;
     private Button buttonLogin;
-    private TextView textViewResetPw;
+    private TextView textViewResetPw,textViewRegister;
     private String pw, email;
     private ProgressBar loading;
     private static String Url = "http://dewy-minuses.000webhostapp.com/dealerlogin.php";
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         editTextPw = (EditText) findViewById(R.id.editTextPw);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
         textViewResetPw = (TextView) findViewById(R.id.textViewResetPw);
+        textViewRegister = (TextView) findViewById(R.id.textViewRegister);
         loading = (ProgressBar) findViewById(R.id.loading);
 
         //skip this activity if already logged in
@@ -66,6 +67,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        textViewRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainActivity.this,DealerRegisterActivity.class);
+                startActivity(intent);
+            }
+        });
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override

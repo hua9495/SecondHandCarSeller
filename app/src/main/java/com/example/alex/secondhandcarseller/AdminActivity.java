@@ -5,6 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -24,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.Inflater;
 
 import static com.example.alex.secondhandcarseller.CarFragment.isConnected;
 
@@ -35,7 +39,7 @@ public class AdminActivity extends AppCompatActivity {
     private ArrayList<String> DealerStatus = new ArrayList<>();
     private RecyclerView recycleViewAllDealer;
     private ProgressBar progressBarloadCOunt;
-    private String Url="https://dewy-minuses.000webhostapp.com/getDealerCount.php";
+    private String Url = "https://dewy-minuses.000webhostapp.com/getDealerCount.php";
 
 
     @Override
@@ -51,13 +55,29 @@ public class AdminActivity extends AppCompatActivity {
         setTitle("Admin");
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_refresh, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        getCount();
+        return super.onOptionsItemSelected(item);
+    }
+
     private void initRecyclerView() {
 
-        AdminAdapter adapter = new AdminAdapter(DealerType, DealerNo,DealerStatus, this);
+        AdminAdapter adapter = new AdminAdapter(DealerType, DealerNo, DealerStatus, this);
         recycleViewAllDealer.setAdapter(adapter);
         recycleViewAllDealer.setLayoutManager(new LinearLayoutManager(this));
 
     }
+
 
     @Override
     public void onBackPressed() {
@@ -66,7 +86,7 @@ public class AdminActivity extends AppCompatActivity {
     }
 
     private void getCount() {
-
+        clearall();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -144,5 +164,12 @@ public class AdminActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
 
+    }
+
+    private void clearall() {
+        progressBarloadCOunt.setVisibility(View.VISIBLE);
+        DealerType.clear();
+        DealerNo.clear();
+        DealerStatus.clear();
     }
 }

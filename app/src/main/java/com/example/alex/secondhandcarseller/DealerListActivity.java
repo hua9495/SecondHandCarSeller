@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -59,9 +62,22 @@ public class DealerListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.action_bar_refresh, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        getDealer();
+        return super.onOptionsItemSelected(item);
+    }
 
     private void getDealer() {
-
+        clearAll();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -147,6 +163,17 @@ public class DealerListActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
 
+    }
+
+    private void clearAll() {
+        Dealerid.clear();
+        DealerName.clear();
+        DealerStatus.clear();
+        DealerEmail.clear();
+        DealerLoctaion.clear();
+        DealerContact.clear();
+        Pic.clear();
+        progressBarLoadDeal.setVisibility(View.VISIBLE);
     }
 
 

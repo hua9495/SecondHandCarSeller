@@ -33,7 +33,8 @@
         <activity android:name=".BookingDetailActivity" />
         <activity android:name=".AdminActivity" />
         <activity android:name=".DealerListActivity" />
-        <activity android:name=".AdminDealerDetail"></activity>
+        <activity android:name=".AdminDealerDetail" />
+        <activity android:name=".DealerRegisterActivity"></activity>
     </application>
 
 </manifest>
