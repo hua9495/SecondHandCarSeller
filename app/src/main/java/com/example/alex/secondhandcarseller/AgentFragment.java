@@ -4,11 +4,15 @@ package com.example.alex.secondhandcarseller;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -57,6 +61,12 @@ public class AgentFragment extends Fragment {
     public AgentFragment() {
         // Required empty public constructor
     }
+    
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
 
     @Override
@@ -76,7 +86,7 @@ public class AgentFragment extends Fragment {
             dealerid = myPref.getString("ID", null);
         }
 
-
+        loadAgent(v);
 
         fabAddAgent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,8 +99,7 @@ public class AgentFragment extends Fragment {
         return v;
     }
 
-    @Override
-    public void onResume() {
+    private void clearAll() {
         AgentNames.clear();
         AgentContact.clear();
         AgentEmail.clear();
@@ -98,7 +107,24 @@ public class AgentFragment extends Fragment {
         AgentStatus.clear();
         AgentID.clear();
         AgentIC.clear();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.action_bar_refresh, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         loadAgent(getView());
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+
         super.onResume();
 
     }
@@ -113,6 +139,8 @@ public class AgentFragment extends Fragment {
 
 
     private void loadAgent(final View v) {
+
+        clearAll();
         loadAgent.setVisibility(View.VISIBLE);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {

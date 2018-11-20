@@ -68,13 +68,19 @@ public class AddAgentActivity extends AppCompatActivity {
                 aWork = etAgentWork.getText().toString();
                 aPassword = etPassword.getText().toString();
 
-                if (aName.equals(null) || aIC.equals(null) || aEmail.equals(null) || aContact.equals(null) || aWork.equals(null) || aPassword.equals(null)) {
-                    etAgentName.setError("Cannot Be Blank!");
-                    etAgentIC.setError("Cannot Be Blank!");
-                    etAgentEmail.setError("Cannot Be Blank!");
-                    etAgentContact.setError("Cannot Be Blank!");
-                    etAgentWork.setError("Cannot Be Blank!");
-                    etPassword.setError("Cannot Be Blank!");
+                if (aName.isEmpty() || aIC.isEmpty() || aEmail.isEmpty() || aContact.isEmpty() || aWork.isEmpty() || aPassword.isEmpty()) {
+                    if (aName.isEmpty())
+                        etAgentName.setError("Cannot Be Blank!");
+                    if (aIC.isEmpty())
+                        etAgentIC.setError("Cannot Be Blank!");
+                    if (aEmail.isEmpty())
+                        etAgentEmail.setError("Cannot Be Blank!");
+                    if (aContact.isEmpty())
+                        etAgentContact.setError("Cannot Be Blank!");
+                    if (aWork.isEmpty())
+                        etAgentWork.setError("Cannot Be Blank!");
+                    if (aPassword.isEmpty())
+                        etPassword.setError("Cannot Be Blank!");
                 } else {
                     progressBarInsertA.setVisibility(View.VISIBLE);
                     etAgentName.setEnabled(false);

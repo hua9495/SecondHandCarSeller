@@ -42,7 +42,7 @@ public class DealerActivity extends AppCompatActivity {
                         return true;
                     case R.id.nav_Agent:
                         setFragment(agentFragment);
-                        setTitle(R.string.title_booking_management);
+                        setTitle("My Agents");
                         return true;
                     case R.id.nav_Profile:
                         setTitle(R.string.title_my_profile);

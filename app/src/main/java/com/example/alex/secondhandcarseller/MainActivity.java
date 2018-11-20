@@ -1,8 +1,10 @@
 package com.example.alex.secondhandcarseller;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.content.IntentCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editTextEmail, editTextPw;
     private Button buttonLogin;
-    private TextView textViewResetPw,textViewRegister;
+    private TextView textViewResetPw, textViewRegister;
     private String pw, email;
     private ProgressBar loading;
     private static String Url = "http://dewy-minuses.000webhostapp.com/dealerlogin.php";
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         textViewRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,DealerRegisterActivity.class);
+                Intent intent = new Intent(MainActivity.this, DealerRegisterActivity.class);
                 startActivity(intent);
             }
         });
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String success = jsonObject.getString("success");
+                    String message = jsonObject.getString("message");
                     JSONArray jsonArray = jsonObject.getJSONArray("login");
                     if (success.equals("1")) {
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -126,25 +129,46 @@ public class MainActivity extends AppCompatActivity {
                             String dlocation = object.getString("location").trim();
                             String dcontact = object.getString("contact").trim();
                             String dpic = object.getString("personIC").trim();
+                            String dstatus = object.getString("status").trim();
+
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
 
                             loading.setVisibility(View.GONE);
                             buttonLogin.setVisibility(View.VISIBLE);
+                            if (dstatus.matches("Approved")) {
+                                Toast.makeText(MainActivity.this, "Dealer", Toast.LENGTH_LONG).show();
 
-                            Toast.makeText(MainActivity.this, "Dealer", Toast.LENGTH_LONG).show();
+                                SharedPreferences.Editor user = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                                user.putString("Email", demail);
+                                user.putString("ID", did);
+                                user.putString("Name", dname);
+                                user.putString("Location", dlocation);
+                                user.putString("Contact", dcontact);
+                                user.putString("PersonIC", dpic);
+                                user.apply();
 
-                            SharedPreferences.Editor user = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
-                            user.putString("Email", demail);
-                            user.putString("ID", did);
-                            user.putString("Name", dname);
-                            user.putString("Location", dlocation);
-                            user.putString("Contact", dcontact);
-                            user.putString("PersonIC", dpic);
-                            user.apply();
+                                Intent login = new Intent(MainActivity.this, DealerActivity.class);
+                                login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(login);
+                                finish();
 
-                            Intent login = new Intent(MainActivity.this, DealerActivity.class);
-                            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(login);
-                            finish();
+                            } else if (dstatus.matches("Blacklisted")) {
+                                builder.setTitle("Blacklisted!");
+                                builder.setMessage("You Are blacklisted!\nPlease Email to \nSHCAdmin@gmail.com for more information.");
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                            } else {
+                                builder.setTitle("Pending");
+                                builder.setMessage("Your registration is being process\nPlease email to \nSHCAdmin@gmail.com if you have any inquiry.");
+                                AlertDialog alert = builder.create();
+                                alert.show();
+
+                            }
 
                         }
                     } else if (success.equals("2")) {
@@ -159,35 +183,59 @@ public class MainActivity extends AppCompatActivity {
                             String aname = object.getString("name").trim();
                             String acontact = object.getString("contact").trim();
                             String workstart = object.getString("workstart").trim();
+                            String dstatus = object.getString("dstatus").trim();
+                            String astatus = object.getString("astatus").trim();
+
                             loading.setVisibility(View.GONE);
                             buttonLogin.setVisibility(View.VISIBLE);
 
-                            Toast.makeText(MainActivity.this, "Agent", Toast.LENGTH_LONG).show();
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            if (astatus.matches("On")) {
+                                if (dstatus.matches("Approved")) {
 
-                            SharedPreferences.Editor user = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
-                            user.putString("Email", aemail);
-                            user.putString("ID", aid);
-                            user.putString("BelongDealer", did);
-                            user.putString("ICno", aic);
-                            user.putString("Name", aname);
-                            user.putString("Contact", acontact);
-                            user.putString("WorkStart", workstart);
-                            user.apply();
+                                    Toast.makeText(MainActivity.this, "Agent", Toast.LENGTH_LONG).show();
 
-                            Intent login = new Intent(MainActivity.this, AgentActivity.class);
-                            login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(login);
-                            finish();
+                                    SharedPreferences.Editor user = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                                    user.putString("Email", aemail);
+                                    user.putString("ID", aid);
+                                    user.putString("BelongDealer", did);
+                                    user.putString("ICno", aic);
+                                    user.putString("Name", aname);
+                                    user.putString("Contact", acontact);
+                                    user.putString("WorkStart", workstart);
+                                    user.apply();
 
+                                    Intent login = new Intent(MainActivity.this, AgentActivity.class);
+                                    login.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(login);
+                                    finish();
+                                } else {
+                                    builder.setTitle("Blacklisted!");
+                                    builder.setMessage("The company you belong to is blacklisted!\nPlease contact your company for more information.");
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+                                }
+                            }
+                            else {
+                                builder.setTitle("Barred");
+                                builder.setMessage("Your account has been barred, please contact your company.");
+                                AlertDialog alert = builder.create();
+                                alert.show();
+                            }
                         }
                     } else {
                         loading.setVisibility(View.GONE);
                         buttonLogin.setVisibility(View.VISIBLE);
-                        Toast.makeText(MainActivity.this, "Incorrect Password", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "Invalid Email \nPlease make sure u enter the correct Email", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this,"Error "+ e.toString(), Toast.LENGTH_LONG).show();
                     loading.setVisibility(View.GONE);
                     buttonLogin.setVisibility(View.VISIBLE);
                 }

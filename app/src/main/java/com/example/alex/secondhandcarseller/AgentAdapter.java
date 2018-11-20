@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,7 +31,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
     private Context mContext;
 
 
-    public AgentAdapter(Context context,  ArrayList<String> agentID,ArrayList<String> agentNames, ArrayList<String> agentIC , ArrayList<String> agentContact, ArrayList<String> agentEmail, ArrayList<String> agentWorkDate, ArrayList<String> agentStatus) {
+    public AgentAdapter(Context context, ArrayList<String> agentID, ArrayList<String> agentNames, ArrayList<String> agentIC, ArrayList<String> agentContact, ArrayList<String> agentEmail, ArrayList<String> agentWorkDate, ArrayList<String> agentStatus) {
         AgentNames = agentNames;
         AgentID = agentID;
         AgentIC = agentIC;
@@ -46,7 +47,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_agent_layout, parent, false);
-        ViewHolder holder =new ViewHolder(view);
+        ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
@@ -56,11 +57,10 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
 
 
         holder.textViewAgentName.setText(AgentNames.get(position));
-        holder.textViewAgentEmail.setText(AgentEmail.get(position));
         holder.textViewAgentNo.setText(AgentContact.get(position));
         holder.textViewStatus.setText(AgentStatus.get(position));
-        holder.textViewWorkDate.setText(AgentWorkDate.get(position));
-
+        if (!AgentStatus.get(position).matches("On"))
+            holder.textViewStatus.setTextColor(ContextCompat.getColor(mContext, R.color.Red));
         holder.AgentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,16 +86,14 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewAgentName, textViewAgentEmail, textViewAgentNo, textViewStatus, textViewWorkDate;
+        TextView textViewAgentName, textViewAgentNo, textViewStatus;
         ConstraintLayout AgentLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textViewAgentName = (TextView) itemView.findViewById(R.id.textViewAgentName);
-            textViewAgentEmail = (TextView) itemView.findViewById(R.id.textViewCustEmail);
             textViewAgentNo = (TextView) itemView.findViewById(R.id.textViewAgentNo);
             textViewStatus = (TextView) itemView.findViewById(R.id.textViewStatus);
-            textViewWorkDate = (TextView) itemView.findViewById(R.id.textViewWorkDate);
             AgentLayout = itemView.findViewById(R.id.AgentLayout);
         }
     }
