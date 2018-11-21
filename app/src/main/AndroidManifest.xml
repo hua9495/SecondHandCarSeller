@@ -34,7 +34,9 @@
         <activity android:name=".AdminActivity" />
         <activity android:name=".DealerListActivity" />
         <activity android:name=".AdminDealerDetail" />
-        <activity android:name=".DealerRegisterActivity"></activity>
+        <activity android:name=".DealerRegisterActivity" />
+        <activity android:name=".EditDealerProfile" />
+        <activity android:name=".PromotionActivity"></activity>
     </application>
 
 </manifest>

@@ -77,4 +77,5 @@
     <string name="title_car_management">Car Management</string>
     <string name="title_booking_management">Booking Management</string>
     <string name="color_indicator">Green - Met, Red - Booked, Pen - Pending, Cross - Cancelled</string>
+    <string name="promotion">Make Promotion</string>
 </resources>

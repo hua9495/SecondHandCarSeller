@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                             String dcontact = object.getString("contact").trim();
                             String dpic = object.getString("personIC").trim();
                             String dstatus = object.getString("status").trim();
+                            String address = object.getString("address").trim();
 
                             final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -150,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                                 user.putString("Location", dlocation);
                                 user.putString("Contact", dcontact);
                                 user.putString("PersonIC", dpic);
+                                user.putString("Address", address);
                                 user.apply();
 
                                 Intent login = new Intent(MainActivity.this, DealerActivity.class);
