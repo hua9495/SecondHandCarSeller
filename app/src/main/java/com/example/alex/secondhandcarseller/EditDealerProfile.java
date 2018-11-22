@@ -98,6 +98,16 @@ public class EditDealerProfile extends AppCompatActivity {
                         eTcompanyAddress.setError("Cannot Be Blank!");
                 } else {
                     updateDealer(EditDealerProfile.this);
+
+                    SharedPreferences.Editor user = getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                    user.putString("Email", email);
+                    user.putString("Name", name);
+                    user.putString("Location", location);
+                    user.putString("Contact", contact);
+                    user.putString("PersonIC", pic);
+                    user.putString("Address", address);
+                    user.apply();
+
                 }
             }
         });
