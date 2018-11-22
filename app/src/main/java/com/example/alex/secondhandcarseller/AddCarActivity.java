@@ -223,6 +223,7 @@ public class AddCarActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
+
         return super.onOptionsItemSelected(item);
     }
 }
