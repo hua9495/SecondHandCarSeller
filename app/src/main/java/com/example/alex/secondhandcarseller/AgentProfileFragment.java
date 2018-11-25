@@ -1,12 +1,17 @@
 package com.example.alex.secondhandcarseller;
 
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,19 +22,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.vision.barcode.Barcode;
 
-
-
-
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class AgentProfileFragment extends Fragment {
 
     private Button buttonLogout;
+    public static final int PERMISSION_REQUEST = 200;
+    public static final int REQUEST_CODE = 100;
 
 
     public AgentProfileFragment() {
@@ -59,6 +62,7 @@ public class AgentProfileFragment extends Fragment {
         tvBelongTo = v.findViewById(R.id.tvBelongTo);
         tvWorkStart = v.findViewById(R.id.tvWorkStart);
         buttonReport = v.findViewById(R.id.buttonReport);
+
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,14 +108,13 @@ public class AgentProfileFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Intent intent = new Intent(getActivity(),ScanActivity.class);
-        //intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
-        //Intent intent = new Intent(zxingScannerView.toString());
-        //intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST);
+        } else {
+            Intent intent = new Intent(getActivity(), ScanActivity.class);
+            startActivityForResult(intent, REQUEST_CODE);
+        }
 
-        //startActivityForResult(intent, 0);
-        //zxingScannerView.setResultHandler(this);
-        //zxingScannerView.startCamera();
         return super.onOptionsItemSelected(item);
 
     }
@@ -120,9 +123,26 @@ public class AgentProfileFragment extends Fragment {
     public void onPause() {
 
         super.onPause();
-        // zxingScannerView.stopCamera();
+
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
+        }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                final Barcode barcode = data.getParcelableExtra("barcode");
+                Toast.makeText(getActivity(), barcode.displayValue, Toast.LENGTH_LONG).show();
+
+            }
+        }
+    }
 }
