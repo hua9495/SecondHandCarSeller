@@ -17,9 +17,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.Result;
 
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -27,10 +27,10 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AgentProfileFragment extends Fragment implements ZXingScannerView.ResultHandler {
+public class AgentProfileFragment extends Fragment {
 
     private Button buttonLogout;
-    private ZXingScannerView zxingScannerView;
+
 
     public AgentProfileFragment() {
         // Required empty public constructor
@@ -103,8 +103,8 @@ public class AgentProfileFragment extends Fragment implements ZXingScannerView.R
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        zxingScannerView = new ZXingScannerView(getActivity());
-        //Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+
+        Intent intent = new Intent(getActivity(),ScanActivity.class);
         //intent.putExtra("SCAN_MODE", "QR_CODE_MODE"); // "PRODUCT_MODE for bar codes
         //Intent intent = new Intent(zxingScannerView.toString());
         //intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
@@ -124,10 +124,5 @@ public class AgentProfileFragment extends Fragment implements ZXingScannerView.R
     }
 
 
-    @Override
-    public void handleResult(Result result) {
-        Toast.makeText(getContext(), "Test", Toast.LENGTH_LONG).show();
-        //zxingScannerView.resumeCameraPreview(this);
-    }
 
 }
