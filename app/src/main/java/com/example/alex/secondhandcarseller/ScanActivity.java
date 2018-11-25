@@ -8,8 +8,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
@@ -28,6 +32,7 @@ public class ScanActivity extends AppCompatActivity {
     SurfaceHolder holder;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +40,8 @@ public class ScanActivity extends AppCompatActivity {
         svCamera = (SurfaceView) findViewById(R.id.cameraView);
         svCamera.setZOrderMediaOverlay(true);
         holder = svCamera.getHolder();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Scanning QR code..");
         barcode = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE)
@@ -90,5 +97,16 @@ public class ScanActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
     }
 }

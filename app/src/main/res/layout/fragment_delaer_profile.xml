@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.alex.secondhandcarseller.DealerProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <TableLayout
         android:id="@+id/tableLayout"
