@@ -13,6 +13,7 @@
 
 
     <color name="Black">#000</color>
+    <color name="Grey">#808080</color>
     <color name="colorWhite">#fff</color>
     <color name="colorWhiteTran">#80ffffff</color>
 </resources>
