@@ -61,7 +61,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/buttonLogout" />
 
-    <!-- TODO: Update blank fragment layout -->
+
 
 
 </android.support.constraint.ConstraintLayout>

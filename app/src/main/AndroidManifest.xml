@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
+
         <activity android:name=".DealerActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -37,7 +41,8 @@
         <activity android:name=".AdminDealerDetail" />
         <activity android:name=".DealerRegisterActivity" />
         <activity android:name=".EditDealerProfile" />
-        <activity android:name=".PromotionActivity"></activity>
+        <activity android:name=".PromotionActivity" />
+        <activity android:name=".ScanActivity"></activity>
     </application>
 
 </manifest>

@@ -69,6 +69,7 @@
     <string name="accept_request">Accept</string>
     <string name="title_booking_detail">Booking Detail</string>
     <string name="update_Status_url">https://dewy-minuses.000webhostapp.com/updateAppointmentStatus.php</string>
+    <string name="met_update_status_url">https://dewy-minuses.000webhostapp.com/metUpdateAppointmentStatus.php</string>
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>
     <string name="title_edit_car">Car Maintenance</string>

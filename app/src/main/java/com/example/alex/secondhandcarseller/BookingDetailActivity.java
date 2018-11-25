@@ -208,7 +208,7 @@ public class BookingDetailActivity extends AppCompatActivity {
 
     //if the agent accept the appointment request
     public void onAcceptRequest(View v) {
-        //Todo: check got clash datetime or not(datetime,status)
+
         Boolean clashTime = checkClashTime(appList);
         if (clashTime) {
             AlertDialog.Builder buider = new AlertDialog.Builder(BookingDetailActivity.this);
