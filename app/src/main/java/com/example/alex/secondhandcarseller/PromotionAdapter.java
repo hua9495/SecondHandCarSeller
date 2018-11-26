@@ -30,7 +30,7 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.View
     private ArrayList<String> CarImage = new ArrayList<>();
     private ArrayList<Float> NewPrice = new ArrayList<>();
     private ArrayList<String> Views = new ArrayList<>();
-    private String[] getchecked = {"no", "no", "no", "no", "no"};
+    private String[] getchecked = {" ", " ", " ", " ", " "};
     private Context mContext;
 
     public PromotionAdapter(ArrayList<String> carID, ArrayList<String> carName, ArrayList<String> carPrice, ArrayList<String> carImage, ArrayList<Float> newPrice, ArrayList<String> views, Context mContext) {
@@ -73,7 +73,7 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.View
             public void onClick(View view) {
                 if (holder.checkBoxProm.isChecked()) {
                     holder.checkBoxProm.setChecked(false);
-                    getchecked[position] = "no";
+                    getchecked[position] = " ";
 
                 } else {
                     holder.checkBoxProm.setChecked(true);
