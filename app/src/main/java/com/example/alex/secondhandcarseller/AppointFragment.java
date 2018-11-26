@@ -35,7 +35,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -60,7 +64,8 @@ public class AppointFragment extends Fragment {
     private ArrayList<String> arrCarPhoto = new ArrayList<>();
     private ArrayList<String> arrCustID = new ArrayList<>();
     private ArrayList<String> arrDateTime = new ArrayList<>();
-    private ArrayList<String> arrAppID=new ArrayList<>();
+    private ArrayList<Date> arrAcceptDateTime = new ArrayList<>();
+    private ArrayList<String> arrAppID = new ArrayList<>();
     private ArrayList<Appointment> appointmentArrayList = new ArrayList<>();
 
     private String agentID, dealerID;
@@ -82,19 +87,13 @@ public class AppointFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_appoint, container, false);
-        SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
-        //past agentID and dealer ID as params to get booking list
-        agentID = myPref.getString("ID", null);
-        dealerID = myPref.getString("BelongDealer", null);
+
         tvTips = (TextView) v.findViewById(R.id.textViewTips);
         lvBooking = (ListView) v.findViewById(R.id.listViewBooking);
         downloadingBooking = (ProgressBar) v.findViewById(R.id.downloadBooking);
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
         downloadingBooking.setVisibility(View.GONE);
         tvCaption.setVisibility(View.GONE);
-
-
-        getAppointment(v, getString(R.string.get_appointment_url));
 
         return v;
     }
@@ -131,7 +130,7 @@ public class AppointFragment extends Fragment {
                             //if HAVE RECORD
                             if (successA.equals("1") || successB.equals("1")) {
                                 //retrive the record
-
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject userResponse = jsonArray.getJSONObject(i);
 
@@ -144,37 +143,29 @@ public class AppointFragment extends Fragment {
                                     String appTime = userResponse.getString("appTime");
                                     String appStatus = userResponse.getString("appStatus");
                                     String carPhoto = userResponse.getString("car_photo");
-
+                                    String acceptDate = userResponse.getString("acceptDate");
+                                    String acceptTime = userResponse.getString("acceptTime");
                                     //store the date time together,for checking purpose(used in booking detail)
                                     String bookingDateTime = appDate + " " + appTime;
+                                    String acceptDateTime = acceptDate + " " + acceptTime;
                                     arrDateTime.add(bookingDateTime);
 
                                     arrCarNAMES.add(carName);
                                     arrBookingDates.add(appDate);
                                     arrBookingTimes.add(appTime);
-
                                     arrBookingStatus.add(appStatus);
                                     //for showing booking detail purpose
                                     arrPrice.add(price);
                                     arrCarPhoto.add(carPhoto);
                                     arrCustID.add(custID);
-
                                     arrAppID.add(appID);
-
-                                  //  Appointment newApp = new Appointment(appID, bookingDateTime, appStatus);
-                                 //   appointmentArrayList.add(newApp);
 
                                 }
 
-                             //   SharedPreferences.Editor editor = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
-                             //   Gson gson = new Gson();
-                             //   String jsonApp = gson.toJson(appointmentArrayList);
-                            //    editor.putString("jsonApp", jsonApp);
-                             //   editor.apply();
 
                                 initListVIew(v);
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
-                                tvTips.setText( R.string.color_indicator);
+                                tvTips.setText(R.string.color_indicator);
 
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
@@ -266,7 +257,22 @@ public class AppointFragment extends Fragment {
     }
 
     private void initListVIew(View v) {
-        AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrCustID,arrAppID);
+
+
+        AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrCustID, arrAppID, arrAcceptDateTime);
         lvBooking.setAdapter(myBookingAdapter);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
+        //past agentID and dealer ID as params to get booking list
+        agentID = myPref.getString("ID", null);
+        dealerID = myPref.getString("BelongDealer", null);
+
+        getAppointment(getView(), getString(R.string.get_appointment_url));
+
     }
 }

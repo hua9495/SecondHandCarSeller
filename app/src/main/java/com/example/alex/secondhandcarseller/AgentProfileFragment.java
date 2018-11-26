@@ -59,8 +59,8 @@ public class AgentProfileFragment extends Fragment {
 
     private TextView tvAgentName, tvAgentIC, tvAgentContact, tvAgentEmail, tvBelongTo, tvWorkStart;
     private Button buttonReport;
-    private String agentID,dealerID, appID;
-    private ArrayList<String> arrAppID=new ArrayList<>();
+    private String agentID, dealerID, appID;
+    private ArrayList<String> arrAppID = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -167,14 +167,19 @@ public class AgentProfileFragment extends Fragment {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 final Barcode barcode = data.getParcelableExtra("barcode");
-                String codeAppID = barcode.displayValue.substring(0, 5);
-                String codeAgentID = barcode.displayValue.substring(6, 12);
-                updateApp(codeAppID, codeAgentID);
-
+                try {
+                    String codeAppID = barcode.displayValue.substring(0, 5);
+                    String codeAgentID = barcode.displayValue.substring(6, 12);
+                    updateApp(codeAppID, codeAgentID);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity(), "Invalid QR code.\nPlease try again.", Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
-    private void getAppointment( String url) {
+
+    private void getAppointment(String url) {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
@@ -251,23 +256,26 @@ public class AgentProfileFragment extends Fragment {
 
 
     }
+
     private void updateApp(String codeAppID, String codeAgentID) {
         //check agentID is the same with this agent or not, then check appID
-        if (codeAgentID.equals(agentID)){
-            for(int i=0; i<arrAppID.size();i++){
+        if (codeAgentID.equals(agentID)) {
+            for (int i = 0; i < arrAppID.size(); i++) {
                 //if codeAppID is same with one of the appID from arrAppID, updateStatus
-                if(codeAppID.equals(arrAppID.get(i))){
-                    appID=arrAppID.get(i);
-                    makeServiceCall(getString(R.string.met_update_status_url),codeAgentID,appID);
+                if (codeAppID.equals(arrAppID.get(i))) {
+                    appID = arrAppID.get(i);
+                    makeServiceCall(getString(R.string.met_update_status_url), codeAgentID, appID);
 
                 }
             }
-        }else{
-            AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Scan failed");
             builder.setMessage("Invalid agent. Please make sure you are the right agent for this appointment").setNegativeButton("Retry", null).create().show();
 
         }
+
+
     }
 
     private void makeServiceCall(String url, final String strAgentID, final String strAppID) {
@@ -281,11 +289,10 @@ public class AgentProfileFragment extends Fragment {
                             String success = jsonObject.getString("success");
                             String message = jsonObject.getString("message");
                             //if UPDATE SUCCESS
-                            if (success.equals("1")){
-                                Toast.makeText(getContext(),message+"\nStatus Updated",Toast.LENGTH_LONG).show();
-                            }
-                            else{
-                                Toast.makeText(getContext(),message,Toast.LENGTH_LONG).show();
+                            if (success.equals("1")) {
+                                Toast.makeText(getContext(), message + "\nStatus Updated", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                             }
 
                         } catch (JSONException e) {

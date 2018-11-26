@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,7 +44,7 @@ public class DealerRegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dealer_register);
         setTitle("Register");
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editTextComName = (EditText) findViewById(R.id.editTextComName);
         editTextAddress = (EditText) findViewById(R.id.editTextAddress);
         editTextLocation = (EditText) findViewById(R.id.editTextLocation);
@@ -118,7 +120,7 @@ public class DealerRegisterActivity extends AppCompatActivity {
                         } else {
                             editTextConfirmPw.setError("Password Not Match");
                         }
-                    }else{
+                    } else {
                         ETemail.setError("Email Already Exist!");
                     }
                 }
@@ -267,5 +269,14 @@ public class DealerRegisterActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
 }

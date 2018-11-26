@@ -12,7 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 
 
 public class AdapterMyBooking extends ArrayAdapter<String> {
@@ -26,9 +30,10 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
     private ArrayList<String> carPhoto = new ArrayList<>();
     private ArrayList<String> custID = new ArrayList<>();
     private ArrayList<String> appID = new ArrayList<>();
+    private ArrayList<Date> acceptDateTime = new ArrayList<>();
     private String strPrice, strCarPhoto, strCustID, strBookingStatus,strAppID;
 
-    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times, ArrayList<String> price, ArrayList<String> carPhoto, ArrayList<String> custID, ArrayList<String> appID) {
+    public AdapterMyBooking(Context context, ArrayList<String> bookingStatus, ArrayList<String> carNames, ArrayList<String> dates, ArrayList<String> times, ArrayList<String> price, ArrayList<String> carPhoto, ArrayList<String> custID, ArrayList<String> appID,ArrayList<Date> acceptDateTime) {
         super(context, R.layout.content_appointment);
         this.bookingStatus = bookingStatus;
         this.carNames = carNames;
@@ -38,6 +43,7 @@ public class AdapterMyBooking extends ArrayAdapter<String> {
         this.carPhoto = carPhoto;
         this.custID = custID;
         this.appID=appID;
+        this.acceptDateTime=acceptDateTime;
         this.context = context;
     }
 

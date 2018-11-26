@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Agent Ic Number"
-                    android:inputType="number"
+                    android:inputType="phone"
                     android:textSize="15dp" />
 
             </android.support.design.widget.TextInputLayout>
@@ -135,7 +135,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Agent Contact Number"
-                    android:inputType="number"
+                    android:inputType="phone"
                     android:textSize="15dp" />
 
             </android.support.design.widget.TextInputLayout>
