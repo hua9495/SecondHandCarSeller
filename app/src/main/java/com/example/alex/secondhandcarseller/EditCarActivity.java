@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,11 +31,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditCarActivity extends AppCompatActivity {
-    private Button buttonSold;
-    private TextView TvCarName, TvColor, TvPrice, TvYear, TvMile, TvDesc;
+    private Button buttonSold, buttonChange;
+    private EditText edCarName, edCarColor, edCarPrice, edCarYear, edMile, edCarDesc;
     private String id, name, img, brand, price, color, desc, year, mile;
     private ImageView imageViewShCar;
+    private ProgressBar progressBarEditcar;
     private String Url = "https://dewy-minuses.000webhostapp.com/deleteCar.php";
+    private String Url2 = "https://dewy-minuses.000webhostapp.com/editCar.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +45,15 @@ public class EditCarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_car);
         setTitle(R.string.title_edit_car);
         buttonSold = (Button) findViewById(R.id.buttonSold);
-        TvCarName = (TextView) findViewById(R.id.TvCarName);
-        TvColor = (TextView) findViewById(R.id.TvColor);
-        TvPrice = (TextView) findViewById(R.id.TvPrice);
-        TvYear = (TextView) findViewById(R.id.TvYear);
-        TvMile = (TextView) findViewById(R.id.TvMile);
-        TvDesc = (TextView) findViewById(R.id.TvDesc);
+        buttonChange = (Button) findViewById(R.id.buttonChange);
+        edCarName = (EditText) findViewById(R.id.edCarName);
+        edCarColor = (EditText) findViewById(R.id.edCarColor);
+        edCarPrice = (EditText) findViewById(R.id.edCarPrice);
+        edCarYear = (EditText) findViewById(R.id.edCarYear);
+        edMile = (EditText) findViewById(R.id.edMile);
+        edCarDesc = (EditText) findViewById(R.id.edCarDesc);
         imageViewShCar = (ImageView) findViewById(R.id.imageViewShCar);
+        progressBarEditcar = (ProgressBar) findViewById(R.id.progressBarEditcar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -63,18 +68,17 @@ public class EditCarActivity extends AppCompatActivity {
         year = intent.getStringExtra("CarYear");
         mile = intent.getStringExtra("CarMile");
 
-        TvCarName.setText(name);
-        TvColor.setText(color);
-        TvPrice.setText(price);
-        TvYear.setText(year);
-        TvMile.setText(mile);
-        TvDesc.setText(desc);
+        edCarName.setText(name);
+        edCarColor.setText(color);
+        edCarPrice.setText(price);
+        edCarYear.setText(year);
+        edMile.setText(mile);
+        edCarDesc.setText(desc);
         Glide.with(this).load(img).into(imageViewShCar);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Confirm");
-        builder.setMessage("Are you sure to Mark this as Sold ?");
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -89,19 +93,99 @@ public class EditCarActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        
+
         buttonSold.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                builder.setMessage("Are you sure to mark this as Sold ?");
                 AlertDialog alert = builder.create();
                 alert.show();
             }
         });
+
+
+        final AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+
+        builder2.setTitle("Confirm");
+
+        builder2.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                UpdateCar(EditCarActivity.this);
+
+                dialog.dismiss();
+            }
+        });
+
+        builder2.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        buttonChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String getChange = buttonChange.getText().toString();
+
+                if (getChange.equals("Edit")) {
+                    changeAll(true, view.GONE);
+                    buttonChange.setText("Save");
+                } else {
+
+                    String Name = edCarName.getText().toString();
+                    String Year = edCarYear.getText().toString();
+                    String Mile = edMile.getText().toString();
+                    String Color = edCarColor.getText().toString();
+                    String Desc = edCarDesc.getText().toString();
+                    String Price = edCarPrice.getText().toString();
+
+                    if (Name.isEmpty() || Year.isEmpty() || Mile.isEmpty() || Color.isEmpty() || Desc.isEmpty() || Price.isEmpty()) {
+                        if (Name.isEmpty())
+                            edCarName.setError("Cannot Be Blank");
+                        if (Year.isEmpty())
+                            edCarYear.setError("Cannot Be Blank");
+                        if (Mile.isEmpty())
+                            edMile.setError("Cannot Be Blank");
+                        if (Color.isEmpty())
+                            edCarColor.setError("Cannot Be Blank");
+                        if (Desc.isEmpty())
+                            edCarDesc.setError("Cannot Be Blank");
+                        if (Price.isEmpty())
+                            edCarPrice.setError("Cannot Be Blank");
+
+                    } else {
+                        builder2.setMessage("Information of this car will change. \nAre you sure?");
+                        AlertDialog alert = builder2.create();
+                        alert.show();
+                        name = Name;
+                        year = Year;
+                        mile = Mile;
+                        color = Color;
+                        desc = Desc;
+                        price = Price;
+                    }
+
+
+                }
+            }
+        });
+    }
+
+    private void changeAll(boolean enabled, int gone) {
+        edCarDesc.setEnabled(enabled);
+        edMile.setEnabled(enabled);
+        edCarYear.setEnabled(enabled);
+        edCarPrice.setEnabled(enabled);
+        //  edCarColor.setEnabled(enabled);
+        edCarName.setEnabled(enabled);
+        buttonSold.setEnabled(!enabled);
+        progressBarEditcar.setVisibility(gone);
     }
 
 
     private void deleteCar(Context context) {
         RequestQueue queue = Volley.newRequestQueue(context);
+        progressBarEditcar.setVisibility(View.VISIBLE);
         //Send data
         try {
             StringRequest postRequest = new StringRequest(
@@ -118,13 +202,17 @@ public class EditCarActivity extends AppCompatActivity {
 
                                 if (success.equals("1")) {
                                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                                    progressBarEditcar.setVisibility(View.GONE);
                                     finish();
                                 } else {
                                     Toast.makeText(getApplicationContext(), message + " Please Try Again", Toast.LENGTH_LONG).show();
+                                    progressBarEditcar.setVisibility(View.GONE);
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 Toast.makeText(getApplicationContext(), "error" + e, Toast.LENGTH_LONG).show();
+                                progressBarEditcar.setVisibility(View.GONE);
 
                             }
                         }
@@ -133,6 +221,7 @@ public class EditCarActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(getApplicationContext(), "Error : " + error.toString(), Toast.LENGTH_LONG).show();
+                            progressBarEditcar.setVisibility(View.GONE);
                         }
                     }) {
                 @Override
@@ -153,6 +242,7 @@ public class EditCarActivity extends AppCompatActivity {
             queue.add(postRequest);
         } catch (Exception e) {
             e.printStackTrace();
+            progressBarEditcar.setVisibility(View.GONE);
         }
     }
 
@@ -161,4 +251,76 @@ public class EditCarActivity extends AppCompatActivity {
         onBackPressed();
         return super.onOptionsItemSelected(item);
     }
+
+
+    private void UpdateCar(Context context) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        buttonChange.setText("Edit");
+        changeAll(false, View.VISIBLE);
+        //Send data
+        try {
+            StringRequest postRequest = new StringRequest(
+                    Request.Method.POST,
+                    Url2,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            JSONObject jsonObject;
+                            try {
+                                jsonObject = new JSONObject(response);
+                                String success = jsonObject.getString("success");
+                                String message = jsonObject.getString("message");
+
+                                if (success.equals("1")) {
+                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                                    progressBarEditcar.setVisibility(View.GONE);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Update Failed,Please Try Again", Toast.LENGTH_LONG).show();
+
+                                    progressBarEditcar.setVisibility(View.GONE);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(getApplicationContext(), "error" + e, Toast.LENGTH_LONG).show();
+                                progressBarEditcar.setVisibility(View.GONE);
+
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getApplicationContext(), "Error : " + error.toString(), Toast.LENGTH_LONG).show();
+                            progressBarEditcar.setVisibility(View.GONE);
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("id", id);
+                    params.put("name", name);
+                    params.put("price", price);
+                    params.put("color", color);
+                    params.put("desc", desc);
+                    params.put("mile", mile);
+                    params.put("year", year);
+
+                    return params;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("Content-Type", "application/x-www-form-urlencoded");
+                    return params;
+                }
+            };
+            queue.add(postRequest);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
