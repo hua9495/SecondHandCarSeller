@@ -80,7 +80,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        textViewResetPw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent resetPwIntent = new Intent(MainActivity.this, ResetPwActivity.class);
+                startActivity(resetPwIntent);
+            }
+        });
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -226,8 +232,7 @@ public class MainActivity extends AppCompatActivity {
                                     AlertDialog alert = builder.create();
                                     alert.show();
                                 }
-                            }
-                            else {
+                            } else {
                                 builder.setTitle("Barred");
                                 builder.setMessage("Your account has been barred, please contact your company.");
                                 AlertDialog alert = builder.create();
@@ -241,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(MainActivity.this,"Error "+ e.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Error " + e.toString(), Toast.LENGTH_LONG).show();
                     loading.setVisibility(View.GONE);
                     buttonLogin.setVisibility(View.VISIBLE);
                 }

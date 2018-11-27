@@ -42,7 +42,8 @@
         <activity android:name=".DealerRegisterActivity" />
         <activity android:name=".EditDealerProfile" />
         <activity android:name=".PromotionActivity" />
-        <activity android:name=".ScanActivity"></activity>
+        <activity android:name=".ScanActivity" />
+        <activity android:name=".ResetPwActivity"></activity>
     </application>
 
 </manifest>

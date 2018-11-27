@@ -27,6 +27,7 @@ dependencies {
     compile 'com.google.android.gms:play-services:11.0.4'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.android.support:appcompat-v7:27.+'
+    compile 'com.android.support:mediarouter-v7:27.+'
     compile 'com.android.support:support-v4:27.+'
     compile 'com.android.support:design:27.+'
     compile 'com.android.support:recyclerview-v7:27.+'
@@ -36,7 +37,4 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.5'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
-    compile files('libs/mail.jar')
-    compile files('libs/smtp.jar')
-    compile files('libs/mailapi.jar')
 }

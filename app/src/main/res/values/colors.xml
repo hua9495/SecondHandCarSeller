@@ -10,7 +10,7 @@
     <color name="Orange">#FFA500</color>
 
 
-
+    <color name="zxing_custom_result_view">#b0000000</color>
     <color name="Black">#000</color>
     <color name="Grey">#808080</color>
     <color name="colorWhite">#fff</color>

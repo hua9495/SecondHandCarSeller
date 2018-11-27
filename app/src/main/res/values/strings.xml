@@ -79,4 +79,9 @@
     <string name="company">Company:</string>
     <string name="start_date">Start Date:</string>
     <string name="scancode">Scan</string>
+    <string name="reset">Reset</string>
+    <string name="reset_your_password">Reset your password</string>
+    <string name="caption_reset_password">Enter your email address and we will send you an email to reset your password</string>
+    <string name="title_reset_pw">Password Recovery</string>
+    <string name="get_allEmail_url">https://dewy-minuses.000webhostapp.com/getAllEmail.php</string>
 </resources>
