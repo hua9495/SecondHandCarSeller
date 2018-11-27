@@ -166,6 +166,8 @@ public class AppointFragment extends Fragment {
                                 initListVIew(v);
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
                                 tvTips.setText(R.string.color_indicator);
+                                tvCaption.setVisibility(View.GONE);
+                                tvTips.setVisibility(View.VISIBLE);
 
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
@@ -173,8 +175,8 @@ public class AppointFragment extends Fragment {
                             }
                             lvBooking.setVisibility(View.VISIBLE);
                             downloadingBooking.setVisibility(View.GONE);
-                            tvCaption.setVisibility(View.GONE);
-                            tvTips.setVisibility(View.VISIBLE);
+
+
 
                         } catch (JSONException e) {
                             //if no internet
@@ -230,11 +232,7 @@ public class AppointFragment extends Fragment {
                 return params;
             }
         };
-//10000 is the time in milliseconds adn is equal to 10 sec
-      /*  stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(stringRequest);
 
