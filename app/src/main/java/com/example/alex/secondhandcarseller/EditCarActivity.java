@@ -8,10 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,22 +34,24 @@ import java.util.Map;
 
 public class EditCarActivity extends AppCompatActivity {
     private Button buttonSold, buttonChange;
-    private EditText edCarName, edCarColor, edCarPrice, edCarYear, edMile, edCarDesc;
+    private EditText edCarName, edCarPrice, edCarYear, edMile, edCarDesc;
+    private Spinner spinnerEditColor;
     private String id, name, img, brand, price, color, desc, year, mile;
     private ImageView imageViewShCar;
     private ProgressBar progressBarEditcar;
     private String Url = "https://dewy-minuses.000webhostapp.com/deleteCar.php";
     private String Url2 = "https://dewy-minuses.000webhostapp.com/editCar.php";
+    ArrayAdapter<CharSequence> colorAdap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_car);
         setTitle(R.string.title_edit_car);
+        spinnerEditColor = (Spinner) findViewById(R.id.spinnerEditColor);
         buttonSold = (Button) findViewById(R.id.buttonSold);
         buttonChange = (Button) findViewById(R.id.buttonChange);
         edCarName = (EditText) findViewById(R.id.edCarName);
-        edCarColor = (EditText) findViewById(R.id.edCarColor);
         edCarPrice = (EditText) findViewById(R.id.edCarPrice);
         edCarYear = (EditText) findViewById(R.id.edCarYear);
         edMile = (EditText) findViewById(R.id.edMile);
@@ -68,8 +72,16 @@ public class EditCarActivity extends AppCompatActivity {
         year = intent.getStringExtra("CarYear");
         mile = intent.getStringExtra("CarMile");
 
+
+        colorAdap = ArrayAdapter.createFromResource(this, R.array.color, android.R.layout.simple_spinner_item);
+        colorAdap.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerEditColor.setAdapter(colorAdap);
+
+        int spinnerPosition = colorAdap.getPosition(color);
+        spinnerEditColor.setSelection(spinnerPosition);
+        spinnerEditColor.setEnabled(false);
+
         edCarName.setText(name);
-        edCarColor.setText(color);
         edCarPrice.setText(price);
         edCarYear.setText(year);
         edMile.setText(mile);
@@ -135,49 +147,49 @@ public class EditCarActivity extends AppCompatActivity {
                     String Name = edCarName.getText().toString();
                     String Year = edCarYear.getText().toString();
                     String Mile = edMile.getText().toString();
-                    String Color = edCarColor.getText().toString();
+                    String Color = spinnerEditColor.getSelectedItem().toString();
                     String Desc = edCarDesc.getText().toString();
                     String Price = edCarPrice.getText().toString();
 
-                    if (Name.isEmpty() || Year.isEmpty() || Mile.isEmpty() || Color.isEmpty() || Desc.isEmpty() || Price.isEmpty()) {
+                    if (Name.isEmpty() || Year.isEmpty() || Mile.isEmpty() || Desc.isEmpty() || Price.isEmpty()) {
                         if (Name.isEmpty())
                             edCarName.setError("Cannot Be Blank");
                         if (Year.isEmpty())
                             edCarYear.setError("Cannot Be Blank");
                         if (Mile.isEmpty())
                             edMile.setError("Cannot Be Blank");
-                        if (Color.isEmpty())
-                            edCarColor.setError("Cannot Be Blank");
                         if (Desc.isEmpty())
                             edCarDesc.setError("Cannot Be Blank");
                         if (Price.isEmpty())
                             edCarPrice.setError("Cannot Be Blank");
 
                     } else {
-                        builder2.setMessage("Information of this car will change. \nAre you sure?");
-                        AlertDialog alert = builder2.create();
-                        alert.show();
+
                         name = Name;
                         year = Year;
                         mile = Mile;
                         color = Color;
                         desc = Desc;
                         price = Price;
+                        builder2.setMessage("Information of this car will change. \nAre you sure?");
+                        AlertDialog alert = builder2.create();
+                        alert.show();
+
+
                     }
-
-
                 }
             }
         });
     }
+
 
     private void changeAll(boolean enabled, int gone) {
         edCarDesc.setEnabled(enabled);
         edMile.setEnabled(enabled);
         edCarYear.setEnabled(enabled);
         edCarPrice.setEnabled(enabled);
-        //  edCarColor.setEnabled(enabled);
         edCarName.setEnabled(enabled);
+        spinnerEditColor.setEnabled(enabled);
         buttonSold.setEnabled(!enabled);
         progressBarEditcar.setVisibility(gone);
     }
