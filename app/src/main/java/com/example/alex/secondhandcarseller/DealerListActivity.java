@@ -43,24 +43,28 @@ public class DealerListActivity extends AppCompatActivity {
     private ArrayList<String> DealerLoctaion = new ArrayList<>();
     private ArrayList<String> DealerContact = new ArrayList<>();
     private ArrayList<String> Pic = new ArrayList<>();
+    private ArrayList<String> Reason = new ArrayList<>();
     private ProgressBar progressBarLoadDeal;
-    private String Url="https://dewy-minuses.000webhostapp.com/getSelectedDealer.php";
+    private String Url = "https://dewy-minuses.000webhostapp.com/getSelectedDealer.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dealer_list);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         rvDealerList = (RecyclerView) findViewById(R.id.rvDealerList);
         progressBarLoadDeal = (ProgressBar) findViewById(R.id.progressBarLoadDeal);
 
         Intent intent = getIntent();
         Status = intent.getStringExtra("DealerStatus");
-        setTitle(Status+" Dealers List");
+        setTitle(Status + " Dealers List");
 
         getDealer();
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -72,7 +76,12 @@ public class DealerListActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        getDealer();
+        if (item.getItemId() == R.id.refresh)
+            getDealer();
+
+        else
+            super.onBackPressed();
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -97,6 +106,7 @@ public class DealerListActivity extends AppCompatActivity {
                             String location = object.getString("location");
                             String contact = object.getString("contact");
                             String pic = object.getString("pic");
+                            String reason = object.getString("reason");
 
                             Dealerid.add(id);
                             DealerName.add(name);
@@ -105,13 +115,16 @@ public class DealerListActivity extends AppCompatActivity {
                             DealerLoctaion.add(location);
                             DealerContact.add(contact);
                             Pic.add(pic);
+                            Reason.add(reason);
 
                         }
 
                         progressBarLoadDeal.setVisibility(View.GONE);
                         initRecyclerView();
                     } else {
-
+                        progressBarLoadDeal.setVisibility(View.GONE);
+                        Toast.makeText(DealerListActivity.this, "There are no " + Status + " dealer in your list!", Toast.LENGTH_LONG).show();
+                        finish();
                     }
 
 
@@ -178,7 +191,7 @@ public class DealerListActivity extends AppCompatActivity {
 
 
     private void initRecyclerView() {
-        DealerListAdap adapter = new DealerListAdap(Dealerid, DealerName, DealerStatus, DealerEmail, DealerLoctaion, DealerContact, Pic, this);
+        DealerListAdap adapter = new DealerListAdap(Dealerid, DealerName, DealerStatus, DealerEmail, DealerLoctaion, DealerContact, Pic, Reason, this);
         rvDealerList.setAdapter(adapter);
         rvDealerList.setLayoutManager(new LinearLayoutManager(this));
     }

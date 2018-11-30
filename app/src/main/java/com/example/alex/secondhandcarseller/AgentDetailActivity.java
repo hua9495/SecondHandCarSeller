@@ -71,7 +71,7 @@ public class AgentDetailActivity extends AppCompatActivity {
         editTextAgentContact.setText(contact);
         editTextAgentWork.setText(workdate);
 
-        if (status.equals("Deleted")) {
+        if (status.equals("Resigned")) {
             checkBoxRetired.setChecked(true);
         }
 
@@ -82,7 +82,7 @@ public class AgentDetailActivity extends AppCompatActivity {
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                status = "Deleted";
+                status = "Resigned";
                 dialog.dismiss();
             }
         });

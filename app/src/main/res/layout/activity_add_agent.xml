@@ -157,19 +157,15 @@
                 android:textColor="@color/Black"
                 android:textSize="15dp" />
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_weight="80">
-
-                <EditText
-                    android:id="@+id/etAgentWork"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Agent Work Date"
-                    android:inputType="date"
-                    android:textSize="15dp" />
-
-            </android.support.design.widget.TextInputLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="80"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:text="Select A Date"
+                android:id="@+id/tvChooseDate"
+                android:textSize="18dp" />
 
         </TableRow>
 
@@ -215,7 +211,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        tools:text="@string/addAgent" />
+        android:text="@string/addAgent"/>
 
     <ProgressBar
         android:id="@+id/progressBarInsertA"

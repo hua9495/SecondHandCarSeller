@@ -100,6 +100,7 @@ public class AdminActivity extends AppCompatActivity {
                         String approved = object.getString("approved");
                         String pending = object.getString("pending");
                         String blacklist = object.getString("blacklist");
+                        String rejected = object.getString("rejected");
 
                         DealerType.add("Pending Dealers");
                         DealerNo.add(pending);
@@ -112,6 +113,10 @@ public class AdminActivity extends AppCompatActivity {
                         DealerType.add("Approved Dealers");
                         DealerNo.add(approved);
                         DealerStatus.add("Approved");
+
+                        DealerType.add("Rejected Dealers");
+                        DealerNo.add(rejected);
+                        DealerStatus.add("Rejected");
                     }
                     progressBarloadCOunt.setVisibility(View.GONE);
                     initRecyclerView();

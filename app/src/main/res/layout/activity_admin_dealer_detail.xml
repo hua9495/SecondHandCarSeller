@@ -30,8 +30,6 @@
         android:id="@+id/tableLayout6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginTop="36dp"
         android:background="@color/Black"
         android:weightSum="100"
@@ -166,7 +164,8 @@
         android:textColor="@color/Black"
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout6" />
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout6"
+        android:layout_marginStart="65dp" />
 
     <TextView
         android:id="@+id/tvdealerstatus"
@@ -178,19 +177,21 @@
         android:textSize="35dp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/textView16"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout6" />
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout6"
+        android:layout_marginStart="8dp" />
 
     <Button
         android:id="@+id/buttonBlackList"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
         android:layout_marginRight="8dp"
         android:background="@color/Red"
         android:text="Black List this Dealer"
         android:textColor="@color/colorWhite"
-        app:layout_constraintBottom_toTopOf="@+id/buttonApprove"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvdealerstatus"
+        android:layout_marginEnd="8dp" />
 
     <Button
         android:id="@+id/buttonApprove"
@@ -202,5 +203,58 @@
         android:text="Approve"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <Button
+        android:id="@+id/buttonReject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:text="Reject"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvdealerstatus" />
+
+    <Spinner
+        android:id="@+id/spinnerReject"
+        android:layout_width="368dp"
+        android:visibility="gone"
+
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonReject" />
+
+    <TextView
+        android:id="@+id/textViewReject"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textSize="20dp"
+        android:textColor="@color/Black"
+        android:visibility="gone"
+        android:layout_marginLeft="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/buttonApprove"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/buttonBlackList" />
+
+    <TextView
+        android:id="@+id/textViewtitle"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:text="Reason of Rejected :"
+        app:layout_constraintBottom_toTopOf="@+id/textViewReject"
+        app:layout_constraintLeft_toLeftOf="parent" />
 </android.support.constraint.ConstraintLayout>
