@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -54,7 +55,9 @@ import static android.content.Context.MODE_PRIVATE;
 public class AppointFragment extends Fragment {
     private ListView lvBooking;
     private ProgressBar downloadingBooking;
-    private TextView tvCaption, tvTips;
+    private TextView tvCaption;
+    private TextView tvTips1Met, tvTips2Booked, tvTips3Cancelled, tvTips4Pending;
+    private ImageView iv1Met, iv2Booked, iv3Cancelled, iv4Pending;
     private ConstraintLayout bookingLayout;
     private ArrayList<String> arrBookingStatus = new ArrayList<>();
     private ArrayList<String> arrCarNAMES = new ArrayList<>();
@@ -88,7 +91,14 @@ public class AppointFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_appoint, container, false);
 
-        tvTips = (TextView) v.findViewById(R.id.textViewTips);
+        tvTips1Met = (TextView) v.findViewById(R.id.textViewTips1);
+        tvTips2Booked = (TextView) v.findViewById(R.id.textViewTips2);
+        tvTips3Cancelled = (TextView) v.findViewById(R.id.textViewTips3);
+        tvTips4Pending = (TextView) v.findViewById(R.id.textViewTips4);
+        iv1Met = (ImageView) v.findViewById(R.id.imageViewG);
+        iv2Booked = (ImageView) v.findViewById(R.id.imageViewR);
+        iv3Cancelled = (ImageView) v.findViewById(R.id.imageViewCr);
+        iv4Pending = (ImageView) v.findViewById(R.id.imageViewP);
         lvBooking = (ListView) v.findViewById(R.id.listViewBooking);
         downloadingBooking = (ProgressBar) v.findViewById(R.id.downloadBooking);
         tvCaption = (TextView) v.findViewById(R.id.tvNoBooking1);
@@ -117,6 +127,7 @@ public class AppointFragment extends Fragment {
 
     private void getAppointment(final View v, String url) {
         clearView();
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -161,13 +172,11 @@ public class AppointFragment extends Fragment {
                                     arrAppID.add(appID);
 
                                 }
-
-
                                 initListVIew(v);
                                 Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
-                                tvTips.setText(R.string.color_indicator);
+
                                 tvCaption.setVisibility(View.GONE);
-                                tvTips.setVisibility(View.VISIBLE);
+                                showTips();
 
                             } else {
                                 tvCaption.setVisibility(View.VISIBLE);
@@ -175,7 +184,6 @@ public class AppointFragment extends Fragment {
                             }
                             lvBooking.setVisibility(View.VISIBLE);
                             downloadingBooking.setVisibility(View.GONE);
-
 
 
                         } catch (JSONException e) {
@@ -251,11 +259,10 @@ public class AppointFragment extends Fragment {
         arrCarPhoto.clear();
         downloadingBooking.setVisibility(View.VISIBLE);
         tvCaption.setVisibility(View.VISIBLE);
-        tvTips.setVisibility(View.GONE);
+        clearTips();
     }
 
     private void initListVIew(View v) {
-
 
         AdapterMyBooking myBookingAdapter = new AdapterMyBooking(getActivity(), arrBookingStatus, arrCarNAMES, arrBookingDates, arrBookingTimes, arrPrice, arrCarPhoto, arrCustID, arrAppID, arrAcceptDateTime);
         lvBooking.setAdapter(myBookingAdapter);
@@ -272,5 +279,27 @@ public class AppointFragment extends Fragment {
 
         getAppointment(getView(), getString(R.string.get_appointment_url));
 
+    }
+
+    private void showTips() {
+        tvTips1Met.setVisibility(View.VISIBLE);
+        tvTips2Booked.setVisibility(View.VISIBLE);
+        tvTips3Cancelled.setVisibility(View.VISIBLE);
+        tvTips4Pending.setVisibility(View.VISIBLE);
+        iv1Met.setVisibility(View.VISIBLE);
+        iv2Booked.setVisibility(View.VISIBLE);
+        iv3Cancelled.setVisibility(View.VISIBLE);
+        iv4Pending.setVisibility(View.VISIBLE);
+    }
+
+    private void clearTips() {
+        tvTips1Met.setVisibility(View.GONE);
+        tvTips2Booked.setVisibility(View.GONE);
+        tvTips3Cancelled.setVisibility(View.GONE);
+        tvTips4Pending.setVisibility(View.GONE);
+        iv1Met.setVisibility(View.GONE);
+        iv2Booked.setVisibility(View.GONE);
+        iv3Cancelled.setVisibility(View.GONE);
+        iv4Pending.setVisibility(View.GONE);
     }
 }
