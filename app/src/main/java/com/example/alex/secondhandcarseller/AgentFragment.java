@@ -142,6 +142,7 @@ public class AgentFragment extends Fragment {
 
         clearAll();
         loadAgent.setVisibility(View.VISIBLE);
+        recycleViewAgent.setVisibility(View.GONE);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {
             @Override
@@ -175,14 +176,17 @@ public class AgentFragment extends Fragment {
                         initRecyclerView(v);
 
                         loadAgent.setVisibility(View.GONE);
+                        recycleViewAgent.setVisibility(View.VISIBLE);
                     } else {
                         loadAgent.setVisibility(View.GONE);
+                        recycleViewAgent.setVisibility(View.VISIBLE);
                         Toast.makeText(getActivity(), "No Agent in your list", Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
                     loadAgent.setVisibility(View.GONE);
+                    recycleViewAgent.setVisibility(View.VISIBLE);
                 }
             }
         },
@@ -192,6 +196,7 @@ public class AgentFragment extends Fragment {
 
                         Toast.makeText(getActivity(), "Error " + error.toString(), Toast.LENGTH_LONG).show();
                         loadAgent.setVisibility(View.GONE);
+                        recycleViewAgent.setVisibility(View.VISIBLE);
                     }
                 }) {
             @Override

@@ -26,16 +26,18 @@ public class DealerListAdap  extends RecyclerView.Adapter<DealerListAdap.ViewHol
     private ArrayList<String> DealerEmail = new ArrayList<>();
     private ArrayList<String> DealerLoctaion = new ArrayList<>();
     private ArrayList<String> DealerContact = new ArrayList<>();
+    private ArrayList<String> Reason = new ArrayList<>();
     private ArrayList<String> Pic = new ArrayList<>();
     private Context mContext;
 
-    public DealerListAdap(ArrayList<String> dealerid, ArrayList<String> dealerName, ArrayList<String> dealerStatus, ArrayList<String> dealerEmail, ArrayList<String> dealerLoctaion, ArrayList<String> dealerContact, ArrayList<String> pic, Context mContext) {
+    public DealerListAdap(ArrayList<String> dealerid, ArrayList<String> dealerName, ArrayList<String> dealerStatus, ArrayList<String> dealerEmail, ArrayList<String> dealerLoctaion, ArrayList<String> dealerContact, ArrayList<String> pic,  ArrayList<String> reason,Context mContext) {
         Dealerid = dealerid;
         DealerName = dealerName;
         DealerStatus = dealerStatus;
         DealerEmail = dealerEmail;
         DealerLoctaion = dealerLoctaion;
         DealerContact = dealerContact;
+        Reason = reason;
         Pic = pic;
         this.mContext = mContext;
     }
@@ -67,6 +69,7 @@ public class DealerListAdap  extends RecyclerView.Adapter<DealerListAdap.ViewHol
                 intent.putExtra("DealerLoctaion", DealerLoctaion.get(position));
                 intent.putExtra("DealerContact", DealerContact.get(position));
                 intent.putExtra("Pic", Pic.get(position));
+                intent.putExtra("Reason", Reason.get(position));
                 mContext.startActivity(intent);
             }
         });

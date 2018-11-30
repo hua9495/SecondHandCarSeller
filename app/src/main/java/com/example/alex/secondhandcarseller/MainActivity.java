@@ -141,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
                             String dpic = object.getString("personIC").trim();
                             String dstatus = object.getString("status").trim();
                             String address = object.getString("address").trim();
+                            String reason = object.getString("reason").trim();
+
 
                             final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -174,12 +176,17 @@ public class MainActivity extends AppCompatActivity {
                                 builder.setMessage("You Are blacklisted!\nPlease Email to \nSHCAdmin@gmail.com for more information.");
                                 AlertDialog alert = builder.create();
                                 alert.show();
-                            } else {
+                            } else if (dstatus.matches("Pending")){
                                 builder.setTitle("Pending");
                                 builder.setMessage("Your registration is being process\nPlease email to \nSHCAdmin@gmail.com if you have any inquiry.");
                                 AlertDialog alert = builder.create();
                                 alert.show();
-
+                            }
+                            else {
+                                builder.setTitle("Rejected");
+                                builder.setMessage("Your registration has been Rejected.\n\nReason: "+reason);
+                                AlertDialog alert = builder.create();
+                                alert.show();
                             }
 
                         }

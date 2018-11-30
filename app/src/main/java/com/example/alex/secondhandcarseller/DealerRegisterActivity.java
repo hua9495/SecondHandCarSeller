@@ -1,6 +1,7 @@
 package com.example.alex.secondhandcarseller;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -219,8 +220,19 @@ public class DealerRegisterActivity extends AppCompatActivity {
 
                                 if (success.equals("1")) {
                                     Proceed(true, View.GONE);
-                                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                                    finish();
+                                    final AlertDialog.Builder builder = new AlertDialog.Builder(DealerRegisterActivity.this);
+                                    builder.setTitle("Register Successful");
+                                    builder.setMessage(message);
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            finish();
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    AlertDialog alert = builder.create();
+                                    alert.show();
+
+
                                 } else {
                                     Proceed(true, View.GONE);
                                     Toast.makeText(getApplicationContext(), message + " Please Try Again", Toast.LENGTH_LONG).show();

@@ -35,6 +35,15 @@
         <item>Purple</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="reject">
+        <item>"Blacklisted dealer's new account"</item>
+        <item>Company does not exist</item>
+        <item>Blacklisted by bank</item>
+        <item>Location given not correct</item>
+        <item>Same company existing</item>
+    </string-array>
+
     <string name="color_prompt">Choose a color</string>
 
 

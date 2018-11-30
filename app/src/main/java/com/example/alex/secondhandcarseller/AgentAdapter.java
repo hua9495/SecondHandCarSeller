@@ -59,7 +59,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
         holder.textViewAgentName.setText(AgentNames.get(position));
         holder.textViewAgentNo.setText(AgentContact.get(position));
         holder.textViewStatus.setText(AgentStatus.get(position));
-        if (!AgentStatus.get(position).matches("On"))
+        if (!AgentStatus.get(position).matches("Active"))
             holder.textViewStatus.setTextColor(ContextCompat.getColor(mContext, R.color.Red));
         holder.AgentLayout.setOnClickListener(new View.OnClickListener() {
             @Override

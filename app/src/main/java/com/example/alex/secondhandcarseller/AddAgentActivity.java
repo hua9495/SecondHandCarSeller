@@ -1,5 +1,6 @@
 package com.example.alex.secondhandcarseller;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +8,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -22,15 +25,20 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.view.View.GONE;
 
 public class AddAgentActivity extends AppCompatActivity {
-    private EditText etAgentName, etAgentIC, etAgentEmail, etAgentContact, etAgentWork, etPassword;
+    private EditText etAgentName, etAgentIC, etAgentEmail, etAgentContact, etPassword;
+    private TextView tvChooseDate;
     private Button buttonAddAgent;
     private String aName, aIC, aEmail, aContact, aWork, aPassword, subid, dealerid;
+    private int mYear, mMonth, mDay;
     private String Url = "https://dewy-minuses.000webhostapp.com/InsertAgent.php";
     private ProgressBar progressBarInsertA;
 
@@ -38,7 +46,8 @@ public class AddAgentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_agent);
-
+        setTitle("Add New Agent");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         SharedPreferences myPref = getSharedPreferences("My_Pref", MODE_PRIVATE);
         String checkid = myPref.getString("ID", null);
@@ -54,10 +63,38 @@ public class AddAgentActivity extends AppCompatActivity {
         etAgentIC = (EditText) findViewById(R.id.etAgentIC);
         etAgentEmail = (EditText) findViewById(R.id.etAgentEmail);
         etAgentContact = (EditText) findViewById(R.id.etAgentContact);
-        etAgentWork = (EditText) findViewById(R.id.etAgentWork);
         etPassword = (EditText) findViewById(R.id.etPassword);
+        tvChooseDate = (TextView) findViewById(R.id.tvChooseDate);
         buttonAddAgent = (Button) findViewById(R.id.buttonAddAgent);
         progressBarInsertA = (ProgressBar) findViewById(R.id.progressBarInsertA);
+
+        tvChooseDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(AddAgentActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        Calendar myCalendar = Calendar.getInstance();
+                        myCalendar.set(Calendar.YEAR, selectedyear);
+                        myCalendar.set(Calendar.MONTH, selectedmonth);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, selectedday);
+                        String myFormat = "dd/MM/yyyy";
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
+                        tvChooseDate.setText(sdf.format(myCalendar.getTime()));
+
+                        mDay = selectedday;
+                        mMonth = selectedmonth;
+                        mYear = selectedyear;
+                    }
+                }, mYear, mMonth, mDay);
+                //mDatePicker.setTitle("Select date");
+                mDatePicker.show();
+            }
+        });
 
         buttonAddAgent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,10 +103,10 @@ public class AddAgentActivity extends AppCompatActivity {
                 aIC = etAgentIC.getText().toString();
                 aEmail = etAgentEmail.getText().toString();
                 aContact = etAgentContact.getText().toString();
-                aWork = etAgentWork.getText().toString();
+                aWork = tvChooseDate.getText().toString();
                 aPassword = etPassword.getText().toString();
 
-                if (aName.isEmpty() || aIC.isEmpty() || aEmail.isEmpty() || aContact.isEmpty() || aWork.isEmpty() || aPassword.isEmpty()) {
+                if (aName.isEmpty() || aIC.isEmpty() || aEmail.isEmpty() || aContact.isEmpty() || aWork.matches("Select A Date") || aPassword.isEmpty()) {
                     if (aName.isEmpty())
                         etAgentName.setError("Cannot Be Blank!");
                     if (aIC.isEmpty())
@@ -78,8 +115,8 @@ public class AddAgentActivity extends AppCompatActivity {
                         etAgentEmail.setError("Cannot Be Blank!");
                     if (aContact.isEmpty())
                         etAgentContact.setError("Cannot Be Blank!");
-                    if (aWork.isEmpty())
-                        etAgentWork.setError("Cannot Be Blank!");
+                    if (aWork.matches("Select A Date"))
+                        tvChooseDate.setError("Please Select A Date");
                     if (aPassword.isEmpty())
                         etPassword.setError("Cannot Be Blank!");
                 } else {
@@ -88,7 +125,7 @@ public class AddAgentActivity extends AppCompatActivity {
                     etAgentIC.setEnabled(false);
                     etAgentEmail.setEnabled(false);
                     etAgentContact.setEnabled(false);
-                    etAgentWork.setEnabled(false);
+                    tvChooseDate.setEnabled(false);
                     etPassword.setEnabled(false);
                     buttonAddAgent.setEnabled(false);
 
@@ -100,6 +137,11 @@ public class AddAgentActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onBackPressed();
+        return super.onOptionsItemSelected(item);
+    }
 
     private void proceed() {
         progressBarInsertA.setVisibility(GONE);
@@ -107,7 +149,7 @@ public class AddAgentActivity extends AppCompatActivity {
         etAgentIC.setEnabled(true);
         etAgentEmail.setEnabled(true);
         etAgentContact.setEnabled(true);
-        etAgentWork.setEnabled(true);
+        tvChooseDate.setEnabled(true);
         etPassword.setEnabled(true);
         buttonAddAgent.setEnabled(true);
     }
