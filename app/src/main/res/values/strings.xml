@@ -80,6 +80,8 @@
     <string name="title_edit_car">Car Maintenance</string>
     <string name="title_booking">My Booking</string>
     <string name="title_my_profile">My Profile</string>
+
+
     <string name="title_car_management">Car Management</string>
     <string name="color_indicator">Green - Met, Red - Booked, Pen - Pending, Cross - Cancelled</string>
     <string name="promotion">Make Promotion</string>
