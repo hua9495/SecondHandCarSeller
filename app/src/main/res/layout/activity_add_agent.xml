@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="80"
                 android:paddingBottom="8dp"
-                android:paddingTop="10dp"
+                android:paddingTop="8dp"
                 android:paddingLeft="8dp"
                 android:text="@string/select_a_date"
                 android:id="@+id/tvChooseDate"
