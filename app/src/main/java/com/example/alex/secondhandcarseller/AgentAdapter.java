@@ -14,9 +14,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Alex on 10/19/2018.
- */
 
 public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> {
     private static final String TAG = "CarAdapter";
@@ -28,18 +25,19 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
     private ArrayList<String> AgentEmail = new ArrayList<>();
     private ArrayList<String> AgentWorkDate = new ArrayList<>();
     private ArrayList<String> AgentStatus = new ArrayList<>();
+    private ArrayList<String> Reason = new ArrayList<>();
     private Context mContext;
 
-
-    public AgentAdapter(Context context, ArrayList<String> agentID, ArrayList<String> agentNames, ArrayList<String> agentIC, ArrayList<String> agentContact, ArrayList<String> agentEmail, ArrayList<String> agentWorkDate, ArrayList<String> agentStatus) {
-        AgentNames = agentNames;
+    public AgentAdapter(ArrayList<String> agentID, ArrayList<String> agentNames, ArrayList<String> agentIC, ArrayList<String> agentContact, ArrayList<String> agentEmail, ArrayList<String> agentWorkDate, ArrayList<String> agentStatus, ArrayList<String> reason, Context mContext) {
         AgentID = agentID;
+        AgentNames = agentNames;
         AgentIC = agentIC;
         AgentContact = agentContact;
         AgentEmail = agentEmail;
         AgentWorkDate = agentWorkDate;
         AgentStatus = agentStatus;
-        mContext = context;
+        Reason = reason;
+        this.mContext = mContext;
     }
 
 
@@ -73,6 +71,7 @@ public class AgentAdapter extends RecyclerView.Adapter<AgentAdapter.ViewHolder> 
                 intent.putExtra("Aemail", AgentEmail.get(position));
                 intent.putExtra("Awork", AgentWorkDate.get(position));
                 intent.putExtra("Astatus", AgentStatus.get(position));
+                intent.putExtra("Reason", Reason.get(position));
 
                 mContext.startActivity(intent);
 

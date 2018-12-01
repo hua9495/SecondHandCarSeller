@@ -3,6 +3,7 @@ package com.example.alex.secondhandcarseller;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,12 +32,13 @@ import java.util.Map;
 import static android.view.View.GONE;
 
 public class AgentDetailActivity extends AppCompatActivity {
-    private EditText editTextAgentName, editTextAgentIC, editTextAgentEmail, editTextAgentContact, editTextAgentWork;
+    private EditText editTextAgentName, editTextAgentIC, editTextAgentEmail, editTextAgentContact, editTextAgentWork, editTextReasonAgent;
     private Button buttonBack, buttonUpdateAgent;
     private CheckBox checkBoxRetired;
-    private String name, ic, id, contact, email, workdate, status;
+    private String name, ic, id, contact, email, workdate, status, reason = "";
     private String Url = "https://dewy-minuses.000webhostapp.com/UpdateAgent.php";
     private ProgressBar progressBarUpdateA;
+
     RequestQueue queue;
 
 
@@ -51,6 +53,7 @@ public class AgentDetailActivity extends AppCompatActivity {
         editTextAgentEmail = (EditText) findViewById(R.id.editTextAgentEmail);
         editTextAgentContact = (EditText) findViewById(R.id.editTextAgentContact);
         editTextAgentWork = (EditText) findViewById(R.id.editTextAgentWork);
+        editTextReasonAgent = (EditText) findViewById(R.id.editTextReasonAgent);
         buttonBack = (Button) findViewById(R.id.buttonBack);
         buttonUpdateAgent = (Button) findViewById(R.id.buttonUpdateAgent);
         checkBoxRetired = (CheckBox) findViewById(R.id.checkBoxRetired);
@@ -64,25 +67,39 @@ public class AgentDetailActivity extends AppCompatActivity {
         email = intent.getStringExtra("Aemail");
         workdate = intent.getStringExtra("Awork");
         status = intent.getStringExtra("Astatus");
+        reason = intent.getStringExtra("Reason");
 
         editTextAgentName.setText(name);
         editTextAgentIC.setText(ic);
         editTextAgentEmail.setText(email);
         editTextAgentContact.setText(contact);
         editTextAgentWork.setText(workdate);
+        editTextReasonAgent.setEnabled(false);
 
         if (status.equals("Resigned")) {
             checkBoxRetired.setChecked(true);
+            checkBoxRetired.setEnabled(false);
+            editTextAgentName.setEnabled(false);
+            editTextAgentIC.setEnabled(false);
+            editTextAgentEmail.setEnabled(false);
+            editTextAgentContact.setEnabled(false);
+            editTextAgentWork.setEnabled(false);
+            editTextReasonAgent.setEnabled(false);
+            buttonUpdateAgent.setEnabled(false);
+
+            editTextReasonAgent.setText(reason);
         }
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Confirm");
-        builder.setMessage("Are you sure to delete this Agent?");
+        builder.setMessage("Are you sure to delete this Agent?\nYou cannot retrieve back this account after you delete.");
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 status = "Resigned";
+                editTextReasonAgent.setEnabled(true);
+                editTextReasonAgent.requestFocus();
                 dialog.dismiss();
             }
         });
@@ -91,6 +108,7 @@ public class AgentDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 checkBoxRetired.setChecked(false);
+                editTextReasonAgent.setEnabled(false);
                 dialog.dismiss();
             }
         });
@@ -102,7 +120,9 @@ public class AgentDetailActivity extends AppCompatActivity {
                     AlertDialog alert = builder.create();
                     alert.show();
                 } else {
-                    status = "On";
+                    status = "Active";
+                    editTextReasonAgent.setEnabled(false);
+                    editTextAgentName.requestFocus();
                 }
 
             }
@@ -117,18 +137,35 @@ public class AgentDetailActivity extends AppCompatActivity {
                 email = editTextAgentEmail.getText().toString();
                 contact = editTextAgentContact.getText().toString();
                 workdate = editTextAgentWork.getText().toString();
+                reason = editTextReasonAgent.getText().toString();
+                if (name.isEmpty() || ic.isEmpty() || email.isEmpty() || contact.isEmpty() || workdate.isEmpty()) {
+                    if (name.isEmpty())
+                        editTextAgentName.setError("Cannot Be Blank!");
+                    if (ic.isEmpty())
+                        editTextAgentIC.setError("Cannot Be Blank!");
+                    if (email.isEmpty())
+                        editTextAgentEmail.setError("Cannot Be Blank!");
+                    if (contact.isEmpty())
+                        editTextAgentContact.setError("Cannot Be Blank!");
+                    if (workdate.isEmpty())
+                        editTextAgentWork.setError("Cannot Be Blank!");
 
-                progressBarUpdateA.setVisibility(View.VISIBLE);
-                editTextAgentName.setEnabled(false);
-                editTextAgentIC.setEnabled(false);
-                editTextAgentEmail.setEnabled(false);
-                editTextAgentContact.setEnabled(false);
-                editTextAgentWork.setEnabled(false);
-                checkBoxRetired.setEnabled(false);
-                buttonBack.setEnabled(false);
-                buttonUpdateAgent.setEnabled(false);
+                } else {
+                    if (checkBoxRetired.isChecked()) {
+                        if (reason.isEmpty())
+                            editTextReasonAgent.setError("Cannot be blank if you want to delete account");
+                        else {
+                            proceedAll(View.VISIBLE, false);
+                            updateAgent(AgentDetailActivity.this);
+                        }
+                    }
+                    else {
+                        reason="";
+                        proceedAll(View.VISIBLE, false);
+                        updateAgent(AgentDetailActivity.this);
+                    }
+                }
 
-                updateAgent(AgentDetailActivity.this);
 
             }
         });
@@ -141,6 +178,18 @@ public class AgentDetailActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void proceedAll(int visible, boolean enabled) {
+        progressBarUpdateA.setVisibility(visible);
+        editTextAgentName.setEnabled(enabled);
+        editTextAgentIC.setEnabled(enabled);
+        editTextAgentEmail.setEnabled(enabled);
+        editTextAgentContact.setEnabled(enabled);
+        editTextAgentWork.setEnabled(enabled);
+        checkBoxRetired.setEnabled(enabled);
+        buttonBack.setEnabled(enabled);
+        buttonUpdateAgent.setEnabled(enabled);
     }
 
     private void updateAgent(Context context) {
@@ -160,18 +209,18 @@ public class AgentDetailActivity extends AppCompatActivity {
                                 String message = jsonObject.getString("message");
 
                                 if (success.equals("1")) {
-                                    proceed();
+                                    proceedAll(View.GONE, true);
                                     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
                                     finish();
                                 } else {
-                                    proceed();
+                                    proceedAll(View.GONE, true);
                                     Toast.makeText(getApplicationContext(), message + " Please Try Again", Toast.LENGTH_LONG).show();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
 
                                 Toast.makeText(getApplicationContext(), "error" + e, Toast.LENGTH_LONG).show();
-                                proceed();
+                                proceedAll(View.GONE, true);
 
                             }
                         }
@@ -180,7 +229,7 @@ public class AgentDetailActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(getApplicationContext(), "Error : " + error.toString(), Toast.LENGTH_LONG).show();
-                            proceed();
+                            proceedAll(View.GONE, true);
 
                         }
                     }) {
@@ -194,6 +243,7 @@ public class AgentDetailActivity extends AppCompatActivity {
                     params.put("email", email);
                     params.put("contact", contact);
                     params.put("status", status);
+                    params.put("reason",reason);
 
                     return params;
                 }
@@ -208,20 +258,8 @@ public class AgentDetailActivity extends AppCompatActivity {
             queue.add(postRequest);
         } catch (Exception e) {
             e.printStackTrace();
-            proceed();
+            proceedAll(View.GONE, true);
         }
-    }
-
-    private void proceed() {
-        progressBarUpdateA.setVisibility(GONE);
-        editTextAgentName.setEnabled(true);
-        editTextAgentIC.setEnabled(true);
-        editTextAgentEmail.setEnabled(true);
-        editTextAgentContact.setEnabled(true);
-        editTextAgentWork.setEnabled(true);
-        checkBoxRetired.setEnabled(true);
-        buttonBack.setEnabled(true);
-        buttonUpdateAgent.setEnabled(true);
     }
 
 

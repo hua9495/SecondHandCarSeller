@@ -30,9 +30,9 @@
                 android:layout_gravity="center"
                 android:layout_weight="10"
                 android:gravity="center"
-                android:text="Name:"
+                android:text="@string/name"
                 android:textColor="@color/Black"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -42,8 +42,8 @@
                     android:id="@+id/etAgentName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Agent Name"
-                    android:textSize="15dp" />
+                    android:hint="@string/agent_name"
+                    android:textSize="15sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -60,9 +60,9 @@
                 android:layout_gravity="center"
                 android:layout_weight="10"
                 android:gravity="center"
-                android:text="Ic No:"
+                android:text="@string/ic_no"
                 android:textColor="@color/Black"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -72,9 +72,9 @@
                     android:id="@+id/etAgentIC"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Agent Ic Number"
+                    android:hint="@string/agent_ic_number"
                     android:inputType="phone"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -91,9 +91,9 @@
                 android:layout_gravity="center"
                 android:layout_weight="10"
                 android:gravity="center"
-                android:text="Email :"
+                android:text="@string/Email"
                 android:textColor="@color/Black"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -103,9 +103,9 @@
                     android:id="@+id/etAgentEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Agent Email Address"
+                    android:hint="@string/agent_email_address"
                     android:inputType="textEmailAddress"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -122,9 +122,9 @@
                 android:layout_gravity="center"
                 android:layout_weight="10"
                 android:gravity="center"
-                android:text="Contact No:"
+                android:text="@string/contact_no"
                 android:textColor="@color/Black"
-                android:textSize="18dp" />
+                android:textSize="17sp" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -134,9 +134,9 @@
                     android:id="@+id/etAgentContact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Agent Contact Number"
+                    android:hint="@string/agent_contact_number"
                     android:inputType="phone"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -153,19 +153,20 @@
                 android:layout_gravity="center"
                 android:layout_weight="10"
                 android:gravity="center"
-                android:text="Start Working At:"
+                android:text="@string/start_working_at"
                 android:textColor="@color/Black"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="80"
                 android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:text="Select A Date"
+                android:paddingTop="10dp"
+                android:paddingLeft="8dp"
+                android:text="@string/select_a_date"
                 android:id="@+id/tvChooseDate"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
 
         </TableRow>
 
@@ -180,9 +181,9 @@
                 android:layout_gravity="center"
                 android:layout_weight="10"
                 android:gravity="center"
-                android:text="Create Password :"
+                android:text="@string/create_password"
                 android:textColor="@color/Black"
-                android:textSize="16dp" />
+                android:textSize="16sp" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -192,9 +193,9 @@
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
             </android.support.design.widget.TextInputLayout>
 

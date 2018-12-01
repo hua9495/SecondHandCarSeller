@@ -51,6 +51,7 @@ public class AgentFragment extends Fragment {
     private ArrayList<String> AgentEmail = new ArrayList<>();
     private ArrayList<String> AgentWorkDate = new ArrayList<>();
     private ArrayList<String> AgentStatus = new ArrayList<>();
+    private ArrayList<String> Reason = new ArrayList<>();
 
     private ProgressBar loadAgent;
     private RecyclerView recycleViewAgent;
@@ -107,6 +108,7 @@ public class AgentFragment extends Fragment {
         AgentStatus.clear();
         AgentID.clear();
         AgentIC.clear();
+        Reason.clear();
     }
 
     @Override
@@ -131,7 +133,7 @@ public class AgentFragment extends Fragment {
 
     private void initRecyclerView(View v) {
 
-        AgentAdapter adapter = new AgentAdapter(getActivity(), AgentID, AgentNames, AgentIC, AgentContact, AgentEmail, AgentWorkDate, AgentStatus);
+        AgentAdapter adapter = new AgentAdapter( AgentID, AgentNames, AgentIC, AgentContact, AgentEmail, AgentWorkDate, AgentStatus,Reason,getActivity());
         recycleViewAgent.setAdapter(adapter);
         recycleViewAgent.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -163,6 +165,7 @@ public class AgentFragment extends Fragment {
                             String agentcontact = object.getString("contact");
                             String agentdate = object.getString("date");
                             String Status = object.getString("status");
+                            String reason = object.getString("Reason");
 
                             AgentNames.add(agentname);
                             AgentContact.add(agentcontact);
@@ -171,7 +174,7 @@ public class AgentFragment extends Fragment {
                             AgentStatus.add(Status);
                             AgentID.add(agentid);
                             AgentIC.add(agentic);
-                            ;
+                            Reason.add(reason);
                         }
                         initRecyclerView(v);
 

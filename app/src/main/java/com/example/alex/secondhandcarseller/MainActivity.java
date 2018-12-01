@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                 }
                             });
-                            if (astatus.matches("On")) {
+                            if (astatus.matches("Active")) {
                                 if (dstatus.matches("Approved")) {
 
                                     Toast.makeText(MainActivity.this, "Agent", Toast.LENGTH_LONG).show();
@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             } else {
                                 builder.setTitle("Barred");
-                                builder.setMessage("Your account has been barred, please contact your company.");
+                                builder.setMessage("This account has been deleted.\nYou no longer can use this Account.\nPlease contact your company.");
                                 AlertDialog alert = builder.create();
                                 alert.show();
                             }
