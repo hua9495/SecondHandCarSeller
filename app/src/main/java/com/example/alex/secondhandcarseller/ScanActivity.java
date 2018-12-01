@@ -42,7 +42,7 @@ public class ScanActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Scanning QR code..");
-        barcode = new BarcodeDetector.Builder(this)
+        barcode = new BarcodeDetector.Builder(ScanActivity.this)
                 .setBarcodeFormats(Barcode.QR_CODE)
                 .build();
         if (!barcode.isOperational()) {

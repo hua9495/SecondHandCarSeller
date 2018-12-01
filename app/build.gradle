@@ -25,6 +25,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.google.android.gms:play-services:11.0.4'
+    //compile 'com.google.android.gms:play-services:7.8+'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.android.support:appcompat-v7:27.+'
     compile 'com.android.support:mediarouter-v7:27.+'

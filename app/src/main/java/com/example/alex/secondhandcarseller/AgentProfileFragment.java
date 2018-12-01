@@ -290,7 +290,10 @@ public class AgentProfileFragment extends Fragment {
                             String message = jsonObject.getString("message");
                             //if UPDATE SUCCESS
                             if (success.equals("1")) {
-                                Toast.makeText(getContext(), message + "\nStatus Updated", Toast.LENGTH_LONG).show();
+                                AlertDialog.Builder msg=new AlertDialog.Builder(getContext());
+                                msg.setTitle("Met Success!");
+                                msg.setMessage("AgentID: "+strAgentID+"\nAppointment ID: "+strAppID+"Status updated to met").create().show();
+
                             } else {
                                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                             }
