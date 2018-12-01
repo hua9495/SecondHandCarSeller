@@ -25,8 +25,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -91,7 +93,6 @@ public class AddAgentActivity extends AppCompatActivity {
                         mYear = selectedyear;
                     }
                 }, mYear, mMonth, mDay);
-                //mDatePicker.setTitle("Select date");
                 mDatePicker.show();
             }
         });
@@ -120,21 +121,35 @@ public class AddAgentActivity extends AppCompatActivity {
                     if (aPassword.isEmpty())
                         etPassword.setError("Cannot Be Blank!");
                 } else {
-                    progressBarInsertA.setVisibility(View.VISIBLE);
-                    etAgentName.setEnabled(false);
-                    etAgentIC.setEnabled(false);
-                    etAgentEmail.setEnabled(false);
-                    etAgentContact.setEnabled(false);
-                    tvChooseDate.setEnabled(false);
-                    etPassword.setEnabled(false);
-                    buttonAddAgent.setEnabled(false);
 
-                    InsertAgent(AddAgentActivity.this);
+
+                    SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        Date SelectedDate = formatter1.parse(aWork);
+                        Date Start = formatter1.parse("01/01/1980");
+                        Date today = Calendar.getInstance().getTime();
+                        if (SelectedDate.after(Start) && SelectedDate.before(today)) {
+                            progressBarInsertA.setVisibility(View.VISIBLE);
+                            etAgentName.setEnabled(false);
+                            etAgentIC.setEnabled(false);
+                            etAgentEmail.setEnabled(false);
+                            etAgentContact.setEnabled(false);
+                            tvChooseDate.setEnabled(false);
+                            etPassword.setEnabled(false);
+                            buttonAddAgent.setEnabled(false);
+
+                            InsertAgent(AddAgentActivity.this);
+                        } else {
+                            tvChooseDate.setError("");
+                            Toast.makeText(getApplicationContext(), "Date selected only can set between 1980 to Today's date!", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
-
-
     }
 
     @Override

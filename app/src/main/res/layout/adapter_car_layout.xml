@@ -13,29 +13,29 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="0dp"
+        android:background="@color/Black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/Black">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorWhite"
             android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp">
+            android:layout_marginRight="2dp"
+            android:background="@color/colorWhite">
 
             <ImageView
                 android:id="@+id/imageViewCar"
                 android:layout_width="0dp"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_weight="50"
+                android:layout_weight="5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -45,34 +45,54 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorWhite"
-            android:layout_marginBottom="2dp"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
-            android:layout_marginTop="2dp">
+            android:layout_marginTop="2dp"
+            android:background="@color/colorWhite">
 
             <TextView
                 android:id="@+id/textViewCar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-
+                android:layout_marginLeft="25dp"
                 android:layout_weight="50"
-                android:fontFamily="sans-serif"
                 android:text="TextView"
-                android:textAlignment="center"
-                android:textColor="@color/Black"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageViewCar" />
+
+            <TextView
+                android:id="@+id/textViewYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_action_year"
+                android:text="TextView"
+                android:layout_weight="5"
+                android:textColor="@color/Black"
+                android:textSize="20sp" />
         </TableRow>
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:background="@color/colorWhite">
+
+            <TextView
+                android:id="@+id/textViewSHPrice"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textColor="@color/Black"
+                android:textSize="20sp" />
+        </TableRow>
     </TableLayout>
 
 </android.support.constraint.ConstraintLayout>

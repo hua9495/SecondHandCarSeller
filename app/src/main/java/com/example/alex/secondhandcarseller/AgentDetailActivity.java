@@ -1,5 +1,6 @@
 package com.example.alex.secondhandcarseller;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,8 +11,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -26,17 +29,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.view.View.GONE;
 
 public class AgentDetailActivity extends AppCompatActivity {
-    private EditText editTextAgentName, editTextAgentIC, editTextAgentEmail, editTextAgentContact, editTextAgentWork, editTextReasonAgent;
+    private EditText editTextAgentName, editTextAgentIC, editTextAgentEmail, editTextAgentContact, editTextReasonAgent;
+    private TextView textViewAgentWork;
     private Button buttonBack, buttonUpdateAgent;
     private CheckBox checkBoxRetired;
     private String name, ic, id, contact, email, workdate, status, reason = "";
     private String Url = "https://dewy-minuses.000webhostapp.com/UpdateAgent.php";
+    private int mYear, mMonth, mDay;
     private ProgressBar progressBarUpdateA;
 
     RequestQueue queue;
@@ -52,7 +62,7 @@ public class AgentDetailActivity extends AppCompatActivity {
         editTextAgentIC = (EditText) findViewById(R.id.editTextAgentIC);
         editTextAgentEmail = (EditText) findViewById(R.id.editTextAgentEmail);
         editTextAgentContact = (EditText) findViewById(R.id.editTextAgentContact);
-        editTextAgentWork = (EditText) findViewById(R.id.editTextAgentWork);
+        textViewAgentWork = (TextView) findViewById(R.id.textViewAgentWork);
         editTextReasonAgent = (EditText) findViewById(R.id.editTextReasonAgent);
         buttonBack = (Button) findViewById(R.id.buttonBack);
         buttonUpdateAgent = (Button) findViewById(R.id.buttonUpdateAgent);
@@ -73,7 +83,7 @@ public class AgentDetailActivity extends AppCompatActivity {
         editTextAgentIC.setText(ic);
         editTextAgentEmail.setText(email);
         editTextAgentContact.setText(contact);
-        editTextAgentWork.setText(workdate);
+        textViewAgentWork.setText(workdate);
         editTextReasonAgent.setEnabled(false);
 
         if (status.equals("Resigned")) {
@@ -83,7 +93,7 @@ public class AgentDetailActivity extends AppCompatActivity {
             editTextAgentIC.setEnabled(false);
             editTextAgentEmail.setEnabled(false);
             editTextAgentContact.setEnabled(false);
-            editTextAgentWork.setEnabled(false);
+            textViewAgentWork.setEnabled(false);
             editTextReasonAgent.setEnabled(false);
             buttonUpdateAgent.setEnabled(false);
 
@@ -129,6 +139,34 @@ public class AgentDetailActivity extends AppCompatActivity {
         });
 
 
+        textViewAgentWork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(AgentDetailActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        Calendar myCalendar = Calendar.getInstance();
+                        myCalendar.set(Calendar.YEAR, selectedyear);
+                        myCalendar.set(Calendar.MONTH, selectedmonth);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, selectedday);
+                        String myFormat = "dd/MM/yyyy";
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
+                        textViewAgentWork.setText(sdf.format(myCalendar.getTime()));
+
+                        mDay = selectedday;
+                        mMonth = selectedmonth;
+                        mYear = selectedyear;
+                    }
+                }, mYear, mMonth, mDay);
+                //mDatePicker.setTitle("Select date");
+                mDatePicker.show();
+            }
+        });
+
         buttonUpdateAgent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,9 +174,9 @@ public class AgentDetailActivity extends AppCompatActivity {
                 ic = editTextAgentIC.getText().toString();
                 email = editTextAgentEmail.getText().toString();
                 contact = editTextAgentContact.getText().toString();
-                workdate = editTextAgentWork.getText().toString();
+                workdate = textViewAgentWork.getText().toString();
                 reason = editTextReasonAgent.getText().toString();
-                if (name.isEmpty() || ic.isEmpty() || email.isEmpty() || contact.isEmpty() || workdate.isEmpty()) {
+                if (name.isEmpty() || ic.isEmpty() || email.isEmpty() || contact.isEmpty()) {
                     if (name.isEmpty())
                         editTextAgentName.setError("Cannot Be Blank!");
                     if (ic.isEmpty())
@@ -147,8 +185,7 @@ public class AgentDetailActivity extends AppCompatActivity {
                         editTextAgentEmail.setError("Cannot Be Blank!");
                     if (contact.isEmpty())
                         editTextAgentContact.setError("Cannot Be Blank!");
-                    if (workdate.isEmpty())
-                        editTextAgentWork.setError("Cannot Be Blank!");
+
 
                 } else {
                     if (checkBoxRetired.isChecked()) {
@@ -158,15 +195,25 @@ public class AgentDetailActivity extends AppCompatActivity {
                             proceedAll(View.VISIBLE, false);
                             updateAgent(AgentDetailActivity.this);
                         }
-                    }
-                    else {
-                        reason="";
-                        proceedAll(View.VISIBLE, false);
-                        updateAgent(AgentDetailActivity.this);
+                    } else {
+                        SimpleDateFormat formatter1 = new SimpleDateFormat("dd/MM/yyyy");
+                        try {
+                            Date SelectedDate = formatter1.parse(workdate);
+                            Date Start = formatter1.parse("01/01/1980");
+                            Date today = Calendar.getInstance().getTime();
+                            if (SelectedDate.after(Start) && SelectedDate.before(today)) {
+                                reason = "";
+                                proceedAll(View.VISIBLE, false);
+                                updateAgent(AgentDetailActivity.this);
+                            } else {
+                                textViewAgentWork.setError("");
+                                Toast.makeText(getApplicationContext(), "Date selected only can set between 1980 to Today's date!", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-
-
             }
         });
 
@@ -186,7 +233,7 @@ public class AgentDetailActivity extends AppCompatActivity {
         editTextAgentIC.setEnabled(enabled);
         editTextAgentEmail.setEnabled(enabled);
         editTextAgentContact.setEnabled(enabled);
-        editTextAgentWork.setEnabled(enabled);
+        textViewAgentWork.setEnabled(enabled);
         checkBoxRetired.setEnabled(enabled);
         buttonBack.setEnabled(enabled);
         buttonUpdateAgent.setEnabled(enabled);
@@ -243,7 +290,7 @@ public class AgentDetailActivity extends AppCompatActivity {
                     params.put("email", email);
                     params.put("contact", contact);
                     params.put("status", status);
-                    params.put("reason",reason);
+                    params.put("reason", reason);
 
                     return params;
                 }

@@ -16,9 +16,9 @@
     <string name="EditProfile">Edit My Profile</string>
     <string name="logout">Log Out</string>
     <string name="carName">Car Name:</string>
-    <string name="price">Price: </string>
-    <string name="year">Publish Year:</string>
-    <string name="mileage">Mileage:</string>
+    <string name="price">Price (RM): </string>
+    <string name="year">Manufacture Year:</string>
+    <string name="mileage">Mileage (KM):</string>
     <string name="addcar">Add Car</string>
     <string name="next">Next</string>
 
