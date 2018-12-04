@@ -106,6 +106,7 @@
     <string name="start_working_at">Start Date :</string>
     <string name="create_password">Create Password :</string>
     <string name="tips4Pending">- Pending</string>
+
     <string name="tips3Cancelled">- Cancelled</string>
     <string name="tips2Booked">- Booked</string>
     <string name="tips1Met">- Met</string>

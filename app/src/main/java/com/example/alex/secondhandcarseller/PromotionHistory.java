@@ -53,7 +53,6 @@ public class PromotionHistory extends AppCompatActivity {
         SharedPreferences myPref = this.getSharedPreferences("My_Pref", MODE_PRIVATE);
         dealerid = myPref.getString("ID", null);
         loadDis();
-
     }
 
     private void loadDis() {

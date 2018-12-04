@@ -122,7 +122,6 @@ public class PromotionActivity extends AppCompatActivity {
                         String myFormat = "yyyy-MM-dd";
                         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.ENGLISH);
                         ETEndDate.setText(sdf.format(myCalendar.getTime()));
-
                         mDay = selectedday;
                         mMonth = selectedmonth;
                         mYear = selectedyear;
@@ -164,7 +163,6 @@ public class PromotionActivity extends AppCompatActivity {
                             today = formatter.format(Today);
                             after = formatter.format(endDate);
                             loadPro();
-
 
                             buttonApply2.setEnabled(false);
                             ETEndDate.setEnabled(false);
