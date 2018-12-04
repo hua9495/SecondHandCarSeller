@@ -151,6 +151,8 @@ public class EditCarActivity extends AppCompatActivity {
                     String Desc = edCarDesc.getText().toString();
                     String Price = edCarPrice.getText().toString();
 
+                    int chkYear=Integer.parseInt(Year);
+
                     if (Name.isEmpty() || Year.isEmpty() || Mile.isEmpty() || Desc.isEmpty() || Price.isEmpty()) {
                         if (Name.isEmpty())
                             edCarName.setError("Cannot Be Blank");
@@ -164,16 +166,20 @@ public class EditCarActivity extends AppCompatActivity {
                             edCarPrice.setError("Cannot Be Blank");
 
                     } else {
-
-                        name = Name;
-                        year = Year;
-                        mile = Mile;
-                        color = Color;
-                        desc = Desc;
-                        price = Price;
-                        builder2.setMessage("Information of this car will change. \nAre you sure?");
-                        AlertDialog alert = builder2.create();
-                        alert.show();
+                        if (chkYear >= 1950 && chkYear <= 2018) {
+                            name = Name;
+                            year = Year;
+                            mile = Mile;
+                            color = Color;
+                            desc = Desc;
+                            price = Price;
+                            builder2.setMessage("Information of this car will change. \nAre you sure?");
+                            AlertDialog alert = builder2.create();
+                            alert.show();
+                        }
+                     else {
+                            edCarYear.setError("Range Only can between 1950 and 2018");
+                        }
 
 
                     }

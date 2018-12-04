@@ -292,7 +292,7 @@ public class AgentProfileFragment extends Fragment {
                             if (success.equals("1")) {
                                 AlertDialog.Builder msg=new AlertDialog.Builder(getContext());
                                 msg.setTitle("Met Success!");
-                                msg.setMessage("AgentID: "+strAgentID+"\nAppointment ID: "+strAppID+"Status updated to met").create().show();
+                                msg.setMessage("AgentID: "+strAgentID+"\nAppointment ID: "+strAppID+"\nBooking status is updated").create().show();
 
                             } else {
                                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();

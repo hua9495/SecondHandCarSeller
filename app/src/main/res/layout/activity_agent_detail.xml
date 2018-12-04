@@ -163,19 +163,19 @@
                 android:text="Start Working At:"
                 android:textColor="@color/Black"
                 android:textSize="15dp" />
-
-            <android.support.design.widget.TextInputLayout
+            <TextView
+                android:id="@+id/textViewAgentWork"
                 android:layout_width="match_parent"
-                android:layout_weight="80">
+                android:layout_height="wrap_content"
+                android:hint="AgentWorkDate"
+                android:textSize="17dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingLeft="2dp"
+                android:layout_weight="80"
+                />
 
-                <EditText
-                    android:id="@+id/editTextAgentWork"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="AgentWorkDate"
-                    android:textSize="15dp" />
 
-            </android.support.design.widget.TextInputLayout>
 
         </TableRow>
     </TableLayout>
@@ -231,7 +231,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="26dp"
         android:text="Delete this Account"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintLeft_toLeftOf="parent"

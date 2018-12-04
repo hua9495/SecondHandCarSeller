@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +71,14 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 .load(mCarImage.get(position))
                 .into(holder.imageViewCar);
 
-        holder.textViewCar.setText(mCarName.get(position));
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        Double dPrice = Double.parseDouble(mCarPrice.get(position));
+        String price = formatter.format(dPrice);
+
+
+        holder.textViewCar.setText(mCarBrand.get(position)+" "+mCarName.get(position));
+        holder.textViewSHPrice.setText(price);
+        holder.textViewYear.setText(mCarYear.get(position));
 
         holder.LayoutCar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,13 +107,15 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewCar;
+        TextView textViewCar,textViewYear,textViewSHPrice;
         ImageView imageViewCar;
         ConstraintLayout LayoutCar;
 
         public ViewHolder(View itemView) {
             super(itemView);
             textViewCar = itemView.findViewById(R.id.textViewCar);
+            textViewYear = itemView.findViewById(R.id.textViewYear);
+            textViewSHPrice = itemView.findViewById(R.id.textViewSHPrice);
             imageViewCar = itemView.findViewById(R.id.imageViewCar);
             LayoutCar = itemView.findViewById(R.id.LayoutCar);
         }
