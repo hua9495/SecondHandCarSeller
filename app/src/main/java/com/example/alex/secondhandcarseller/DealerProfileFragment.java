@@ -61,10 +61,17 @@ public class DealerProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        textViewReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Intent intent = new Intent(getActivity(), ReportProblem.class);
+                startActivity(intent);
+            }
+        });
         buttonLogout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
 
 
                 SharedPreferences.Editor user = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE).edit();

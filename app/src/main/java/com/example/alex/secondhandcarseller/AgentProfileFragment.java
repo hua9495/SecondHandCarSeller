@@ -101,6 +101,14 @@ public class AgentProfileFragment extends Fragment {
 
             }
         });
+        buttonReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), ReportProblem.class);
+                startActivity(intent);
+            }
+        });
 
         SharedPreferences myPref;
         myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
@@ -290,9 +298,9 @@ public class AgentProfileFragment extends Fragment {
                             String message = jsonObject.getString("message");
                             //if UPDATE SUCCESS
                             if (success.equals("1")) {
-                                AlertDialog.Builder msg=new AlertDialog.Builder(getContext());
+                                AlertDialog.Builder msg = new AlertDialog.Builder(getContext());
                                 msg.setTitle("Met Success!");
-                                msg.setMessage("AgentID: "+strAgentID+"\nAppointment ID: "+strAppID+"\nBooking status is updated").create().show();
+                                msg.setMessage("AgentID: " + strAgentID + "\nAppointment ID: " + strAppID + "\nBooking status is updated").create().show();
 
                             } else {
                                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();

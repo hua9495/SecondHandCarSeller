@@ -164,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                                 user.putString("Contact", dcontact);
                                 user.putString("PersonIC", dpic);
                                 user.putString("Address", address);
+                                user.putString("password",Dealerpw);
                                 user.apply();
 
                                 Intent login = new Intent(MainActivity.this, DealerActivity.class);
