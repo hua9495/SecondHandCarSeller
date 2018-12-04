@@ -176,6 +176,7 @@ public class AgentFragment extends Fragment {
                             AgentIC.add(agentic);
                             Reason.add(reason);
                         }
+                        getActivity().setTitle("My Agents("+AgentEmail.size()+")");
                         initRecyclerView(v);
 
                         loadAgent.setVisibility(View.GONE);

@@ -11,11 +11,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.MediaBrowserCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -67,7 +71,6 @@ public class CarFragment extends Fragment {
     private RecyclerView recyclerViewCar;
     private String Url = "https://dewy-minuses.000webhostapp.com/sellerCar.php";
     private String subid, dealerid;
-    private FloatingActionButton fabAddCar;
 
 
     @Override
@@ -77,12 +80,12 @@ public class CarFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_car, container, false);
         recyclerViewCar = (RecyclerView) v.findViewById(R.id.recyclerViewCar);
         progressBarLoadCar = (ProgressBar) v.findViewById(R.id.progressBarLoadCar);
-        fabAddCar = (FloatingActionButton) v.findViewById(R.id.fabAddCar);
 
-
+        getActivity().setTitle("Cars On Sale");
+        setHasOptionsMenu(true);
         ClearArray();
 
-        LoadPic(getView());
+
 
 
         SharedPreferences myPref = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE);
@@ -93,15 +96,7 @@ public class CarFragment extends Fragment {
         } else {
             dealerid = myPref.getString("ID", null);
         }
-
-
-        fabAddCar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), AddCarActivity.class);
-                startActivity(intent);
-            }
-        });
+        LoadPic(getView());
 
         return v;
     }
@@ -119,11 +114,29 @@ public class CarFragment extends Fragment {
         mCarMile.clear();
     }
 
-    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.car_select, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.nav_add) {
+            Intent intent = new Intent(getActivity(), AddCarActivity.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(getActivity(), SoldCar.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void initRecyclerView(View v) {
 
         CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarYear, mCarMile, getActivity());
+
         recyclerViewCar.setAdapter(adapter);
         recyclerViewCar.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -165,6 +178,7 @@ public class CarFragment extends Fragment {
                             mCarYear.add(year);
                             mCarMile.add(mileage);
                         }
+
                         initRecyclerView(v);
 
                         progressBarLoadCar.setVisibility(View.GONE);

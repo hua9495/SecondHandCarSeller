@@ -37,7 +37,6 @@ public class DealerActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_Car:
-                        setTitle(R.string.title_car_management);
                         setFragment(carFragment);
                         return true;
                     case R.id.nav_Agent:

@@ -18,20 +18,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="gone"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabAddCar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="8dp"
-        android:clickable="true"
-        app:backgroundTint="@color/colorPrimaryDark"
-        app:fabSize="normal"
-        app:layout_constraintRight_toRightOf="parent"
-        app:rippleColor="@color/Black"
-        app:srcCompat="@drawable/ic_action_add"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLogout" />
 
     <Button
         android:id="@+id/buttonLogout"

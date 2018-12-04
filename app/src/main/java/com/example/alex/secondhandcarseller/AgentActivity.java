@@ -38,7 +38,6 @@ public class AgentActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.nav_Car:
                         setFragment(carFragment);
-                        setTitle(R.string.title_car_management);
                         return true;
                     case R.id.nav_Appoint:
                         setFragment(appointFragment);

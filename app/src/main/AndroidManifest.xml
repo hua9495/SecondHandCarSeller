@@ -44,7 +44,8 @@
         <activity android:name=".PromotionActivity" />
         <activity android:name=".ScanActivity" />
         <activity android:name=".ResetPwActivity" />
-        <activity android:name=".PromotionHistory"></activity>
+        <activity android:name=".PromotionHistory" />
+        <activity android:name=".SoldCar"></activity>
     </application>
 
 </manifest>
