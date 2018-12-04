@@ -109,5 +109,7 @@
     <string name="tips3Cancelled">- Cancelled</string>
     <string name="tips2Booked">- Booked</string>
     <string name="tips1Met">- Met</string>
+    <string name="prices">Price:</string>
     <string name="promotion_history">Promotion History</string>
+
 </resources>
