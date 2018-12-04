@@ -173,8 +173,6 @@ public class AppointFragment extends Fragment {
 
                                 }
                                 initListVIew(v);
-                                Toast.makeText(getActivity(), "Done ! ", Toast.LENGTH_SHORT).show();
-
                                 tvCaption.setVisibility(View.GONE);
                                 showTips();
 

@@ -227,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
                                     user.putString("Name", aname);
                                     user.putString("Contact", acontact);
                                     user.putString("WorkStart", workstart);
+                                    user.putString("password",Dealerpw);
                                     user.apply();
 
                                     Intent login = new Intent(MainActivity.this, AgentActivity.class);

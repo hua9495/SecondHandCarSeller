@@ -36,10 +36,12 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -72,15 +74,6 @@ public class BookingDetailActivity extends AppCompatActivity {
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         agentID = sharePref.getString("ID", null);
 
-
-        //     Gson gson = new Gson();
-        //     String json = sharePref.getString("jsonApp", null);
-        //appList is to check got crashTime or not
-        //   Type type = new TypeToken<ArrayList<Appointment>>() {
-        //    }.getType();
-        //   appList = gson.fromJson(json, type);
-
-
         tvCarName = (TextView) findViewById(R.id.textViewCarName);
         tvAppDate = (TextView) findViewById(R.id.textViewAppDate);
         tvAppTime = (TextView) findViewById(R.id.textViewAppTime);
@@ -92,7 +85,6 @@ public class BookingDetailActivity extends AppCompatActivity {
 
         btnAcceptRequest = (Button) findViewById(R.id.buttonAccept);
         downloadingAppDetail = (ProgressBar) findViewById(R.id.downloadingAppDetail);
-
 
         downloadingAppDetail.setVisibility(View.GONE);
         Intent intent = getIntent();
@@ -186,11 +178,7 @@ public class BookingDetailActivity extends AppCompatActivity {
                 return params;
             }
         };
-//10000 is the time in milliseconds adn is equal to 10 sec
-        /*stringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                20000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));*/
+
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
@@ -272,8 +260,8 @@ public class BookingDetailActivity extends AppCompatActivity {
 
                                 if (success.equals("1")) {//UPDATED success
 
-                                    Toast.makeText(BookingDetailActivity.this, message, Toast.LENGTH_LONG).show();
-                                    finish();
+                                    sendEmail();
+
                                 } else {
                                     Toast.makeText(BookingDetailActivity.this, message, Toast.LENGTH_LONG).show();
 
@@ -316,6 +304,24 @@ public class BookingDetailActivity extends AppCompatActivity {
             Toast.makeText(BookingDetailActivity.this, "Error : " + e.toString(), Toast.LENGTH_LONG).show();
             proceed();
         }
+    }
+
+    private void sendEmail() {
+        String Recipient = custEmail;
+        List<String> recipients = Arrays.asList(Recipient.split("\\s*,\\s*"));
+        String strCar, strSender, strSenderEmail, strSenderPw, strDate, strTime;
+
+        strSenderEmail = sharePref.getString("Email", null);
+        strSenderPw = sharePref.getString("password", null);
+        strSender = sharePref.getString("Name", null);
+        strDate = appDate;
+        strTime = appTime;
+        strCar = carName;
+        String subject = "Confirm car review booking request";
+        String body = "Hi, I accepted your booking request with " + strCar + " at " + strDate + " " + strTime + ". Thank you. Regards, " + strSender;
+
+        SendMailTask smt = new SendMailTask(BookingDetailActivity.this);
+        smt.execute(strSenderEmail, strSenderPw, recipients, subject, body);
     }
 
     private void proceed() {
