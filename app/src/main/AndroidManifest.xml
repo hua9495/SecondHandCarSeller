@@ -43,7 +43,8 @@
         <activity android:name=".EditDealerProfile" />
         <activity android:name=".PromotionActivity" />
         <activity android:name=".ScanActivity" />
-        <activity android:name=".ResetPwActivity"></activity>
+        <activity android:name=".ResetPwActivity" />
+        <activity android:name=".PromotionHistory"></activity>
     </application>
 
 </manifest>
