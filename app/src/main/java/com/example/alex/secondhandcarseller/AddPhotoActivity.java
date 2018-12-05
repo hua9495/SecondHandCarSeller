@@ -36,7 +36,7 @@ public class AddPhotoActivity extends AppCompatActivity {
 
     private Button buttonSelectImg, buttonUpload;
     private ImageView imageViewAddCar;
-    private String dealerid, brand, name, color, price, year, type, desc, mileage, ConvertImage, subid;
+    private String dealerid, brand, name, color, price, year, type, desc, mileage, ConvertImage, subid,plate;
     private Bitmap FixBitmap;
     private String ServerUploadPath = "http://dewy-minuses.000webhostapp.com/upload.php";
     private ProgressDialog progressDialog;
@@ -76,6 +76,7 @@ public class AddPhotoActivity extends AppCompatActivity {
         type = getIntent().getStringExtra("type");
         mileage = getIntent().getStringExtra("mileage");
         desc = getIntent().getStringExtra("desc");
+        plate = getIntent().getStringExtra("plate");
 
         buttonSelectImg = (Button) findViewById(R.id.buttonSelectImg);
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
@@ -162,6 +163,7 @@ public class AddPhotoActivity extends AppCompatActivity {
                 HashMapParams.put("year", year);
                 HashMapParams.put("type", type);
                 HashMapParams.put("mileage", mileage);
+                HashMapParams.put("plate", plate);
                 HashMapParams.put("image_data", ConvertImage);
                 String FinalData = imageProcessClass.ImageHttpRequest(ServerUploadPath, HashMapParams);
                 return FinalData;
