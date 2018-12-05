@@ -38,11 +38,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     private ArrayList<String> mCarDesc = new ArrayList<>();
     private ArrayList<String> mCarYear = new ArrayList<>();
     private ArrayList<String> mCarMile = new ArrayList<>();
+    private ArrayList<String> mCarPlate = new ArrayList<>();
     private Context mContext;
 
-
-
-    public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarYear, ArrayList<String> mCarMile, Context mContext) {
+    public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarYear, ArrayList<String> mCarMile, ArrayList<String> mCarPlate, Context mContext) {
         this.mCarName = mCarName;
         this.mCarImage = mCarImage;
         this.mCarId = mCarId;
@@ -52,8 +51,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
         this.mCarDesc = mCarDesc;
         this.mCarYear = mCarYear;
         this.mCarMile = mCarMile;
+        this.mCarPlate = mCarPlate;
         this.mContext = mContext;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -96,6 +97,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
                 intent.putExtra("CarDesc", mCarDesc.get(position));
                 intent.putExtra("CarYear", mCarYear.get(position));
                 intent.putExtra("CarMile", mCarMile.get(position));
+                intent.putExtra("CarPlate", mCarPlate.get(position));
                 mContext.startActivity(intent);
             }
         });

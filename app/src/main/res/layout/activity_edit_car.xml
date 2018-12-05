@@ -88,13 +88,33 @@
                     <Spinner
                         android:id="@+id/spinnerEditColor"
                         android:layout_width="match_parent"
-                        android:paddingTop="5dp"
+                        android:paddingTop="10dp"
                         android:layout_height="28dp"
                         android:textSize="17dp" />
 
 
                 </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
+                    <TextView
+                        android:id="@+id/textView67"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="Plate No :" />
+
+                    <EditText
+                        android:id="@+id/edCarPlate"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:enabled="false"
+                        android:textSize="17dp" />
+
+
+                </TableRow>
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">

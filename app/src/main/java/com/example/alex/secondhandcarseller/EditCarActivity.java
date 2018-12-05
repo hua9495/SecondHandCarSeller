@@ -34,9 +34,9 @@ import java.util.Map;
 
 public class EditCarActivity extends AppCompatActivity {
     private Button buttonSold, buttonChange;
-    private EditText edCarName, edCarPrice, edCarYear, edMile, edCarDesc;
+    private EditText edCarName, edCarPrice, edCarYear, edMile, edCarDesc, edCarPlate;
     private Spinner spinnerEditColor;
-    private String id, name, img, brand, price, color, desc, year, mile;
+    private String id, name, img, brand, price, color, desc, year, mile,plate;
     private ImageView imageViewShCar;
     private ProgressBar progressBarEditcar;
     private String Url = "https://dewy-minuses.000webhostapp.com/deleteCar.php";
@@ -51,6 +51,7 @@ public class EditCarActivity extends AppCompatActivity {
         spinnerEditColor = (Spinner) findViewById(R.id.spinnerEditColor);
         buttonSold = (Button) findViewById(R.id.buttonSold);
         buttonChange = (Button) findViewById(R.id.buttonChange);
+        edCarPlate = (EditText) findViewById(R.id.edCarPlate);
         edCarName = (EditText) findViewById(R.id.edCarName);
         edCarPrice = (EditText) findViewById(R.id.edCarPrice);
         edCarYear = (EditText) findViewById(R.id.edCarYear);
@@ -71,6 +72,7 @@ public class EditCarActivity extends AppCompatActivity {
         desc = intent.getStringExtra("CarDesc");
         year = intent.getStringExtra("CarYear");
         mile = intent.getStringExtra("CarMile");
+        plate = intent.getStringExtra("CarPlate");
 
 
         colorAdap = ArrayAdapter.createFromResource(this, R.array.color, android.R.layout.simple_spinner_item);
@@ -86,6 +88,7 @@ public class EditCarActivity extends AppCompatActivity {
         edCarYear.setText(year);
         edMile.setText(mile);
         edCarDesc.setText(desc);
+        edCarPlate.setText(plate);
         Glide.with(this).load(img).into(imageViewShCar);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -150,10 +153,11 @@ public class EditCarActivity extends AppCompatActivity {
                     String Color = spinnerEditColor.getSelectedItem().toString();
                     String Desc = edCarDesc.getText().toString();
                     String Price = edCarPrice.getText().toString();
+                    String Plate = edCarPlate.getText().toString();
 
-                    int chkYear=Integer.parseInt(Year);
+                    int chkYear = Integer.parseInt(Year);
 
-                    if (Name.isEmpty() || Year.isEmpty() || Mile.isEmpty() || Desc.isEmpty() || Price.isEmpty()) {
+                    if (Name.isEmpty() || Year.isEmpty() || Mile.isEmpty() || Desc.isEmpty() || Price.isEmpty()|| Plate.isEmpty()) {
                         if (Name.isEmpty())
                             edCarName.setError("Cannot Be Blank");
                         if (Year.isEmpty())
@@ -164,6 +168,8 @@ public class EditCarActivity extends AppCompatActivity {
                             edCarDesc.setError("Cannot Be Blank");
                         if (Price.isEmpty())
                             edCarPrice.setError("Cannot Be Blank");
+                        if (Plate.isEmpty())
+                            edCarPlate.setError("Cannot Be Blank");
 
                     } else {
                         if (chkYear >= 1950 && chkYear <= 2018) {
@@ -173,11 +179,11 @@ public class EditCarActivity extends AppCompatActivity {
                             color = Color;
                             desc = Desc;
                             price = Price;
+                            plate=Plate;
                             builder2.setMessage("Information of this car will change. \nAre you sure?");
                             AlertDialog alert = builder2.create();
                             alert.show();
-                        }
-                     else {
+                        } else {
                             edCarYear.setError("Range Only can between 1950 and 2018");
                         }
 
@@ -323,6 +329,7 @@ public class EditCarActivity extends AppCompatActivity {
                     params.put("desc", desc);
                     params.put("mile", mile);
                     params.put("year", year);
+                    params.put("plate", plate);
 
                     return params;
                 }
