@@ -67,6 +67,7 @@ public class CarFragment extends Fragment {
     private ArrayList<String> mCarDesc = new ArrayList<>();
     private ArrayList<String> mCarYear = new ArrayList<>();
     private ArrayList<String> mCarMile = new ArrayList<>();
+    private ArrayList<String> mCarPlate = new ArrayList<>();
     private ProgressBar progressBarLoadCar;
     private RecyclerView recyclerViewCar;
     private String Url = "https://dewy-minuses.000webhostapp.com/sellerCar.php";
@@ -112,6 +113,7 @@ public class CarFragment extends Fragment {
         mCarDesc.clear();
         mCarYear.clear();
         mCarMile.clear();
+        mCarPlate.clear();
     }
 
     @Override
@@ -135,7 +137,7 @@ public class CarFragment extends Fragment {
 
     private void initRecyclerView(View v) {
 
-        CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarYear, mCarMile, getActivity());
+        CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarYear, mCarMile,mCarPlate, getActivity());
 
         recyclerViewCar.setAdapter(adapter);
         recyclerViewCar.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -167,6 +169,7 @@ public class CarFragment extends Fragment {
                             String desc = object.getString("desc");
                             String year = object.getString("year");
                             String mileage = object.getString("mileage");
+                            String plate = object.getString("plate");
 
                             mCarName.add(name);
                             mCarImage.add(image_data);
@@ -177,6 +180,7 @@ public class CarFragment extends Fragment {
                             mCarDesc.add(desc);
                             mCarYear.add(year);
                             mCarMile.add(mileage);
+                            mCarPlate.add(plate);
                         }
 
                         initRecyclerView(v);

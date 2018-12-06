@@ -32,8 +32,8 @@ import java.util.Map;
 import static com.example.alex.secondhandcarseller.CarFragment.isConnected;
 
 public class DealerRegisterActivity extends AppCompatActivity {
-    private EditText editTextComName, editTextAddress, editTextLocation, editTextPic, editTextContact, ETemail, editTextPassword, editTextConfirmPw;
-    private String name, address, location, pic, contact, email, password, conpw;
+    private EditText editTextReg, editTextComName, editTextAddress, editTextLocation, editTextPic, editTextContact, ETemail, editTextPassword, editTextConfirmPw;
+    private String name, address, location, pic, contact, email, password, conpw, reg;
     private ProgressBar progressBarInsertDealer;
     private ArrayList<String> emails = new ArrayList<>();
     private Button buttonRegister;
@@ -48,6 +48,7 @@ public class DealerRegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editTextComName = (EditText) findViewById(R.id.editTextComName);
         editTextAddress = (EditText) findViewById(R.id.editTextAddress);
+        editTextReg = (EditText) findViewById(R.id.editTextReg);
         editTextLocation = (EditText) findViewById(R.id.editTextLocation);
         editTextPic = (EditText) findViewById(R.id.editTextPic);
         editTextContact = (EditText) findViewById(R.id.editTextContact);
@@ -70,8 +71,9 @@ public class DealerRegisterActivity extends AppCompatActivity {
                 email = ETemail.getText().toString();
                 password = editTextPassword.getText().toString();
                 conpw = editTextConfirmPw.getText().toString();
+                reg = editTextReg.getText().toString();
 
-                if (name.isEmpty() || address.isEmpty() || location.isEmpty() || pic.isEmpty() || contact.isEmpty() || email.isEmpty() || password.isEmpty() || conpw.isEmpty()) {
+                if (name.isEmpty() || address.isEmpty() || location.isEmpty() || pic.isEmpty() || contact.isEmpty() || email.isEmpty() || password.isEmpty() || conpw.isEmpty() || reg.isEmpty()) {
                     if (name.isEmpty()) {
                         editTextComName.setError("Please fill in Company Name");
                     }
@@ -107,6 +109,9 @@ public class DealerRegisterActivity extends AppCompatActivity {
                     if (password.length() <= 6) {
                         editTextPassword.setError("Password length must more than 6");
                     }
+                    if (reg.length() <= 6) {
+                        editTextReg.setError("Cannot be Blank!");
+                    }
                 } else {
                     boolean checkemail = true;
                     for (int i = 0; i < emails.size(); i++) {
@@ -139,6 +144,7 @@ public class DealerRegisterActivity extends AppCompatActivity {
         ETemail.setEnabled(enabled);
         editTextPassword.setEnabled(enabled);
         editTextConfirmPw.setEnabled(enabled);
+        editTextReg.setEnabled(enabled);
         buttonRegister.setEnabled(enabled);
         progressBarInsertDealer.setVisibility(visible);
     }
@@ -264,6 +270,7 @@ public class DealerRegisterActivity extends AppCompatActivity {
                     params.put("contact", contact);
                     params.put("email", email);
                     params.put("pw", password);
+                    params.put("reg", reg);
                     return params;
                 }
 

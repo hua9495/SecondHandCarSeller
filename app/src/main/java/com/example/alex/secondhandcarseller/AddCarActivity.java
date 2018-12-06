@@ -57,7 +57,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class AddCarActivity extends AppCompatActivity {
 
 
-    private EditText editTextCarName, editTextCarPrice, editTextCarYear, editTextMileage, editTextDesc;
+    private EditText editTextCarName, editTextCarPrice, editTextCarYear, editTextMileage, editTextDesc,editTextPlateNumber;
     private Spinner spinnerCarBrand, spinnerColor, spinnerCarType;
     private ProgressBar progressBarLoadBrand;
     private Button buttonNext;
@@ -75,6 +75,7 @@ public class AddCarActivity extends AppCompatActivity {
         setTitle("Add Car");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         editTextCarName = (EditText) findViewById(R.id.editTextCarName);
+        editTextPlateNumber = (EditText) findViewById(R.id.editTextPlateNumber);
         editTextDesc = (EditText) findViewById(R.id.editTextDesc);
         editTextCarPrice = (EditText) findViewById(R.id.editTextCarPrice);
         editTextCarYear = (EditText) findViewById(R.id.editTextCarYear);
@@ -104,10 +105,11 @@ public class AddCarActivity extends AppCompatActivity {
                 String year = editTextCarYear.getText().toString();
                 String mileage = editTextMileage.getText().toString();
                 String desc = editTextDesc.getText().toString();
+                String plate = editTextPlateNumber.getText().toString();
                 String brand = spinnerCarBrand.getSelectedItem().toString();
 
 
-                if (name.isEmpty() || price.isEmpty() || year.isEmpty() || mileage.isEmpty() || desc.isEmpty()) {
+                if (name.isEmpty() || price.isEmpty() || year.isEmpty() || mileage.isEmpty() || desc.isEmpty()||plate.isEmpty()) {
                     if (name.isEmpty()) {
                         editTextCarName.setError("Please enter Car Name");
                         editTextCarName.requestFocus();
@@ -127,6 +129,10 @@ public class AddCarActivity extends AppCompatActivity {
                     if (desc.isEmpty()) {
                         editTextDesc.setError("Please enter Car Description");
                         editTextDesc.requestFocus();
+                    }
+                    if (plate.isEmpty()) {
+                        editTextPlateNumber.setError("Please enter Car Plate Number");
+                        editTextPlateNumber.requestFocus();
                     }
 
                 } else {
@@ -149,6 +155,7 @@ public class AddCarActivity extends AppCompatActivity {
                         addinfo.putExtra("year", year);
                         addinfo.putExtra("type", spinnerCarType.getSelectedItem().toString());
                         addinfo.putExtra("mileage", mileage);
+                        addinfo.putExtra("plate", plate);
                         addinfo.putExtra("desc", desc);
                         startActivity(addinfo);
                     }
