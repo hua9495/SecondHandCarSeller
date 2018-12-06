@@ -73,6 +73,12 @@ public class BookingDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         agentID = sharePref.getString("ID", null);
+        //to retreive appointment list (for checking clash time purpose)
+        Gson gson = new Gson();
+        String json = sharePref.getString("jsonApp", null);
+        Type type = new TypeToken<ArrayList<Appointment>>() {
+        }.getType();
+        appList = gson.fromJson(json, type);
 
         tvCarName = (TextView) findViewById(R.id.textViewCarName);
         tvAppDate = (TextView) findViewById(R.id.textViewAppDate);
