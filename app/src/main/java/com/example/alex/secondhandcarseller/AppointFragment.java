@@ -141,13 +141,14 @@ public class AppointFragment extends Fragment {
                             //if HAVE RECORD
                             if (successA.equals("1") || successB.equals("1")) {
                                 //retrive the record
+                                String appID="";
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject userResponse = jsonArray.getJSONObject(i);
 
                                     String carName = userResponse.getString("carName");
                                     String price = userResponse.getString("price");
-                                    String appID = userResponse.getString("appID");
+                                    appID = userResponse.getString("appID");
                                     String carID = userResponse.getString("carID");
                                     String custID = userResponse.getString("custID");
                                     String appDate = userResponse.getString("appDate");
@@ -171,7 +172,18 @@ public class AppointFragment extends Fragment {
                                     arrCustID.add(custID);
                                     arrAppID.add(appID);
 
+                                    //for later check clash time
+                                    Appointment newApp=new Appointment(appID,bookingDateTime,appStatus);
+                                    appointmentArrayList.add(newApp);
+
+
                                 }
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("My_Pref", MODE_PRIVATE).edit();
+                                editor.putString("appID",appID);
+                                Gson gson=new Gson();
+                                String jsonApp=gson.toJson(appointmentArrayList);
+                                editor.putString("jsonApp",jsonApp);
+                                editor.commit();
                                 initListVIew(v);
                                 tvCaption.setVisibility(View.GONE);
                                 showTips();

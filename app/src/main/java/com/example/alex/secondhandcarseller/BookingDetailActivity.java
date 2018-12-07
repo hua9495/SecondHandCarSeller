@@ -73,6 +73,12 @@ public class BookingDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         sharePref = this.getSharedPreferences("My_Pref", Context.MODE_PRIVATE);
         agentID = sharePref.getString("ID", null);
+        //to retreive appointment list (for checking clash time purpose)
+        Gson gson = new Gson();
+        String json = sharePref.getString("jsonApp", null);
+        Type type = new TypeToken<ArrayList<Appointment>>() {
+        }.getType();
+        appList = gson.fromJson(json, type);
 
         tvCarName = (TextView) findViewById(R.id.textViewCarName);
         tvAppDate = (TextView) findViewById(R.id.textViewAppDate);
@@ -201,6 +207,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         if (clashTime) {
             AlertDialog.Builder buider = new AlertDialog.Builder(BookingDetailActivity.this);
             buider.setTitle(R.string.retry);
+            buider.setIcon(R.drawable.ic_action_problem);
             buider.setMessage("Can not accept the appointment.\nReason: Date time is clashed ").setNegativeButton(R.string.cancel, null).create().show();
 
         } else {
