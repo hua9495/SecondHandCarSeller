@@ -39,9 +39,10 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     private ArrayList<String> mCarYear = new ArrayList<>();
     private ArrayList<String> mCarMile = new ArrayList<>();
     private ArrayList<String> mCarPlate = new ArrayList<>();
+    private ArrayList<String> mDiscount = new ArrayList<>();
     private Context mContext;
 
-    public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarYear, ArrayList<String> mCarMile, ArrayList<String> mCarPlate, Context mContext) {
+    public CarAdapter(ArrayList<String> mCarName, ArrayList<String> mCarImage, ArrayList<String> mCarId, ArrayList<String> mCarBrand, ArrayList<String> mCarPrice, ArrayList<String> mCarColor, ArrayList<String> mCarDesc, ArrayList<String> mCarYear, ArrayList<String> mCarMile, ArrayList<String> mCarPlate, ArrayList<String> mDiscount, Context mContext) {
         this.mCarName = mCarName;
         this.mCarImage = mCarImage;
         this.mCarId = mCarId;
@@ -52,6 +53,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
         this.mCarYear = mCarYear;
         this.mCarMile = mCarMile;
         this.mCarPlate = mCarPlate;
+        this.mDiscount = mDiscount;
         this.mContext = mContext;
     }
 
@@ -77,15 +79,22 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
         String price = formatter.format(dPrice);
 
 
-        holder.textViewCar.setText(mCarBrand.get(position)+" "+mCarName.get(position));
+        holder.textViewCar.setText(mCarBrand.get(position) + " " + mCarName.get(position));
         holder.textViewSHPrice.setText(price);
         holder.textViewYear.setText(mCarYear.get(position));
+
+
+        if (!mDiscount.get(position).equals("null")) {
+            holder.imageViewSales.bringToFront();
+            holder.imageViewSales.setVisibility(View.VISIBLE);
+        } else
+            holder.imageViewSales.setVisibility(View.GONE);
 
         holder.LayoutCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick:Clicked on: " + mCarName.get(position));
-                Toast.makeText(mContext, mCarName.get(position), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, mDiscount.get(position), Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent(mContext, EditCarActivity.class);
                 intent.putExtra("CarID", mCarId.get(position));
@@ -109,8 +118,8 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textViewCar,textViewYear,textViewSHPrice;
-        ImageView imageViewCar;
+        TextView textViewCar, textViewYear, textViewSHPrice;
+        ImageView imageViewCar, imageViewSales;
         ConstraintLayout LayoutCar;
 
         public ViewHolder(View itemView) {
@@ -119,6 +128,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder> {
             textViewYear = itemView.findViewById(R.id.textViewYear);
             textViewSHPrice = itemView.findViewById(R.id.textViewSHPrice);
             imageViewCar = itemView.findViewById(R.id.imageViewCar);
+            imageViewSales = itemView.findViewById(R.id.imageViewSales);
             LayoutCar = itemView.findViewById(R.id.LayoutCar);
         }
     }

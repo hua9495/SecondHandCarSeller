@@ -68,6 +68,7 @@ public class CarFragment extends Fragment {
     private ArrayList<String> mCarYear = new ArrayList<>();
     private ArrayList<String> mCarMile = new ArrayList<>();
     private ArrayList<String> mCarPlate = new ArrayList<>();
+    private ArrayList<String> mDiscount = new ArrayList<>();
     private ProgressBar progressBarLoadCar;
     private RecyclerView recyclerViewCar;
     private String Url = "https://dewy-minuses.000webhostapp.com/sellerCar.php";
@@ -114,6 +115,7 @@ public class CarFragment extends Fragment {
         mCarYear.clear();
         mCarMile.clear();
         mCarPlate.clear();
+        mDiscount.clear();
     }
 
     @Override
@@ -137,7 +139,7 @@ public class CarFragment extends Fragment {
 
     private void initRecyclerView(View v) {
 
-        CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarYear, mCarMile,mCarPlate, getActivity());
+        CarAdapter adapter = new CarAdapter(mCarName, mCarImage, mCarId, mCarBrand, mCarPrice, mCarColor, mCarDesc, mCarYear, mCarMile,mCarPlate,mDiscount, getActivity());
 
         recyclerViewCar.setAdapter(adapter);
         recyclerViewCar.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -170,6 +172,7 @@ public class CarFragment extends Fragment {
                             String year = object.getString("year");
                             String mileage = object.getString("mileage");
                             String plate = object.getString("plate");
+                            String discount = object.getString("promID").trim();
 
                             mCarName.add(name);
                             mCarImage.add(image_data);
@@ -181,6 +184,7 @@ public class CarFragment extends Fragment {
                             mCarYear.add(year);
                             mCarMile.add(mileage);
                             mCarPlate.add(plate);
+                            mDiscount.add(discount);
                         }
 
                         initRecyclerView(v);
