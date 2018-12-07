@@ -207,6 +207,7 @@ public class BookingDetailActivity extends AppCompatActivity {
         if (clashTime) {
             AlertDialog.Builder buider = new AlertDialog.Builder(BookingDetailActivity.this);
             buider.setTitle(R.string.retry);
+            buider.setIcon(R.drawable.ic_action_problem);
             buider.setMessage("Can not accept the appointment.\nReason: Date time is clashed ").setNegativeButton(R.string.cancel, null).create().show();
 
         } else {
