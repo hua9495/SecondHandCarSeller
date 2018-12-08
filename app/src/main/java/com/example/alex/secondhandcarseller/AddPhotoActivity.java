@@ -3,6 +3,7 @@ package com.example.alex.secondhandcarseller;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -36,7 +37,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class AddPhotoActivity extends AppCompatActivity {
 
-    private Button buttonSelectImg, buttonUpload, buttonCamera;
+    private Button buttonSelectImg, buttonUpload;
     private ImageView imageViewAddCar;
     private String dealerid, brand, name, color, price, year, type, desc, mileage, ConvertImage, subid, plate;
     private Bitmap FixBitmap;
@@ -85,22 +86,7 @@ public class AddPhotoActivity extends AppCompatActivity {
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
         imageViewAddCar = (ImageView) findViewById(R.id.imageViewAddCar);
         byteArrayOutputStream = new ByteArrayOutputStream();
-        buttonCamera = (Button) findViewById(R.id.buttonStartCamera);
-        buttonCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //start camera
-                Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                            Uri.fromFile(photo));
-                    imageUri = Uri.fromFile(photo);
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                }
 
-            }
-        });
         buttonSelectImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +101,10 @@ public class AddPhotoActivity extends AppCompatActivity {
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UploadImageToServer();
+                if (imageViewAddCar.getDrawable() == null) {
+                    Toast.makeText(getApplicationContext(), "No Photo Selected!", Toast.LENGTH_LONG).show();
+                } else
+                    UploadImageToServer();
 
 
             }
