@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -34,9 +36,9 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class AddPhotoActivity extends AppCompatActivity {
 
-    private Button buttonSelectImg, buttonUpload;
+    private Button buttonSelectImg, buttonUpload, buttonCamera;
     private ImageView imageViewAddCar;
-    private String dealerid, brand, name, color, price, year, type, desc, mileage, ConvertImage, subid,plate;
+    private String dealerid, brand, name, color, price, year, type, desc, mileage, ConvertImage, subid, plate;
     private Bitmap FixBitmap;
     private String ServerUploadPath = "http://dewy-minuses.000webhostapp.com/upload.php";
     private ProgressDialog progressDialog;
@@ -44,12 +46,13 @@ public class AddPhotoActivity extends AppCompatActivity {
     private byte[] byteArray;
     private HttpURLConnection httpURLConnection;
     private URL url;
+    private Uri imageUri;
     private OutputStream outputStream;
     private BufferedWriter bufferedWriter;
     private int RC;
     private BufferedReader bufferedReader;
     private StringBuilder stringBuilder;
-
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     boolean check = true;
 
     @Override
@@ -82,7 +85,22 @@ public class AddPhotoActivity extends AppCompatActivity {
         buttonUpload = (Button) findViewById(R.id.buttonUpload);
         imageViewAddCar = (ImageView) findViewById(R.id.imageViewAddCar);
         byteArrayOutputStream = new ByteArrayOutputStream();
+        buttonCamera = (Button) findViewById(R.id.buttonStartCamera);
+        buttonCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //start camera
+                Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                            Uri.fromFile(photo));
+                    imageUri = Uri.fromFile(photo);
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
 
+            }
+        });
         buttonSelectImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,6 +134,13 @@ public class AddPhotoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        //i add this le
+        else if (RC == REQUEST_IMAGE_CAPTURE && RQC == RESULT_OK) {
+            Bundle extras = I.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageViewAddCar.setImageBitmap(imageBitmap);
+        }
+
     }
 
     private void UploadImageToServer() {
