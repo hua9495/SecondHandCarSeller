@@ -1,13 +1,18 @@
 package com.example.alex.secondhandcarseller;
 
+import android.*;
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
@@ -89,6 +94,13 @@ public class AddPhotoActivity extends AppCompatActivity {
         buttonCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //getPermission first
+                if (ActivityCompat.checkSelfPermission(AddPhotoActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(AddPhotoActivity.this, new String[] {Manifest.permission.CAMERA}, REQUEST_IMAGE_CAPTURE);
+                } else {
+                   // Intent intent = new Intent(getActivity(), ScanActivity.class);
+                    //startActivityForResult(intent, REQUEST_CODE);
+                }
                 //start camera
                 Intent takePictureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
