@@ -138,7 +138,8 @@ public class AddPhotoActivity extends AppCompatActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                progressDialog = ProgressDialog.show(AddPhotoActivity.this, "Car Information is Uploading", "Please Wait", false, false);
+                progressDialog = ProgressDialog.show(AddPhotoActivity.this, "Car Information is Uploading",
+                        "Please Wait", false, false);
             }
 
             @Override

@@ -42,7 +42,14 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.View
         Views = views;
         this.mContext = mContext;
     }
+    public String[] getAllChecked() {
+        return getchecked;
+    }
 
+    @Override
+    public int getItemCount() {
+        return CarID.size();
+    }
 
     @NonNull
     @Override
@@ -82,16 +89,6 @@ public class PromotionAdapter extends RecyclerView.Adapter<PromotionAdapter.View
             }
         });
 
-    }
-
-
-    public String[] getAllChecked() {
-        return getchecked;
-    }
-
-    @Override
-    public int getItemCount() {
-        return CarID.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
